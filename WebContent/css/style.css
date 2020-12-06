@@ -393,6 +393,7 @@ h6, .h6 {
   
 .container-questionnaire {
 	max-width: 800px;
+	margin-top: 20px;
 }
 
 .questionnaire-title{
