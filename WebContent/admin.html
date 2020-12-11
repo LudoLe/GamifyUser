@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.min.js"
+      data-th-src="@{https://code.jquery.com/jquery-3.5.1.min.js}"
+    ></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="css/bootstrap.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="css/style.css"
+    />
+    <script
+      src="https://kit.fontawesome.com/2079f21d9c.js"
+      crossorigin="anonymous"
+    ></script>
+    <title>Admin</title>
+  </head>
+  <body>
+    <!-- START SIDENAV -->
+    <div class="sidenav">
+      <a href="#" id="creationNavbarLink">Creation</a>
+      <a href="#" id="inspectionNavbarLink">Inspection</a>
+      <a href="#" id="deletionNavbarLink">Deletion</a>
+      <a href="#" id="logoutNavbarLink">Logout</a>
+    </div>
+    <!-- END SIDENAV -->
+
+    <!-- START MAIN CONTAINER -->
+    <div class="container container-admin" id="mainContainer">
+      <form id="mainForm">
+        <div class="form-group">
+          <div class="form-row">
+            <div class="col-md-6">
+              <label for="inputName">Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="inputName"
+                name="name"
+                placeholder="Enter product name"
+                required
+              />
+            </div>
+            <div class="col-md-6">
+              <label for="inputImage">Image</label>
+              <input
+                type="file"
+                class="form-control"
+                name="image"
+                id="inputImage"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="inputDate">Date</label>
+          <input type="date" name="date" class="form-control" id="inputDate" required />
+        </div>
+        <div class="form-group" id="questionFormGroup">
+          <input
+            type="text"
+            class="form-control question"
+            id="inputQuestion0"
+            name="Question0"
+            placeholder="Question"
+            required
+          />
+        </div>
+        <button class="btn btn-primary" id="addQuestionButton">
+          Add Question
+        </button>
+        <button type="submit" class="btn btn-success">Create!</button>
+      </form>
+    </div>
+    <!-- END MAIN CONTAINER -->
+  </body>
+  <script src="js/admin.js"></script>
+</html>
