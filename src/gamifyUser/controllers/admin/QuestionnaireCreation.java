@@ -2,11 +2,11 @@ package gamifyUser.controllers.admin;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serial;
 import java.text.SimpleDateFormat;
-import java.time.LocalTime;
+
 import java.util.*;
 import javax.ejb.EJB;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -17,24 +17,24 @@ import javax.servlet.http.HttpServletResponse;
 import gamifyUser.utility.Utility;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.RandomStringUtils;
-import polimi.db2.gamifyDB.services.UserService;
-import polimi.db2.gamifyDB.entities.User;
-import javax.persistence.NonUniqueResultException;
 import javax.servlet.http.Part;
 
 
 @WebServlet("/admin/create")
 @MultipartConfig
 public class QuestionnaireCreation extends HttpServlet {
+	@Serial
 	private static final long serialVersionUID = 1L;
-	@EJB(name = "polimi.db2.gamifyDB.services/QuestionnaireService")
-	private QuestionnaireService qstService;
+	@EJB(name = "gamifyDB.services/QuestionnaireService")
+	private QuestionnaireService questionnaireService;
+	@EJB(name = "gamifyDB.services/QuestionService")
+	private QuestionService questionService;
 
 	public QuestionnaireCreation() {
 		super();
 	}
 
-	public void init() throws ServletException {
+	public void init() {
 	
 	}
 
@@ -48,8 +48,7 @@ public class QuestionnaireCreation extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Too many questions.");
 			return;
 		}
-		String question0 = null;
-		String name = null;
+		String question0, name;
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		Date date, currentTime = new Date();
 		Calendar calendar = Calendar.getInstance();
@@ -66,7 +65,7 @@ public class QuestionnaireCreation extends HttpServlet {
 			return;
 		}
 
-		List<String> questions = new ArrayList<String>();
+		List<String> questions = new ArrayList<>();
 		questions.add(question0);
 		questions.addAll(Utility.retrieveQuestions(request));
 
@@ -105,7 +104,7 @@ public class QuestionnaireCreation extends HttpServlet {
 
 		try {
 			part.write(finalPath);
-			qstService.createQuestionnaire(savedFileName, name);
+			questionnaireService.createQuestionnaire(savedFileName, name, questions);
 			response.sendRedirect(getServletContext().getContextPath() + "/greetins.html");
 		} catch (Exception e){
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal error.");

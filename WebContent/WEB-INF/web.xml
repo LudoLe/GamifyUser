@@ -9,6 +9,7 @@
     <filter-name>Checker</filter-name>
     <url-pattern>/todo</url-pattern>
   </filter-mapping>
+  <!-- todo filters for user and admin pages-->
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>

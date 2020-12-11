@@ -219,10 +219,10 @@
 	
 
 	var formData = new FormData($(this)[0]);
-	const tempUrl = "https://run.mocky.io/v3/5f33c3de-8b3b-406e-9e1e-0294a9e0d35c";
+	const url = "http://localhost:8080/admin/create";
     $.ajax({
 		method: "POST",
-		url: tempUrl,
+		url: url,
 		data: formData,
 		processData: false,
 		contentType: false,
