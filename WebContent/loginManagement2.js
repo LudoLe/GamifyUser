@@ -14,7 +14,7 @@
             switch (req.status) {
               case 200:
             	sessionStorage.setItem('username', message);
-                window.location.href = "Home2.0.html";
+                window.location.href = "HomePage.html";
                 break;
               case 400: // bad request
                 document.getElementById("errormessage").textContent = message;
@@ -36,8 +36,7 @@
   
   
   var token=1;
-
- document.getElementById("signin").addEventListener("click",(e) => {
+   document.getElementById("signin").addEventListener("click",(e) => {
 	if(token){
 	  var div, form, fieldset, input, input2, input2, label3, label, label2, action, mex;
 	  div=document.createElement("div"); 
@@ -154,7 +153,7 @@
 		            switch (req.status) {
 		              case 200:
 		            	sessionStorage.setItem('username', message);
-		                window.location.href = "Home2.0.html";
+		                window.location.href = "HomePage.html";
 		                break;
 		              case 400: // bad request
 		                document.getElementById("errormessage2").textContent = message;
@@ -194,6 +193,8 @@
 
 		}	
   }, false);
+
+
 	  
   
 
