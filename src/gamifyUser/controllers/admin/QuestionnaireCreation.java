@@ -2,7 +2,6 @@ package gamifyUser.controllers.admin;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Serial;
 import java.text.SimpleDateFormat;
 
 import java.util.*;
@@ -14,17 +13,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import gamifyUser.utility.Utility;
+import polimi.db2.gamifyDB.services.QuestionService;
+import polimi.db2.gamifyDB.services.QuestionnaireService;
+
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.RandomStringUtils;
+
+import gamifyUser.utility.Utility;
+
 import javax.servlet.http.Part;
 
 
 @WebServlet("/admin/create")
 @MultipartConfig
 public class QuestionnaireCreation extends HttpServlet {
-	@Serial
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1231111L;
 	@EJB(name = "gamifyDB.services/QuestionnaireService")
 	private QuestionnaireService questionnaireService;
 	@EJB(name = "gamifyDB.services/QuestionService")

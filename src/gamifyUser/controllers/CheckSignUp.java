@@ -1,6 +1,5 @@
 package gamifyUser.controllers;
 
-
 import java.io.IOException;
 import polimi.db2.gamifyDB.services.UserService;
 
@@ -16,7 +15,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 @WebServlet("/CheckSignUp")
 @MultipartConfig
 public class CheckSignUp extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 198237498L;
 	@EJB(name = "polimi.db2.gamifyDB.services/UserService")
 	private UserService usrService;
 

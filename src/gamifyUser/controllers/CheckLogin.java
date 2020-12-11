@@ -18,9 +18,9 @@ import javax.persistence.NonUniqueResultException;
 @WebServlet("/CheckLogin")
 @MultipartConfig
 public class CheckLogin extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1028379202L;
 	@EJB(name = "polimi.db2.gamifyDB.services/UserService")
-	private UserService usrService;
+	private UserService usrService = new UserService();
 
 	public CheckLogin() {
 		super();

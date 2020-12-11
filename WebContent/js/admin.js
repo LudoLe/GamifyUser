@@ -218,7 +218,7 @@
 	
 
 	var formData = new FormData($(this)[0]);
-	const url = "http://localhost:8080/admin/create";
+	const url = "http://localhost:8080/GamifyUser/admin/create";
     $.ajax({
 		method: "POST",
 		url: url,
