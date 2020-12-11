@@ -32,3 +32,24 @@ td {
 th {
     text-align: center;
 }
+
+.modal {
+	padding-left: 160px;
+}
+
+body .modal-dialog { /* Width */
+    max-width: 100%;
+    width: auto !important;
+	display: inline-block;
+	min-width: 240px;
+}
+
+.modal {
+	z-index: -1;
+	display: flex !important;
+	min-width: 240px;
+  }
+  
+  .modal-open .modal {
+	 z-index: 1050;
+  }

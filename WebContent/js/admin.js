@@ -3,6 +3,33 @@
   // main page container
   const container = $("#mainContainer");
 
+  const showModal = function(title, content) {
+	container.append(`<div class="modal" tabindex="-1" id="#mainModal">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title">` + title + `</h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body">
+		  <p>` + content + `</p>
+		</div>
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+		</div>
+	  </div>
+	</div>
+  </div>`);
+  $('.modal').modal('show');
+  $('.modal').on('hidden.bs.modal', function() {
+	container[0].removeChild($(".modal")[0]);
+  });
+  };
+
+  
+
   // called whenever the current tab chanegs
   const onTabChange = function () {
     container.children().remove();
@@ -69,7 +96,7 @@
 			$.ajax({
 				url: tempUrl,
 				success: function( data ) {
-					alert("TODO");
+					showModal("TODO","TODO");
 				  }
 			  });
 		  });
@@ -183,7 +210,13 @@
   // defines what to do when the form is submitted
   $(document).on('submit', 'form', function(e) {
 	e.preventDefault();
-	//TODO check that date isn't in the past
+	let date = new Date($(this)[0][2].value);
+	let today = new Date();
+	if(date == null || date == NaN || date < today) {
+		showModal("Error", "Time travel doesn't exist yet, so please try entering a date that's not in the past.");
+		return;
+	}
+	
 
 	var formData = new FormData($(this)[0]);
 	const tempUrl = "https://run.mocky.io/v3/5f33c3de-8b3b-406e-9e1e-0294a9e0d35c";
@@ -195,17 +228,17 @@
 		contentType: false,
 		timeout: 20000,
 		success: function( msg ) {
-			alert( "TODOOK");
+			showModal( "TODOOK","TODOOK");
 		},
 		error: function (request, status, error) {
 			if(request.readyState == 0 || request.status == 0) 
-              alert("asd");
+              showModal("asd","asd");
 		}
 	});
 });
 
   $("#logoutNavbarLink").click(function (event) {
-	  alert("TODO");
+	  showModal("TODO","TODO");
   });
 
 })();
