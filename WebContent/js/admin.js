@@ -201,9 +201,8 @@
 		<button type="submit" class="btn btn-success">Create!</button>
 		
 	 	 </form>`;
-
+		  container.append(form);
 	$("#addQuestionButton").click(addQuestion);
-    container.append(form);
   });
   $("#addQuestionButton").click(addQuestion);
 
