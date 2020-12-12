@@ -54,6 +54,8 @@ public class QuestionnaireCreation extends HttpServlet {
 		String question0, name;
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		Date date, currentTime = new Date();
+		
+		//TODO check if another questionnaire with the same date already exists 
 		Calendar calendar = Calendar.getInstance();
 		try{
 			name = StringEscapeUtils.escapeJava(request.getParameter("name"));
@@ -108,7 +110,9 @@ public class QuestionnaireCreation extends HttpServlet {
 		try {
 			part.write(finalPath);
 			questionnaireService.createQuestionnaire(savedFileName, name, date, questions);
-			response.sendRedirect(getServletContext().getContextPath() + "/greetings.html");
+			response.setStatus(HttpServletResponse.SC_OK);
+			response.getWriter().println("OK");
+			return;
 		} catch (Exception e){
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal error.");
 		}
