@@ -2,7 +2,6 @@ package gamifyUser.controllers;
 
 import java.io.IOException;
 import javax.ejb.EJB;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -12,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringEscapeUtils;
 import polimi.db2.gamifyDB.services.UserService;
 import polimi.db2.gamifyDB.entities.User;
-import javax.persistence.NonUniqueResultException;
 
 
 @WebServlet("/CheckLogin")
@@ -20,7 +18,7 @@ import javax.persistence.NonUniqueResultException;
 public class CheckLogin extends HttpServlet {
 	private static final long serialVersionUID = 1028379202L;
 	@EJB(name = "polimi.db2.gamifyDB.services/UserService")
-	private UserService usrService = new UserService();
+	private UserService usrService;
 
 	public CheckLogin() {
 		super();
@@ -44,16 +42,16 @@ public class CheckLogin extends HttpServlet {
 
 		} catch (Exception e) {
 			// for debugging only e.printStackTrace();
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing credential value");
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().println("Missing credentials.");
 			return;
 		}
 		User user;
 		try {
-			// query db to authenticate for user
 			user = usrService.checkCredentials(usrn, pwd);
 		} catch (Exception e) {
-			e.printStackTrace();
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not check credentials");
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().println("Bad request.");
 			return;
 		}
 

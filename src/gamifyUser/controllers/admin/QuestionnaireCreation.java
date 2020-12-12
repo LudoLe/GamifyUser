@@ -44,7 +44,7 @@ public class QuestionnaireCreation extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		List<String> mandatoryParams = new ArrayList<>(Arrays.asList("name", "date", "image", "Question0"));
+		List<String> mandatoryParams = new ArrayList<>(Arrays.asList("name", "date", "Question0"));
 		if(!Utility.paramExists(request, response, mandatoryParams) || Utility.paramIsEmpty(request, response, mandatoryParams)) return;
 		Set<String> paramNames = request.getParameterMap().keySet();
 		if (paramNames.size() > 150) {
@@ -107,8 +107,8 @@ public class QuestionnaireCreation extends HttpServlet {
 
 		try {
 			part.write(finalPath);
-			questionnaireService.createQuestionnaire(savedFileName, name, questions);
-			response.sendRedirect(getServletContext().getContextPath() + "/greetins.html");
+			questionnaireService.createQuestionnaire(savedFileName, name, date, questions);
+			response.sendRedirect(getServletContext().getContextPath() + "/greetings.html");
 		} catch (Exception e){
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal error.");
 		}
