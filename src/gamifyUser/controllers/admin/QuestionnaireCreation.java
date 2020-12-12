@@ -69,7 +69,7 @@ public class QuestionnaireCreation extends HttpServlet {
 		}
 
 		List<String> questions = new ArrayList<>();
-		questions.add(question0);
+
 		questions.addAll(Utility.retrieveQuestions(request));
 
 		Part part = request.getPart("image");
