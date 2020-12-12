@@ -1,47 +1,49 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="ISO-8859-1">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css">
-<link rel="stylesheet" href="login.css">
-<script src="loginManagement2.js" charset="utf-8" defer></script>
+  <head>
+    <meta charset="ISO-8859-1" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="login.css" />
+    <script src="loginManagement2.js" charset="utf-8" defer></script>
 
+    <title>Login page</title>
+    <script src="utils.js" charset="utf-8" defer></script>
+  </head>
+  <body>
+    <div class="container" id ="mainContainer">
+      <div class="container">
+        <h3><i class="fas fa-gamepad"></i>GAMIFY</h3>
+      </div>
 
+      <div class="container">
+        <form action="#">
+          <div class="container">
+            <fieldset>
+              <div class="item">
+                Username: <input type="text" name="username" required /> <br />
+              </div>
+              <div class="item">
+                Password: <input type="password" name="pwd" required /><br />
+              </div>
+              <div class="item">
+                <button id="signin" class="btn">
+                  Login
+                </button>              </div>
+              <p id="errormessage"></p>
+            </fieldset>
+          </div>
+        </form>
+      </div>
 
-<title>Login page</title>
-<script src="utils.js" charset="utf-8" defer></script>
-</head>
-<body>
-<div class="container">
-<div class="container">
-	<h3><i class="fas fa-gamepad"></i>GAMIFY </h3>
-</div>
-	
-
-<div class="container">
-	<form action="#">
-	<div class="container">
-	<fieldset>
-	<div class="item">
-		Username: <input type="text" name="username" required> <br>
-			</div>
-	<div class="item">
-		Password: <input type="password" name="pwd" required><br>
-	  	</div>
-	  	<div class="item">
-		<input id="loginbutton" type="button" value="login">
-			</div>
-		<p id="errormessage"></p>
-	</fieldset>
-	</div>
-	</form>
-</div>
-
-<div class="container">
-<button id="signin" class="btn"><i class="fas fa-user-plus"></i>Don't have an account? Sign up!</button>
-   <form id="form" action="#">
-</form>
-</div>
-</div>
-</body>
+      <div class="container">
+        <button id="signup" class="btn">
+          <i class="fas fa-user-plus"></i>Don't have an account? Sign up!
+        </button>
+        <form id="form" action="#"></form>
+      </div>
+    </div>
+  </body>
 </html>

@@ -5,7 +5,6 @@ import org.apache.commons.validator.routines.EmailValidator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -59,7 +58,6 @@ public class Utility {
 
     public static List<String> retrieveQuestions(HttpServletRequest req) {
         Map<String,String[]> parameterMap = req.getParameterMap();
-        List<String> output = new ArrayList<>();
         return parameterMap.keySet().stream().filter(name -> name.contains("Question")).map(parameterMap::get).map(contents -> contents[0]).filter(content -> !content.isEmpty() && !(content.length() > MAX_QUESTION_LENGTH)).collect(Collectors.toList());
     }
 
