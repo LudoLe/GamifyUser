@@ -5,7 +5,7 @@
 (function () {
   // main page container
   const container = $("#mainContainer");
-  
+
   const tabElements = Array.from(
     document.getElementsByClassName("sidenav-button")
   );
@@ -164,7 +164,7 @@
           $.ajax({
             url: deleteUrl + val.questionnaireId,
             success: function (data) {
-              showModal("TODO", "TODO");
+              showModal("Success!", "Questionnaire deleted correctly");
               location.reload();
             },
           });
@@ -182,32 +182,51 @@
   // onclick for deletion tab
   const inspectionUserList = function (questId) {
     const completedUsersUrl =
-      "http://localhost:8080/GamifyUser/admin/listQuestionnaireCompletedUsers?start=0&size=100&id=" + questId;
+      "http://localhost:8080/GamifyUser/admin/listQuestionnaireCompletedUsers?start=0&size=100&id=" +
+      questId;
     const canceledUsersUrl =
-      "http://localhost:8080/GamifyUser/admin/listQuestionnaireCanceledUsers?start=0&size=100&id=" + questId;
+      "http://localhost:8080/GamifyUser/admin/listQuestionnaireCanceledUsers?start=0&size=100&id=" +
+      questId;
 
- /*   let backButtonDiv = document.createElement("div"); backButtonDiv.classList = "row"; backButtonDiv.style = "heigth: 35px";
+    /*   let backButtonDiv = document.createElement("div"); backButtonDiv.classList = "row"; backButtonDiv.style = "heigth: 35px";
     let backButton = document.createElement("button"); backButton.classList = "btn btn-outline-primary"; backButton.style = "margin: 10px 0 20px 30px";
     backButton.textContent = "Go Back";
     backButtonDiv.append(backButton);
     document.getElementById("mainContainer").append(backButtonDiv);*/
 
-    let mainDiv = document.createElement("div"); mainDiv.classList = "row"; mainDiv.id = "mainRow";
-    let col1 = document.createElement("div");    col1.classList = "col-md-3";
-    let ul1 = document.createElement("ul");    ul1.classList = "list-group"; ul1.id = "completedUsersList";
-    let col2 = document.createElement("div");    col2.classList = "col-md-3";
-    let ul2 = document.createElement("ul");    ul2.classList = "list-group"; ul2.id = "canceledUsersList";
-    let col3 = document.createElement("div");    col3.classList = "col-md-6";
-    let h31 = document.createElement("h3");      h31.style = "text-align: center; margin-bottom: 20px"; h31.textContent = "Completed";
-    let h32 = document.createElement("h3");      h32.style = "text-align: center; margin-bottom: 20px"; h32.textContent = "Canceled";
-    let h33 = document.createElement("h3");      h33.style = "text-align: center; margin-bottom: 20px"; h33.textContent = "Answers";
-    
+    let mainDiv = document.createElement("div");
+    mainDiv.classList = "row";
+    mainDiv.id = "mainRow";
+    let col1 = document.createElement("div");
+    col1.classList = "col-md-3";
+    let ul1 = document.createElement("ul");
+    ul1.classList = "list-group";
+    ul1.id = "completedUsersList";
+    let col2 = document.createElement("div");
+    col2.classList = "col-md-3";
+    let ul2 = document.createElement("ul");
+    ul2.classList = "list-group";
+    ul2.id = "canceledUsersList";
+    let col3 = document.createElement("div");
+    col3.classList = "col-md-6";
+    let h31 = document.createElement("h3");
+    h31.style = "text-align: center; margin-bottom: 20px";
+    h31.textContent = "Completed";
+    let h32 = document.createElement("h3");
+    h32.style = "text-align: center; margin-bottom: 20px";
+    h32.textContent = "Canceled";
+    let h33 = document.createElement("h3");
+    h33.style = "text-align: center; margin-bottom: 20px";
+    h33.textContent = "Answers";
+
     col1.append(h31);
     col2.append(h32);
     col1.append(ul1);
     col2.append(ul2);
     col3.append(h33);
-    mainDiv.append(col1); mainDiv.append(col2); mainDiv.append(col3);
+    mainDiv.append(col1);
+    mainDiv.append(col2);
+    mainDiv.append(col3);
 
     document.getElementById("mainContainer").append(mainDiv);
 
@@ -264,11 +283,11 @@
 
   // called whenever the current tab changes
   const onTabChange = function (newPage) {
-	console.log("Changing tab to => " + newPage);
+    console.log("Changing tab to => " + newPage);
     container.children().remove();
     switch (newPage) {
       case "creation":
-		creationTab();
+        creationTab();
         break;
       case "inspection":
         inspectionTab();
@@ -283,16 +302,14 @@
   };
 
   const tab = sessionStorage.getItem("currentTab") || "creation";
-  
+
   //handle first load / refresh
-  if(tab === "creation"){
-	creationTab();
-	sessionStorage.setItem("currentTab", "creation");
+  if (tab === "creation") {
+    creationTab();
+    sessionStorage.setItem("currentTab", "creation");
   } else {
-	  onTabChange(tab);
+    onTabChange(tab);
   }
-
-
 
   // defines what to do when the form is submitted
   $(document).on("submit", "form", function (e) {
