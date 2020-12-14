@@ -53,3 +53,15 @@ body .modal-dialog { /* Width */
   .modal-open .modal {
 	 z-index: 1050;
   }
+
+  .sidenav-button {
+	  text-align: left;
+  }
+
+  .list-group-item {
+	  text-align: center;
+  }
+
+  .canceled-users {
+	pointer-events: none;
+  }
