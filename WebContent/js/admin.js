@@ -190,6 +190,7 @@
     let mainDiv = document.createElement("div");
     mainDiv.classList = "row";
     mainDiv.id = "mainRow";
+    mainDiv.name = questId;
     let col1 = document.createElement("div");
     col1.classList = "col-md-3";
     let ul1 = document.createElement("ul");
@@ -202,6 +203,7 @@
     ul2.id = "canceledUsersList";
     let col3 = document.createElement("div");
     col3.classList = "col-md-6";
+    col3.id = "answersColumn";
     let h31 = document.createElement("h3");
     h31.style = "text-align: center; margin-bottom: 20px";
     h31.textContent = "Completed";
@@ -233,6 +235,17 @@
       script.src = "js/inspectionUserList.js";
       mainDiv.append(script);
     });
+
+    /*$.getJSON(canceledUsersUrl, function (data) {
+      let ul = document.getElementById("canceledUsersList");
+      $.each(data, function (key, val) {
+        let li = document.createElement("li");
+        li.classList = "list-group-item canceled-users";
+        li.textContent = val.username;
+        li.id = val.userId;
+        ul.append(li);
+      });
+    });*/
 
     return mainDiv;
   };
