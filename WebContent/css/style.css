@@ -63,45 +63,66 @@ body .modal-dialog {
   text-align: center;
 }
 
+.btn-female {
+  border-color: #7307f7 !important;
+  color: #7307f7 !important;
+}
+
 .canceled-users {
   pointer-events: none;
 }
 
+.answers-card {
+	margin: 10px 0 10px 0;
+  }
+  
+
+.btn-stats {
+  pointer-events: none;
+  flex: 1;
+  margin: 0 8px 0 8px;
+}
+
+.btn-stats-md {
+  flex: 2;
+}
+
 .slide-out {
-  animation: slide-out 0.5s forwards, fadeOutOpacity 0.2s;
-  -webkit-animation: slide-out 0.5s forwards, fadeOutOpacity 0.2s;
+  animation: slide-out 5s forwards, fadeOutOpacity 0.65s;
+  -webkit-animation: slide-out 5s forwards, fadeOutOpacity 0.65s;
 }
 
 .fade-in {
-	position: absolute;
-	top: 0;
-	left: 150px;
-	opacity: 1;
-	animation-name: fadeInOpacity;
-	animation-iteration-count: 1;
-	animation-timing-function: ease-in;
-	animation-duration: 0.3s;
+  position: absolute;
+  top: 0;
+  left: 150px;
+  opacity: 1;
+  animation-name: fadeInOpacity;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in;
+  animation-duration: 0.65s;
 }
 
 @keyframes fadeInOpacity {
-	0% {
-		opacity: 0;
-	}
-	100% {
-		opacity: 1;
-	}
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 @keyframes fadeOutOpacity {
-	0% {
-		opacity: 1;
-	}
-	100% {
-		opacity: 0;
-	}
+  0% {
+    opacity: 1;
+  }
+  10% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0;
+  }
 }
-
-
 
 @keyframes slide-out {
   0% {
