@@ -4,7 +4,7 @@
 
 (function () {
   // main page container
-  const container = $("#mainContainer");
+  let currentContainer = $("#mainContainer");
 
   const tabElements = Array.from(
     document.getElementsByClassName("sidenav-button")
@@ -13,12 +13,12 @@
   document.addEventListener("mousedown", (event) => {
     if (tabElements.includes(event.target)) {
       event.preventDefault();
-      onTabChange(event.target.id);
+      onTabChange(event.target.id, null);
     }
   });
 
   const showModal = function (title, content) {
-    container.append(
+    currentContainer.append(
       `<div class="modal" tabindex="-1" id="#mainModal">
 	<div class="modal-dialog">
 	  <div class="modal-content">
@@ -44,13 +44,12 @@
     );
     $(".modal").modal("show");
     $(".modal").on("hidden.bs.modal", function () {
-      container[0].removeChild($(".modal")[0]);
+      currentContainer[0].removeChild($(".modal")[0]);
     });
   };
 
   // called when a question is added
-  const addQuestion = function (event) {
-    event.preventDefault();
+  const addQuestion = function () {
     var questionNumber = sessionStorage.getItem("questionNumber") || 1;
     var input = document.createElement("input");
     input.id = "inputQuestion" + questionNumber;
@@ -70,7 +69,6 @@
 
     let table = document.createElement("table");
     table.classList = "table table-striped";
-    container.append(table);
 
     let thead = document.createElement("thead");
     thead.classList = "thead";
@@ -104,8 +102,7 @@
         let button = document.createElement("button");
         button.classList = "btn btn-primary";
         button.addEventListener("click", (ev) => {
-          onTabChange("inspectionUserId");
-          inspectionUserList(val.questionnaireId);
+          onTabChange("inspectionUserList", val.questionnaireId);
         });
         let i = document.createElement("i");
         i.classList = "fas fa-newspaper";
@@ -116,6 +113,7 @@
         tbody.append(tr);
       });
     });
+    return table;
   };
 
   // onclick for deletion tab
@@ -126,7 +124,6 @@
 
     let table = document.createElement("table");
     table.classList = "table table-striped";
-    container.append(table);
 
     let thead = document.createElement("thead");
     thead.classList = "thead";
@@ -177,6 +174,8 @@
         tbody.append(tr);
       });
     });
+
+    return table;
   };
 
   // onclick for deletion tab
@@ -187,12 +186,6 @@
     const canceledUsersUrl =
       "http://localhost:8080/GamifyUser/admin/listQuestionnaireCanceledUsers?start=0&size=100&id=" +
       questId;
-
-    /*   let backButtonDiv = document.createElement("div"); backButtonDiv.classList = "row"; backButtonDiv.style = "heigth: 35px";
-    let backButton = document.createElement("button"); backButton.classList = "btn btn-outline-primary"; backButton.style = "margin: 10px 0 20px 30px";
-    backButton.textContent = "Go Back";
-    backButtonDiv.append(backButton);
-    document.getElementById("mainContainer").append(backButtonDiv);*/
 
     let mainDiv = document.createElement("div");
     mainDiv.classList = "row";
@@ -227,9 +220,6 @@
     mainDiv.append(col1);
     mainDiv.append(col2);
     mainDiv.append(col3);
-
-    document.getElementById("mainContainer").append(mainDiv);
-
     $.getJSON(completedUsersUrl, function (data) {
       let ul = document.getElementById("completedUsersList");
       $.each(data, function (key, val) {
@@ -239,40 +229,106 @@
         li.id = val.userId;
         ul.append(li);
       });
+      let script = document.createElement("script");
+      script.src = "js/inspectionUserList.js";
+      mainDiv.append(script);
     });
+
+    return mainDiv;
   };
 
   // onclick for creation tab
   const creationTab = function () {
-    const form = `
-		<form id="mainForm">
-		<div class="form-group">
-		<div class="form-row">
-		<div class="col-md-6">
-		  <label for="inputName">Name</label>
-		  <input type="text" class="form-control" id="inputName" placeholder="Enter product name" required>
-		  </div>
-		  <div class="col-md-6">
-								  <label for="inputImage">Image</label>
-								  <input type="file" class="form-control" name="image" id="inputImage" required/>
-							  </div>
-		</div>
-		</div>
-			
-		<div class="form-group">
-		  <label for="inputDate">Date</label>
-		  <input type="date" class="form-control" name="inputDate" required>
-		</div>
-		<div class="form-group" id="questionFormGroup">
-				  <input type="text" class="form-control question" id="inputQuestion0" placeholder="Question" required>
-	  
-		</div>
-		<button class="btn btn-primary" id="addQuestionButton">Add Question</button>
-		<button type="submit" class="btn btn-success">Create!</button>
-		
-	 	 </form>`;
-    container.append(form);
-    $("#addQuestionButton").click(addQuestion);
+    //start form
+    let form = document.createElement("form");
+    form.id = "mainForm";
+
+    //start first form group
+    let div1 = document.createElement("div");
+    div1.classList = "form-group";
+    form.append(div1);
+    let div2 = document.createElement("div");
+    div2.classList = "form-row";
+    div1.append(div2);
+    let col1 = document.createElement("div");
+    col1.classList = "col-md-6";
+    div2.append(col1);
+    let label1 = document.createElement("label");
+    label1.for = "inputName";
+    label1.textContent = "Name";
+    col1.append(label1);
+    let input1 = document.createElement("input");
+    input1.type = "text";
+    input1.name = "name";
+    input1.classList = "form-control";
+    input1.id = "inputName";
+    input1.placeholder = "Enter product name";
+    input1.required = true;
+    col1.append(input1);
+    let col2 = document.createElement("div");
+    col2.classList = "col-md-6";
+    div2.append(col2);
+    let label2 = document.createElement("label");
+    label2.for = "inputImage";
+    label2.textContent = "Image";
+    col2.append(label2);
+    let input2 = document.createElement("input");
+    input2.type = "file";
+    input2.classList = "form-control";
+    input2.id = "inputImage";
+    input2.name = "image";
+    input2.required = true;
+    col2.append(input2);
+    // close first form group
+
+    //start second form group
+    let div3 = document.createElement("div");
+    div3.classList = "form-group";
+    form.append(div3);
+    let label3 = document.createElement("label");
+    label3.for = "inputDate";
+    label3.textContent = "Date";
+    div3.append(label3);
+    let input3 = document.createElement("input");
+    input3.type = "date";
+    input3.name = "date";
+    input3.classList = "form-control";
+    input3.id = "inputDate";
+    input3.required = true;
+    div3.append(input3);
+    // close second form group
+
+    //start third form group
+    let div4 = document.createElement("div");
+    form.append(div4);
+    div4.classList = "form-group";
+    div4.id = "questionFormGroup";
+    let input4 = document.createElement("input");
+    input4.type = "text";
+    input4.name = "Question0";
+    input4.classList = "form-control question";
+    input1.id = "inputQuestion0";
+    input4.placeholder = "Question";
+    input4.required = true;
+    div4.append(input4);
+    // close third form group
+
+    let newQuestionButton = document.createElement("button");
+    newQuestionButton.classList = "btn btn-primary";
+    newQuestionButton.addEventListener("click", (e) => {
+      e.preventDefault();
+      addQuestion();
+    });
+    newQuestionButton.id = "addQuestionButton";
+    newQuestionButton.textContent = "Add Question";
+    newQuestionButton.style = "margin-right: 10px";
+    form.append(newQuestionButton);
+    let submitButton = document.createElement("button");
+    submitButton.classList = "btn btn-success";
+    submitButton.type = "submit";
+    submitButton.textContent = "Create!";
+    form.append(submitButton);
+    return form;
   };
 
   $("#addQuestionButton").click(addQuestion);
@@ -282,21 +338,40 @@
   };
 
   // called whenever the current tab changes
-  const onTabChange = function (newPage) {
+  const onTabChange = function (newPage, data) {
     console.log("Changing tab to => " + newPage);
-    container.children().remove();
+    currentContainer.addClass("slide-out");
+    let prevCont = currentContainer[0];
+    prevCont.addEventListener("animationend", (e) => {
+      document.body.removeChild(prevCont);
+    });
+    let div = null;
     switch (newPage) {
       case "creation":
-        creationTab();
+        div = creationTab();
         break;
       case "inspection":
-        inspectionTab();
+        div = inspectionTab();
         break;
       case "deletion":
-        deletionTab();
+        div = deletionTab();
+        break;
+      case "inspectionUserList":
+        div = inspectionUserList(data);
         break;
       default:
+        return;
     }
+    let newContainer = document.createElement("div");
+    newContainer.classList = "container container-admin";
+    newContainer.id = "mainContainer";
+    newContainer.append(div);
+    newContainer.classList.add("fade-in");
+    newContainer.addEventListener("animationend", (e) => {
+      newContainer.classList.remove("fade-in");
+    });
+    document.body.append(newContainer);
+    currentContainer = $(newContainer);
     sessionStorage.clear();
     sessionStorage.setItem("currentTab", newPage);
   };
@@ -305,10 +380,10 @@
 
   //handle first load / refresh
   if (tab === "creation") {
-    creationTab();
+    onTabChange(tab, null);
     sessionStorage.setItem("currentTab", "creation");
   } else {
-    onTabChange(tab);
+    onTabChange(tab, null);
   }
 
   // defines what to do when the form is submitted

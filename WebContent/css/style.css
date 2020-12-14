@@ -1,67 +1,122 @@
 .question {
-	text-align: left;
-	margin: 15px 0 15px 0; 	
+  text-align: left;
+  margin: 15px 0 15px 0;
 }
 
 .h2-register {
-	  text-align: center; 
-	  margin: 30px 0 30px 0;
-	  font-size: 40px;
-  }
-
-.container-questionnaire {
-	max-width: 800px;
-	margin-top: 20px;
+  text-align: center;
+  margin: 30px 0 30px 0;
+  font-size: 40px;
 }
 
-.questionnaire-title{
-	margin: 30px 0 30px 0;
-	text-align: center;
+.container-questionnaire {
+  max-width: 800px;
+  margin-top: 20px;
+}
+
+.questionnaire-title {
+  margin: 30px 0 30px 0;
+  text-align: center;
 }
 
 .questionnaire-image {
-	margin-top: 30px;
-	max-height: 500px;
-	width: 100%;
+  margin-top: 30px;
+  max-height: 500px;
+  width: 100%;
 }
 
 td {
-    text-align: center;
+  text-align: center;
 }
 
 th {
-    text-align: center;
+  text-align: center;
 }
 
 .modal {
-	padding-left: 160px;
+  padding-left: 160px;
 }
 
-body .modal-dialog { /* Width */
-    max-width: 100%;
-    width: auto !important;
-	display: inline-block;
-	min-width: 240px;
+body .modal-dialog {
+  /* Width */
+  max-width: 100%;
+  width: auto !important;
+  display: inline-block;
+  min-width: 240px;
 }
 
 .modal {
-	z-index: -1;
-	display: flex !important;
-	min-width: 240px;
-  }
-  
-  .modal-open .modal {
-	 z-index: 1050;
-  }
+  z-index: -1;
+  display: flex !important;
+  min-width: 240px;
+}
 
-  .sidenav-button {
-	  text-align: left;
-  }
+.modal-open .modal {
+  z-index: 1050;
+}
 
-  .list-group-item {
-	  text-align: center;
-  }
+.sidenav-button {
+  text-align: left;
+}
 
-  .canceled-users {
-	pointer-events: none;
+.list-group-item {
+  text-align: center;
+}
+
+.canceled-users {
+  pointer-events: none;
+}
+
+.slide-out {
+  animation: slide-out 0.5s forwards, fadeOutOpacity 0.2s;
+  -webkit-animation: slide-out 0.5s forwards, fadeOutOpacity 0.2s;
+}
+
+.fade-in {
+	position: absolute;
+	top: 0;
+	left: 150px;
+	opacity: 1;
+	animation-name: fadeInOpacity;
+	animation-iteration-count: 1;
+	animation-timing-function: ease-in;
+	animation-duration: 0.3s;
+}
+
+@keyframes fadeInOpacity {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+@keyframes fadeOutOpacity {
+	0% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+}
+
+
+
+@keyframes slide-out {
+  0% {
+    transform: translateX(0%);
   }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@-webkit-keyframes slide-out {
+  0% {
+    -webkit-transform: translateX(0%);
+  }
+  100% {
+    -webkit-transform: translateX(-100%);
+  }
+}
