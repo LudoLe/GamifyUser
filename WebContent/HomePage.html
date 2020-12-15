@@ -29,12 +29,14 @@
 
     <title>Gamify</title>
     <script src="utils.js" charset="utf-8" defer></script>
-    <script src="HomePage.js" charset="utf-8" defer></script>
+    <script src="HomePageUser.js" charset="utf-8" defer></script>
   </head>
   <body>
-    <div class="container">
+    <div class="container" id="Page">
+  
+  <! -- buttons directory  -->   
       <div class="container">
-        <div class="itemdirectory">
+        <div class="itemsDirectory">
           <ul id="directory">
             <li>
               <button id="home" class="btn">
@@ -42,22 +44,17 @@
               </button>
             </li>
             <li>
-              <button id="Questionnaire" class="btn">
+              <button id="questionnaireButton" class="btn">
                 <i class="fas fa-file-signature"></i>
               </button>
-            </li>
+            </li>        
             <li>
-              <button id="See Reviews" class="btn">
+              <button id="logout" class="btn">
                 <i class="fas fa-sign-out-alt"></i>
               </button>
             </li>
             <li>
-              <button id="Log out" class="btn">
-                <i class="fas fa-sign-out-alt"></i>
-              </button>
-            </li>
-            <li>
-              <button id="See Leaderboard" class="btn">
+              <button id="seeLeaderboardButton" class="btn">
                 <i class="fas fa-chess-queen"></i>
               </button>
             </li>
@@ -69,14 +66,24 @@
         </div>
       </div>
 
+
+
       <div class="container">
-        <div class="maincontainer">
-          <div class="mainitem">
-            <ul id="mainDirectory"></ul>
-          </div>
-          <div class="mainitem2" id="mainFrame"></div>
+      <! - the main container with:  --> 
+        <div class="maincontainer" id="mainFrame">
+       
+        <div class="mainItem" id="productFrame">
+          <div class="mainItem0" id="productFrameImage"></div>
+          <div class="mainItem1" id="productReviews"></div>
         </div>
+          <div class="mainItem2" id="leaderBoardFrame"></div>
+          <div class="mainItem3" id="questionnaireFrame"></div>
+          </div>
+          
+         </div>
+        
+        
       </div>
-    </div>
+
   </body>
 </html>
