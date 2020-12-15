@@ -36,7 +36,7 @@
         `</p>
 		</div>
 		<div class="modal-footer">
-		  <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+		  <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Close</button>
 		</div>
 	  </div>
 	</div>
@@ -68,7 +68,7 @@
       "http://localhost:8080/GamifyUser/admin/listQuestionnaires?start=0&size=100";
 
     let table = document.createElement("table");
-    table.classList = "table table-striped";
+    table.classList = "table table-borderless";
 
     let thead = document.createElement("thead");
     thead.classList = "thead";
@@ -100,13 +100,14 @@
         tr.append(td);
         td = document.createElement("td");
         let button = document.createElement("button");
-        button.classList = "btn btn-primary";
+        button.classList = "btn btn-outline-primary";
         button.addEventListener("click", (ev) => {
           onTabChange("inspectionUserList", val.questionnaireId);
         });
         let i = document.createElement("i");
         i.classList = "fas fa-newspaper";
         i.textContent = " Open";
+        i.style = "font-weight: lighter";
         button.append(i);
         td.append(button);
         tr.append(td);
@@ -123,7 +124,7 @@
     const deleteUrl = "http://localhost:8080/GamifyUser/admin/delete?id=";
 
     let table = document.createElement("table");
-    table.classList = "table table-striped";
+    table.classList = "table table-borderless";
 
     let thead = document.createElement("thead");
     thead.classList = "thead";
@@ -155,7 +156,7 @@
         tr.append(td);
         td = document.createElement("td");
         let button = document.createElement("button");
-        button.classList = "btn btn-danger";
+        button.classList = "btn btn-outline-danger";
         let i = document.createElement("i");
         button.addEventListener("click", (ev) => {
           $.ajax({
@@ -166,6 +167,7 @@
             },
           });
         });
+        i.style = "font-weight: lighter";
         i.classList = "fas fa-newspaper";
         i.textContent = " Delete";
         button.append(i);
@@ -280,18 +282,31 @@
     col1.append(input1);
     let col2 = document.createElement("div");
     col2.classList = "col-md-6";
+    col2.style = "text-align: center";
     div2.append(col2);
     let label2 = document.createElement("label");
-    label2.for = "inputImage";
+    label2.for = "inputImageRow";
     label2.textContent = "Image";
     col2.append(label2);
+    let div22 = document.createElement("div");
+    div22.classList = "row justify-content-center";
+    div22.id = "inputImageRow";
+    col2.append(div22);
+    let label22 = document.createElement("label");
+    label22.for = "inputImage";
+    label22.id = "imageFakeLabel";
+    label22.classList = "btn btn-outline-primary";
+    label22.textContent = "Browse for an image";
+    label22.style = "position: absolute; bottom:0; margin: 0 0 0 0"
+    div22.append(label22);
     let input2 = document.createElement("input");
     input2.type = "file";
     input2.classList = "form-control";
     input2.id = "inputImage";
     input2.name = "image";
     input2.required = true;
-    col2.append(input2);
+    input2.hidden = true;
+    label22.append(input2);
     // close first form group
 
     //start second form group
@@ -312,6 +327,10 @@
     // close second form group
 
     //start third form group
+    let label4 = document.createElement("label");
+    label4.for = "inputQuestion0";
+    label4.textContent = "Questions";
+    form.append(label4);
     let div4 = document.createElement("div");
     form.append(div4);
     div4.classList = "form-group";
@@ -327,7 +346,7 @@
     // close third form group
 
     let newQuestionButton = document.createElement("button");
-    newQuestionButton.classList = "btn btn-primary";
+    newQuestionButton.classList = "btn btn-outline-primary";
     newQuestionButton.addEventListener("click", (e) => {
       e.preventDefault();
       addQuestion();
@@ -337,7 +356,7 @@
     newQuestionButton.style = "margin-right: 10px";
     form.append(newQuestionButton);
     let submitButton = document.createElement("button");
-    submitButton.classList = "btn btn-success";
+    submitButton.classList = "btn btn-outline-success";
     submitButton.type = "submit";
     submitButton.textContent = "Create!";
     form.append(submitButton);
