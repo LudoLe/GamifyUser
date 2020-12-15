@@ -4963,11 +4963,6 @@ input[type="button"].btn-block {
   margin-bottom: 0.75rem;
 }
 
-.container-admin {
-  padding-left: 180px;
-  margin-top: 30px;
-}
-
 @media (min-width: 576px) {
   .card-columns {
     -webkit-column-count: 3;
