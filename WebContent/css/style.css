@@ -1,12 +1,19 @@
 .question {
   text-align: left;
-  margin: 15px 0 15px 0;
+  margin: 5px 0 15px 0;
+  border-width: 1px;
 }
 
 .h2-register {
   text-align: center;
   margin: 30px 0 30px 0;
   font-size: 40px;
+}
+
+
+.container-admin {
+  padding-left: 180px;
+  margin-top: 30px;
 }
 
 .container-questionnaire {
@@ -25,8 +32,13 @@
   width: 100%;
 }
 
-td {
+.bg-white {
+  background-color: white;
+}
+
+.table td {
   text-align: center;
+  vertical-align: middle;
 }
 
 th {
@@ -56,7 +68,19 @@ body .modal-dialog {
 }
 
 .sidenav-button {
-  text-align: left;
+  text-align: center;
+  margin: 10px 0 10px 0;
+}
+
+.sidenav-image {
+  max-width: 90%;
+  max-height: 90%;
+  margin: 0 0 20px 10px;
+}
+
+.sidenav-admin {
+  box-shadow: 0px 0px 2px 0px;
+  color: #007bff;
 }
 
 .list-group-item {
@@ -73,14 +97,13 @@ body .modal-dialog {
 }
 
 .answers-card {
-	margin: 10px 0 10px 0;
-  }
-  
+  margin: 10px 0 10px 0;
+}
 
 .btn-stats {
   pointer-events: none;
   flex: 1;
-  margin: 0 8px 0 8px;
+  margin: 0 6px 0 6px;
 }
 
 .btn-stats-md {
@@ -95,12 +118,12 @@ body .modal-dialog {
 .fade-in {
   position: absolute;
   top: 0;
-  left: 150px;
+  left: 144px;
   opacity: 1;
   animation-name: fadeInOpacity;
   animation-iteration-count: 1;
   animation-timing-function: ease-in;
-  animation-duration: 0.65s;
+  animation-duration: 0.85s;
 }
 
 @keyframes fadeInOpacity {
