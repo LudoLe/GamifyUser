@@ -1,15 +1,17 @@
-//TODO:
-// mettere absolute url invece che localhost
-// collegare parametri negli url
+/* 
+This script takes care of orchestrating the admin page's tabs (Creation, Inspection and Deletion).
+*/
 
 (function () {
   // main page container
   let currentContainer = $("#mainContainer");
 
+  // list of sidenav buttons
   const tabElements = Array.from(
     document.getElementsByClassName("sidenav-button")
   );
 
+  // binds left click on sidenav button to tab change callback
   document.addEventListener("mousedown", (event) => {
     if (tabElements.includes(event.target)) {
       event.preventDefault();
@@ -17,6 +19,7 @@
     }
   });
 
+  // simple function to show a Bootstrap modal
   const showModal = function (title, content) {
     currentContainer.append(
       `<div class="modal" tabindex="-1" id="#mainModal">
@@ -36,7 +39,7 @@
         `</p>
 		</div>
 		<div class="modal-footer">
-		  <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+		  <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Close</button>
 		</div>
 	  </div>
 	</div>
@@ -48,7 +51,7 @@
     });
   };
 
-  // called when a question is added
+  // takes care of adding a question row to the creation page
   const addQuestion = function () {
     var questionNumber = sessionStorage.getItem("questionNumber") || 1;
     var input = document.createElement("input");
@@ -63,12 +66,15 @@
     return false;
   };
 
+  // returns the inspection page
   const inspectionTab = function () {
     const listUrl =
-      "http://localhost:8080/GamifyUser/admin/listQuestionnaires?start=0&size=100";
+      "/GamifyUser/admin/listQuestionnaires?start=0&size=100";
+
+    // start page content
 
     let table = document.createElement("table");
-    table.classList = "table table-striped";
+    table.classList = "table table-borderless";
 
     let thead = document.createElement("thead");
     thead.classList = "thead";
@@ -89,6 +95,10 @@
     let tbody = document.createElement("tbody");
     table.append(tbody);
 
+    // end page content
+
+    // gets a list of questionnaires
+    // the json contains the questionnaireId, datetime and name of each questionnaire
     $.getJSON(listUrl, function (data) {
       $.each(data, function (key, val) {
         let tr = document.createElement("tr");
@@ -100,13 +110,14 @@
         tr.append(td);
         td = document.createElement("td");
         let button = document.createElement("button");
-        button.classList = "btn btn-primary";
+        button.classList = "btn btn-outline-primary";
         button.addEventListener("click", (ev) => {
           onTabChange("inspectionUserList", val.questionnaireId);
         });
         let i = document.createElement("i");
         i.classList = "fas fa-newspaper";
         i.textContent = " Open";
+        i.style = "font-weight: lighter";
         button.append(i);
         td.append(button);
         tr.append(td);
@@ -116,14 +127,17 @@
     return table;
   };
 
-  // onclick for deletion tab
+  // creates deletion tab
   const deletionTab = function () {
+
     const pastListUrl =
-      "http://localhost:8080/GamifyUser/admin/listQuestionnaires?start=0&size=100&past=true";
-    const deleteUrl = "http://localhost:8080/GamifyUser/admin/delete?id=";
+      "/GamifyUser/admin/listQuestionnaires?start=0&size=100&past=true";
+    const deleteUrl = "/GamifyUser/admin/delete?id=";
+
+    // start page content
 
     let table = document.createElement("table");
-    table.classList = "table table-striped";
+    table.classList = "table table-borderless";
 
     let thead = document.createElement("thead");
     thead.classList = "thead";
@@ -144,8 +158,14 @@
     let tbody = document.createElement("tbody");
     table.append(tbody);
 
+    // end page content
+
+    // gets a list of questionnaires which are deletable, meaning they are in the past
+    // creates a table row for each questionnaire
     $.getJSON(pastListUrl, function (data) {
       $.each(data, function (key, val) {
+
+        //start row element
         let tr = document.createElement("tr");
         let td = document.createElement("td");
         td.textContent = val.datetime;
@@ -155,8 +175,11 @@
         tr.append(td);
         td = document.createElement("td");
         let button = document.createElement("button");
-        button.classList = "btn btn-danger";
+        button.classList = "btn btn-outline-danger";
         let i = document.createElement("i");
+
+        // adds listener to click on deletion button; when clicked, a call
+        // to deleteUrl happens, which if successful deletes the questionnaire
         button.addEventListener("click", (ev) => {
           $.ajax({
             url: deleteUrl + val.questionnaireId,
@@ -166,26 +189,32 @@
             },
           });
         });
+
+        i.style = "font-weight: lighter";
         i.classList = "fas fa-newspaper";
         i.textContent = " Delete";
         button.append(i);
         td.append(button);
         tr.append(td);
         tbody.append(tr);
+        
+        //end row element
       });
     });
 
     return table;
   };
 
-  // onclick for deletion tab
+  // deletion tab
   const inspectionUserList = function (questId) {
     const completedUsersUrl =
-      "http://localhost:8080/GamifyUser/admin/listQuestionnaireCompletedUsers?start=0&size=100&id=" +
+      "/GamifyUser/admin/listQuestionnaireCompletedUsers?start=0&size=100&id=" +
       questId;
     const canceledUsersUrl =
-      "http://localhost:8080/GamifyUser/admin/listQuestionnaireCanceledUsers?start=0&size=100&id=" +
+      "/GamifyUser/admin/listQuestionnaireCanceledUsers?start=0&size=100&id=" +
       questId;
+
+    // start page content
 
     let mainDiv = document.createElement("div");
     mainDiv.classList = "row";
@@ -222,6 +251,13 @@
     mainDiv.append(col1);
     mainDiv.append(col2);
     mainDiv.append(col3);
+
+    // end page content
+
+    // gets list of users who completed the questionnaire and
+    // creates a clickable list element for each user;
+    // when clicked, the user's answers to the questionnaire are loaded
+    // via inpsectionUserList.js
     $.getJSON(completedUsersUrl, function (data) {
       let ul = document.getElementById("completedUsersList");
       $.each(data, function (key, val) {
@@ -236,7 +272,8 @@
       mainDiv.append(script);
     });
 
-    /*$.getJSON(canceledUsersUrl, function (data) {
+    // gets list of users who canceled the questionnaire
+    $.getJSON(canceledUsersUrl, function (data) {
       let ul = document.getElementById("canceledUsersList");
       $.each(data, function (key, val) {
         let li = document.createElement("li");
@@ -245,12 +282,12 @@
         li.id = val.userId;
         ul.append(li);
       });
-    });*/
+    });
 
     return mainDiv;
   };
 
-  // onclick for creation tab
+  // creation tab
   const creationTab = function () {
     //start form
     let form = document.createElement("form");
@@ -280,18 +317,31 @@
     col1.append(input1);
     let col2 = document.createElement("div");
     col2.classList = "col-md-6";
+    col2.style = "text-align: center";
     div2.append(col2);
     let label2 = document.createElement("label");
-    label2.for = "inputImage";
+    label2.for = "inputImageRow";
     label2.textContent = "Image";
     col2.append(label2);
+    let div22 = document.createElement("div");
+    div22.classList = "row justify-content-center";
+    div22.id = "inputImageRow";
+    col2.append(div22);
+    let label22 = document.createElement("label");
+    label22.for = "inputImage";
+    label22.id = "imageFakeLabel";
+    label22.classList = "btn btn-outline-primary";
+    label22.textContent = "Browse for an image";
+    label22.style = "position: absolute; bottom:0; margin: 0 0 0 0";
+    div22.append(label22);
     let input2 = document.createElement("input");
     input2.type = "file";
     input2.classList = "form-control";
     input2.id = "inputImage";
     input2.name = "image";
     input2.required = true;
-    col2.append(input2);
+    input2.hidden = true;
+    label22.append(input2);
     // close first form group
 
     //start second form group
@@ -312,6 +362,10 @@
     // close second form group
 
     //start third form group
+    let label4 = document.createElement("label");
+    label4.for = "inputQuestion0";
+    label4.textContent = "Questions";
+    form.append(label4);
     let div4 = document.createElement("div");
     form.append(div4);
     div4.classList = "form-group";
@@ -327,7 +381,7 @@
     // close third form group
 
     let newQuestionButton = document.createElement("button");
-    newQuestionButton.classList = "btn btn-primary";
+    newQuestionButton.classList = "btn btn-outline-primary";
     newQuestionButton.addEventListener("click", (e) => {
       e.preventDefault();
       addQuestion();
@@ -337,7 +391,7 @@
     newQuestionButton.style = "margin-right: 10px";
     form.append(newQuestionButton);
     let submitButton = document.createElement("button");
-    submitButton.classList = "btn btn-success";
+    submitButton.classList = "btn btn-outline-success";
     submitButton.type = "submit";
     submitButton.textContent = "Create!";
     form.append(submitButton);
@@ -353,8 +407,10 @@
   // called whenever the current tab changes
   const onTabChange = function (newPage, data) {
     console.log("Changing tab to => " + newPage);
+    // adds the slide-out class to trigger the animation
     currentContainer.addClass("slide-out");
     let prevCont = currentContainer[0];
+    // when the animation ends, destroy the container
     prevCont.addEventListener("animationend", (e) => {
       document.body.removeChild(prevCont);
     });
@@ -375,6 +431,7 @@
       default:
         return;
     }
+    // create new page container
     let newContainer = document.createElement("div");
     newContainer.classList = "container container-admin";
     newContainer.id = "mainContainer";
@@ -386,6 +443,8 @@
     document.body.append(newContainer);
     currentContainer = $(newContainer);
     sessionStorage.clear();
+    // save current tab's name to session storage, so that in case
+    // the user reloads the page we keep track of the tab he was on
     sessionStorage.setItem("currentTab", newPage);
   };
 
@@ -399,7 +458,7 @@
     onTabChange(tab, null);
   }
 
-  // defines what to do when the form is submitted
+  // defines what to do when the creation form is submitted
   $(document).on("submit", "form", function (e) {
     e.preventDefault();
     let date = new Date($(this)[0][2].value);
@@ -413,7 +472,7 @@
     }
 
     var formData = new FormData($(this)[0]);
-    const url = "http://localhost:8080/GamifyUser/admin/create";
+    const url = "/GamifyUser/admin/create";
     $.ajax({
       method: "POST",
       url: url,
