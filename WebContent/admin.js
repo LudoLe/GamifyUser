@@ -68,8 +68,7 @@ This script takes care of orchestrating the admin page's tabs (Creation, Inspect
 
   // returns the inspection page
   const inspectionTab = function () {
-    const listUrl =
-      "/GamifyUser/admin/listQuestionnaires?start=0&size=100";
+    const listUrl = "/GamifyUser/admin/listQuestionnaires?start=0&size=100";
 
     // start page content
 
@@ -129,7 +128,6 @@ This script takes care of orchestrating the admin page's tabs (Creation, Inspect
 
   // creates deletion tab
   const deletionTab = function () {
-
     const pastListUrl =
       "/GamifyUser/admin/listQuestionnaires?start=0&size=100&past=true";
     const deleteUrl = "/GamifyUser/admin/delete?id=";
@@ -164,7 +162,6 @@ This script takes care of orchestrating the admin page's tabs (Creation, Inspect
     // creates a table row for each questionnaire
     $.getJSON(pastListUrl, function (data) {
       $.each(data, function (key, val) {
-
         //start row element
         let tr = document.createElement("tr");
         let td = document.createElement("td");
@@ -187,6 +184,9 @@ This script takes care of orchestrating the admin page's tabs (Creation, Inspect
               showModal("Success!", "Questionnaire deleted correctly");
               location.reload();
             },
+            error: function (request, status, error) {
+              showModal("Error", request.responseText);
+            },
           });
         });
 
@@ -197,7 +197,7 @@ This script takes care of orchestrating the admin page's tabs (Creation, Inspect
         td.append(button);
         tr.append(td);
         tbody.append(tr);
-        
+
         //end row element
       });
     });
@@ -205,7 +205,7 @@ This script takes care of orchestrating the admin page's tabs (Creation, Inspect
     return table;
   };
 
-  // deletion tab
+  // user inspection tab
   const inspectionUserList = function (questId) {
     const completedUsersUrl =
       "/GamifyUser/admin/listQuestionnaireCompletedUsers?start=0&size=100&id=" +
@@ -337,6 +337,9 @@ This script takes care of orchestrating the admin page's tabs (Creation, Inspect
     let input2 = document.createElement("input");
     input2.type = "file";
     input2.classList = "form-control";
+    input2.addEventListener("change", (e) => {
+      sessionStorage.setItem("imageUploaded", "true");
+    });
     input2.id = "inputImage";
     input2.name = "image";
     input2.required = true;
@@ -394,26 +397,32 @@ This script takes care of orchestrating the admin page's tabs (Creation, Inspect
     submitButton.classList = "btn btn-outline-success";
     submitButton.type = "submit";
     submitButton.textContent = "Create!";
+    submitButton.addEventListener("click", (e) => {
+      if (sessionStorage.getItem("imageUploaded") === null) {
+        showModal("Error", "Please upload an image");
+        return;
+      }
+    });
     form.append(submitButton);
     return form;
   };
 
   $("#addQuestionButton").click(addQuestion);
 
-  const logoutTab = function () {
-    showModal("TODO", "TODO");
-  };
-
   // called whenever the current tab changes
   const onTabChange = function (newPage, data) {
     console.log("Changing tab to => " + newPage);
-    // adds the slide-out class to trigger the animation
-    currentContainer.addClass("slide-out");
     let prevCont = currentContainer[0];
-    // when the animation ends, destroy the container
-    prevCont.addEventListener("animationend", (e) => {
+    if (newPage === sessionStorage.getItem("currentTab")) {
       document.body.removeChild(prevCont);
-    });
+    } else {
+      // adds the slide-out class to trigger the animation
+      currentContainer.addClass("slide-out");
+      // when the animation ends, destroy the container
+      prevCont.addEventListener("animationend", (e) => {
+        document.body.removeChild(prevCont);
+      });
+    }
     let div = null;
     switch (newPage) {
       case "creation":
@@ -470,6 +479,10 @@ This script takes care of orchestrating the admin page's tabs (Creation, Inspect
       );
       return;
     }
+    if (sessionStorage.getItem("imageUploaded") === null) {
+      showModal("Error", "Please upload an image");
+      return;
+    }
 
     var formData = new FormData($(this)[0]);
     const url = "/GamifyUser/admin/create";
@@ -480,14 +493,18 @@ This script takes care of orchestrating the admin page's tabs (Creation, Inspect
       processData: false,
       contentType: false,
       timeout: 20000,
-      success: function (msg) {
-        location.href("/greetings.html");
+      success: function (data) {
+        if (data.redirect) {
+          window.location.href = data.redirect;
+        } else {
+          showModal(
+            "Success",
+            "Congrats! The questionnaire has been submitted successfully."
+          );
+        }
       },
       error: function (request, status, error) {
-        showModal(
-          "Error",
-          "Questionnaire submission failed. Please try again."
-        );
+        showModal("Error", request.responseText);
       },
     });
   });

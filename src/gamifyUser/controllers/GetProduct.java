@@ -49,7 +49,7 @@ public class GetProduct extends HttpServlet{
 
 			try {
 		
-				questionnaire = questionnaireService.findByDate(java.time.LocalDate.now().toString());
+		//		questionnaire = questionnaireService.findByDate(java.time.LocalDate.now().toString());
 				Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 				response.setStatus(HttpServletResponse.SC_OK);
 				response.setContentType("application/json");
