@@ -63,9 +63,9 @@ public class CheckLogin extends HttpServlet {
 		} else {
 			request.getSession().setAttribute("user", user);
 			response.setStatus(HttpServletResponse.SC_OK);
-			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
-			response.getWriter().println(usrn);
+			String redirectPath = request.getServletContext().getContextPath() + (user.getAdmin() == 1 ? "/admin" : "/user");
+			response.getWriter().print(redirectPath);
 		}
 	}
 

@@ -4,6 +4,9 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import polimi.db2.gamifyDB.entities.User;
+
 import java.io.IOException;
 
 /**
@@ -30,17 +33,36 @@ public class Checker implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
-        System.out.print("Login checker filter executing ...\n");
 
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
-        String loginPath = req.getServletContext().getContextPath() + "/login";
+    	ServletContext context = req.getServletContext();
+
+        String loginPath = context.getContextPath() + "/";
 
         HttpSession s = req.getSession();
-        if (s.isNew() || s.getAttribute("user") == null) {
-            res.sendRedirect(loginPath);
-            return;
+        
+        Object user = s.getAttribute("user");
+    	String URI = req.getRequestURI();
+
+        if (s.isNew() || user == null) {
+        	if(!(URI.equals(loginPath) || URI.equals(loginPath + "CheckLogin") || URI.equals(loginPath + "loginManagement2.js") || URI.equals(loginPath + "utils.js") || URI.equals(loginPath + "login.css"))) {
+        		res.sendRedirect(loginPath);
+                return;          
+                }
+        	else if(user != null) {
+        		context.removeAttribute("user");
+        		res.sendRedirect(loginPath);
+                return;
+        	}
         }
+        
+        else if(URI.equals(loginPath)) {
+        	String redPath = loginPath + (((User) user).getAdmin() == 1 ? "admin" : "user");
+        	res.sendRedirect(redPath);
+        	return;
+        }
+        
         // pass the request along the filter chain
         chain.doFilter(request, response);
     }

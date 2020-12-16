@@ -2,6 +2,7 @@ package gamifyUser.controllers.admin;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 
 import java.util.*;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import polimi.db2.gamifyDB.entities.Questionnaire;
 import polimi.db2.gamifyDB.services.QuestionService;
 import polimi.db2.gamifyDB.services.QuestionnaireService;
 
@@ -75,6 +77,11 @@ public class QuestionnaireCreation extends HttpServlet {
 		questions.addAll(Utility.retrieveQuestions(request));
 
 		Part part = request.getPart("image");
+		
+		if(part == null) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request.");
+			return;
+		}
 
 		// gets absolute path of the web application
 		String applicationPath = request.getServletContext().getRealPath("");
@@ -108,8 +115,14 @@ public class QuestionnaireCreation extends HttpServlet {
 		}
 
 		try {
+			Questionnaire q = questionnaireService.createQuestionnaire(savedFileName, name, date, questions);
+			if(q == null) {
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.setContentType("text/plain;charset=UTF-8");
+				response.getWriter().println("A questionnaire already exists on this date.");
+				return;
+			}
 			part.write(finalPath);
-			questionnaireService.createQuestionnaire(savedFileName, name, date, questions);
 			response.setStatus(HttpServletResponse.SC_OK);
 			response.getWriter().println("OK");
 			return;
