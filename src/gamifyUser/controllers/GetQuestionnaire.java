@@ -3,6 +3,7 @@ package gamifyUser.controllers;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -43,24 +44,24 @@ public class GetQuestionnaire extends HttpServlet{
 		public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			
 			
-			 List<String> mandatoryParams = new ArrayList<>(Arrays.asList("date"));
-			 if(!Utility.paramExists(request, response, mandatoryParams) || Utility.paramIsEmpty(request, response, mandatoryParams)) return;
 			
 			//get the product	
 			List<Question> questions=null;
 			Questionnaire questionnaire;
 
 			try {
-		
-				
-				int questionnaireId=Integer.parseInt((StringEscapeUtils.escapeJava(request.getParameter("questionnaireId"))));
-				questionnaire = questionnaireService.find(questionnaireId);
-				questions=questionnaire.getQuestions();
+		        
+				questionnaire = questionnaireService.findByDate(new Date());
 				Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 				response.setStatus(HttpServletResponse.SC_OK);
 				response.setContentType("application/json");
 				response.setCharacterEncoding("UTF-8");
-				response.getWriter().print(gson.toJson(questions));
+				
+				if(questionnaire!=null){
+						questions=questionnaire.getQuestions();
+						response.getWriter().print(gson.toJson(questions));
+				}else  response.getWriter().print(gson.toJson(questionnaire));
+
 				return;
 				
 			} catch (Exception e){

@@ -3,6 +3,7 @@ package gamifyUser.controllers;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -48,13 +49,16 @@ public class GetProduct extends HttpServlet{
 			Questionnaire questionnaire=null;
 
 			try {
-		
-				questionnaire = questionnaireService.findByDate(java.time.LocalDate.now().toString());
+				  				
+				
+				questionnaire = questionnaireService.findByDate(new Date());
 				Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+				String applicationPath = request.getServletContext().getRealPath("");
+				String uploadFilePath = applicationPath + File.separator + "uploads/campaignImages"
 				response.setStatus(HttpServletResponse.SC_OK);
 				response.setContentType("application/json");
 				response.setCharacterEncoding("UTF-8");
-				response.getWriter().print(gson.toJson(questionnaire));
+				response.getWriter().print(gson.toJson());
 				return;
 				
 			} catch (Exception e){

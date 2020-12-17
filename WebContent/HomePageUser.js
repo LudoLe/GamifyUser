@@ -1,6 +1,7 @@
 (function() { // avoid variables ending up in the global scope
 // page components
-    var productFrame, leaderBoardFrame, questionnaireFrame, logout, homeButton, questionnaireButton, mainFrame;
+    var productFrame, leaderBoardFrame, questionnaireFrame, logout, homeButton, questionnaireButton, leaderBoardButton, mainFrame;
+
     orchestrator = new PageOrchestrator(); 
    
 
@@ -15,18 +16,23 @@
 
  function HomeButton(){
 	 var home = document.getElementById("home");
-	
 	 home.addEventListener("click", (e)=>{	
-	           	   orchestrator.refresh(0); 
- }, false);
+ 	 orchestrator.refresh(0); 
+   }, false);
+  
 	 }
 
 function QuestionnaireButton(){
-	 var home = document.getElementById("questionnaireButton");
-
-	 
-	 home.addEventListener("click", (e)=>{	
+	 var questionnaire = document.getElementById("questionnaireButton");
+	 questionnaire.addEventListener("click", (e)=>{	
 	           	   orchestrator.refresh(1); 
+ }, false);
+	 }
+
+function LeaderBoardButton(){
+	 var home = document.getElementById("leaderBoardButton");
+	 home.addEventListener("click", (e)=>{	
+	 orchestrator.refresh(2); 
  }, false);
 	 }
  
@@ -80,9 +86,10 @@ function QuestionnaireButton(){
 	      var self = this;
 	        // build the figure with the product image and product image
 	          var figure = document.createElement("FIGURE");
-	          figure.textContent= folder.name
+	          figure.textContent= questionnaire.name
 	          figure.setAttribute('id', questionnaire.id);
 			  var i = document.createElement("IMG");
+			  var image=self.getImage();
       		  i.setAttribute("src", questionnaire.image);
       		  i.setAttribute("width", "250");
       		  i.setAttribute("height", "200");
@@ -131,6 +138,22 @@ function QuestionnaireButton(){
  			}, false);	  
 	  }
 
+    this.getImage= function(questionnaireId){
+          var self = this;
+	      questionnaireId=target.id;
+	      makeCall("GET", "GetImage?questionnaireId="+questionnaireId, null,
+				        function(req) {
+				          if (req.readyState == 4) {
+				            var message = req.responseText;
+				            if (req.status == 200) {
+				             self.updateCommentSection(JSON.parse(req.responseText),target); 
+				            } else {
+				              self.alert.textContent = message;
+				            }
+				          }
+				        }
+				      ); 
+	   }
 	  
 	
 	  
@@ -192,6 +215,17 @@ this.updateCommentSection= function(array, target){
  
 	  
   this.show= function(questions){
+	
+	
+	if(questions==null){
+			  var self=this;
+		    	      var alert= document.createElement("p");
+			          alert.textContent = "Nothing to display!";	
+			          item= document.createElement("div");
+			          item.setAttribute("class", "se");
+				      item.appendChild(alert);
+				      self.frame.appendChild(item);
+		}else{
 	 
         var prod=document.getElementById("questionnaireFrame")
 
@@ -249,22 +283,23 @@ this.updateCommentSection= function(array, target){
 	  fieldsetDiv.appendChild(buttonDiv);
       
       self.registerEvents(button);
+}
 
 	      }
 
   this.registerEvents= function(element){
 		  
-		  var tokenFolders =0;
+		  var token =0;
 	 	    
 	    element.addEventListener("click", (e) => {	 
 	    	 e.stopPropagation();
-	    	  if(tokenFolders===0){
+	    	  if(token===0){
 	    			self.showStats(e.target);
-	 		     	tokenFolders=1;
+	 		     	token=1;
 				}
 		    	else{ 	 
 		         element.removeChild(ul);
-		         tokenFolders=0;
+		         token=0;
 		    	} 
  			}, false);	  
 	  }
@@ -450,22 +485,44 @@ this.showStatiticsForm= function(array, target){
 
 /************************************************END QUESTIONNAIRE***************************************************************** */
 
+
+/************************************************BEGIN LEADERBOARDFRAME***************************************************************** */
+
+ function LeaderBoardFrame(_frame){
+	    this.frame=_frame;
+	   var self = this;
+}
+
+/************************************************END LEADERBOARDFRAME***************************************************************** */
+
+
+
+
+
 //Questa funzione gestisce tutta la pagina in generale (tramite il page orchestrator), ha una lista degli stati in cui
 //può trovarsi la pagina e a seconda dei parametri che le vengono passati nelle varie fnuzioni costruisce
 //il giusto template
 function MainFrame(_framecontainer){
 
+
+
+      productFrame = new ProductFrame(document.getElementById("productFrame"));
+	  questionnaireFrame = new QuestionnaireFrame(document.getElementById("questionnaireFrame"));
+	  leaderBoardFrame = new LeaderBoardFrame(document.getElementById("leaderBoardFrame"));
+ 
 	  this.frameContainer = _framecontainer;
 	  var self=this;
+	  this.alertContainer = document.getElementById("id_alert");
+
 	  
-	 this.show = function(state, id){
+	 this.show = function(state){
 		 var url;
 		 var self=this;
 	 
 		 switch(state){
 	    	case 0: url="GetProduct";
 	    		break; 
-	    	case 1: url="GetQuestionnaire?questionnaireId=" +id;
+	    	case 1: url="GetQuestionnaire";
 	    		break;
 	    	case 2: url="GetLeaderBoard";
 	    		break;
@@ -479,7 +536,7 @@ function MainFrame(_framecontainer){
 			              self.update(JSON.parse(req.responseText),state); 
 			            } else {
 			            	
-			              self.alert.textContent = message;
+			              self.alertContainer.textContent = message;
 			            }
 			          }
 			        }
@@ -494,16 +551,34 @@ function MainFrame(_framecontainer){
 	
 	switch(state){
 	    	case 0: 
-					 productFrame = new ProductFrame(document.getElementById("productFrame"));
-					 productFrame.show(array);
+                     document.getElementById("id_alert").innerHTML="";
+
+					 document.getElementById("productFrame").innerHTML = "";
+					 document.getElementById("questionnaireFrame").innerHTML = "";
+					 document.getElementById("leaderBoardFrame").innerHTML = "";
+				     productFrame.show(array)
+
 			    break; 
 	    	case 1: 
-					 questionnaireFrame = new QuestionnaireFrame(document.getElementById("questionnaireFrame"));
+                    
+                    document.getElementById("id_alert").innerHTML="";
+
+					 document.getElementById("questionnaireFrame").innerHTML = "";
+					 document.getElementById("productFrame").innerHTML = "";
+					 document.getElementById("leaderBoardFrame").innerHTML = "";
 					 questionnaireFrame.show(array);
+					
+
 	    		break;
 	    	case 2: 
-					  leaderBoardFrame = new LeaderBoardFrame(document.getElementById("leaderBoardFrame"));
-					  questionnaireFrame.show(array);
+                      
+                    document.getElementById("id_alert").innerHTML="";
+
+					 document.getElementById("productFrame").innerHTML = "";
+					 document.getElementById("questionnaireFrame").innerHTML = "";
+					 document.getElementById("leaderBoardFrame").innerHTML = "";
+					 leaderBoardFrame.show(array);
+			           
 	    		break;	         
 		 }
 			 
@@ -512,12 +587,13 @@ function MainFrame(_framecontainer){
 	  } 	
 
 
- function PageOrchestrator(){
-	  
-	    var alertContainer = document.getElementById("id_alert");
+var state=0;
 
+ function PageOrchestrator(){
+	 
 	    this.start = function(){
 		    
+           
 	    	//messaggio di welcome back
 			personalMessage = new PersonalMessage(sessionStorage.getItem('username'),  document.getElementById("id_username"));
 	        personalMessage.show();
@@ -526,14 +602,16 @@ function MainFrame(_framecontainer){
 	        mainFrame=new MainFrame(document.getElementById("mainFrame"));
 
 		  //directory coi bottoni
-           questionnaireButton= new QuestionnaireButton();
-		   homeButton=new HomeButton();
+           questionnaireButton= new QuestionnaireButton(state);
+           leaderBoardButton= new LeaderBoardButton(state);
+
+		   homeButton=new HomeButton(state);
 	       logout= new Logout();
         }
 	    
 	    
-	        this.refresh = function(state, id){
-	    	mainFrame.show(state, id);
+	        this.refresh = function(state){
+	    	mainFrame.show(state);
 	    
 	
 	     }
