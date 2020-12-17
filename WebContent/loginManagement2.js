@@ -12,10 +12,10 @@
       makeCall("POST", "CheckLogin", e.target.closest("form"), function (req) {
         if (req.readyState == XMLHttpRequest.DONE) {
           var message = req.responseText;
+          console.log(message);
           switch (req.status) {
             case 200:
-              sessionStorage.setItem("username", message);
-              window.location.href = "HomePage.html";
+              window.location.href = message;
               break;
             case 400: // bad request
               document.getElementById("errormessage").textContent = message;
@@ -178,8 +178,8 @@
                     var message = req.responseText;
                     switch (req.status) {
                       case 200:
-                        sessionStorage.setItem("username", message);
-                        window.location.href = "HomePage.html";
+                    //    sessionStorage.setItem("username", message);
+                        window.location.href = message;
                         break;
                       case 400: // bad request
                         document.getElementById(

@@ -47,7 +47,6 @@ public class QuestionnaireDeletion extends HttpServlet {
 
 		List<String> mandatoryParams = new ArrayList<>(Arrays.asList("id"));
 		if(!Utility.paramExists(request, response, mandatoryParams) || Utility.paramIsEmpty(request, response, mandatoryParams)) return;
-		Questionnaire questionnaire;
 
 		try{
 			int id = Integer.parseInt(request.getParameter("id"));
@@ -57,11 +56,15 @@ public class QuestionnaireDeletion extends HttpServlet {
 				response.getWriter().print(("OK"));
 			}
 			else {
-				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request.");
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.setContentType("text/plain;charset=UTF-8");
+				response.getWriter().println("Invalid request.");
 				return;
 			}
 		} catch (Exception e){
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request.");
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.setContentType("text/plain;charset=UTF-8");
+			response.getWriter().println("Invalid request.");
 			return;
 		}
 
