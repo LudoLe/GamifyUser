@@ -22,7 +22,7 @@ import gamifyUser.utility.Utility;
 @WebServlet("/CheckSignUp")
 @MultipartConfig
 public class CheckSignUp extends HttpServlet {
-	
+
 	public static final int MAX_USERNAME_LENGTH = 40;
 	public static final int MAX_EMAIL_LENGTH = 100;
 	public static final int MAX_PWD_LENGTH = 100;
@@ -31,7 +31,7 @@ public class CheckSignUp extends HttpServlet {
 	@EJB(name = "polimi.db2.gamifyDB.services/UserService")
 	private UserService usrService;
 
-	public CheckSignUp(){
+	public CheckSignUp() {
 		super();
 	}
 
@@ -42,54 +42,58 @@ public class CheckSignUp extends HttpServlet {
 			throws ServletException, IOException {
 		// obtain and escape params
 		String usrn, pwd, pwd2, email;
-		
+
 		List<String> mandatoryParams = new ArrayList<>(Arrays.asList("user2", "mail2", "pass2", "pass3"));
-		if(!Utility.paramExists(request, response, mandatoryParams) || Utility.paramIsEmpty(request, response, mandatoryParams)) return;
-		
+		if (!Utility.paramExists(request, response, mandatoryParams)
+				|| Utility.paramIsEmpty(request, response, mandatoryParams))
+			return;
+
 		try {
 			usrn = StringEscapeUtils.escapeJava(request.getParameter("user2"));
 			email = StringEscapeUtils.escapeJava(request.getParameter("mail2"));
-			if(!Utility.isValidMailAddress(email)) throw new Exception();
+			if (!Utility.isValidMailAddress(email))
+				throw new Exception();
 			pwd = StringEscapeUtils.escapeJava(request.getParameter("pass2"));
 			pwd2 = StringEscapeUtils.escapeJava(request.getParameter("pass3"));
 		} catch (Exception e) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request");
 			return;
 		}
-		
+
 		if (!pwd2.contentEquals(pwd)) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request. Passwords do not match.");
 			return;
 		}
-		
-		if (usrn.length() >= MAX_USERNAME_LENGTH || email.length() > MAX_EMAIL_LENGTH || pwd.length() > MAX_PWD_LENGTH) {
+
+		if (usrn.length() >= MAX_USERNAME_LENGTH || email.length() > MAX_EMAIL_LENGTH
+				|| pwd.length() > MAX_PWD_LENGTH) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request. Passwords do not match.");
 			return;
 		}
-		
+
 		User user;
 		try {
 			user = usrService.createUser(usrn, pwd, email);
 		} catch (Exception e) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error. Please try again later.");
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+					"Internal server error. Please try again later.");
 			return;
 		}
-		if(user == null) {
+		if (user == null) {
 			response.setStatus(HttpServletResponse.SC_CONFLICT);
 			response.getWriter().println("Incorrect credentials");
 			return;
 		}
-	
-				request.getSession().setAttribute("user", usrn);
-				response.setStatus(HttpServletResponse.SC_OK);
-				response.setContentType("application/json");
-				response.setCharacterEncoding("UTF-8");
-				response.getWriter().println(usrn);
-		
-  }
-	
 
-	public void destroy(){
-	
+		request.getSession().setAttribute("user", user);
+		response.setStatus(HttpServletResponse.SC_OK);
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().print(request.getServletContext().getContextPath() + "/user");
+
 	}
-  }
+
+	public void destroy() {
+
+	}
+}

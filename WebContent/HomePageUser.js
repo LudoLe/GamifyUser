@@ -89,7 +89,8 @@ function LeaderBoardButton(){
 	          figure.textContent= questionnaire.name
 	          figure.setAttribute('id', questionnaire.id);
 			  var i = document.createElement("IMG");
-			  var image=self.getImage();
+			 
+			  
       		  i.setAttribute("src", questionnaire.image);
       		  i.setAttribute("width", "250");
       		  i.setAttribute("height", "200");
@@ -141,7 +142,7 @@ function LeaderBoardButton(){
     this.getImage= function(questionnaireId){
           var self = this;
 	      questionnaireId=target.id;
-	      makeCall("GET", "GetImage?questionnaireId="+questionnaireId, null,
+	      makeCall("GET", "http://localhost:8080/GamifyUser/ProductImages/"+questionnaireId+".png", null,
 				        function(req) {
 				          if (req.readyState == 4) {
 				            var message = req.responseText;

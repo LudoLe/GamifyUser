@@ -1,5 +1,6 @@
 package gamifyUser.controllers;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -54,11 +55,12 @@ public class GetProduct extends HttpServlet{
 				questionnaire = questionnaireService.findByDate(new Date());
 				Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 				String applicationPath = request.getServletContext().getRealPath("");
-				String uploadFilePath = applicationPath + File.separator + "uploads/campaignImages"
+				String uploadFilePath = applicationPath + File.separator + "uploads/campaignImages";
+				questionnaire.setImage(uploadFilePath);
 				response.setStatus(HttpServletResponse.SC_OK);
 				response.setContentType("application/json");
 				response.setCharacterEncoding("UTF-8");
-				response.getWriter().print(gson.toJson());
+				response.getWriter().print(gson.toJson(questionnaire));
 				return;
 				
 			} catch (Exception e){

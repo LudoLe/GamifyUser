@@ -2,6 +2,7 @@ package gamifyUser.controllers;
 
 import java.io.IOException;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -11,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @MultipartConfig
-@WebServlet("/LogOut")
+@WebServlet("/logout")
 
 	public class LogOut extends HttpServlet {
 		private static final long serialVersionUID = 1L;
@@ -27,6 +28,8 @@ import javax.servlet.http.HttpSession;
 			if (session != null) {
 				session.invalidate();
 			}
+	    	ServletContext context = request.getServletContext();
+	    	context.removeAttribute("user");
 			String path = getServletContext().getContextPath() + "/index.html";
 			response.sendRedirect(path);
 		}
