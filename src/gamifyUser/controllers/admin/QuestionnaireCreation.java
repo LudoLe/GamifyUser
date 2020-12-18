@@ -65,6 +65,7 @@ public class QuestionnaireCreation extends HttpServlet {
 			if (question0.length() > Utility.MAX_QUESTION_LENGTH) throw new Exception();
 			date = simpleDateFormat.parse(request.getParameter("date"));
 			calendar.setTime(date);
+			currentTime = simpleDateFormat.parse(simpleDateFormat.format(currentTime));
 			long milliseconds = (calendar.getTime().getTime() - currentTime.getTime());
 			if (milliseconds < 0) throw new IllegalArgumentException();
 		} catch (Exception e){
