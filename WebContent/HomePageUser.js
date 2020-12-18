@@ -139,23 +139,7 @@ function LeaderBoardButton(){
  			}, false);	  
 	  }
 
-    this.getImage= function(questionnaireId){
-          var self = this;
-	      questionnaireId=target.id;
-	      makeCall("GET", "http://localhost:8080/GamifyUser/ProductImages/"+questionnaireId+".png", null,
-				        function(req) {
-				          if (req.readyState == 4) {
-				            var message = req.responseText;
-				            if (req.status == 200) {
-				             self.updateCommentSection(JSON.parse(req.responseText),target); 
-				            } else {
-				              self.alert.textContent = message;
-				            }
-				          }
-				        }
-				      ); 
-	   }
-	  
+   
 	
 	  
 	  this.showComments = function(target){
