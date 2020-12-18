@@ -46,7 +46,7 @@ public class Checker implements Filter {
     	String URI = req.getRequestURI();
 
         if (s.isNew() || user == null) {
-        	if(!(URI.equals(loginPath) || URI.equals(loginPath + "CheckLogin") || URI.equals(loginPath + "loginManagement2.js") || URI.equals(loginPath + "utils.js") || URI.equals(loginPath + "login.css"))) {
+        	if(!(URI.equals(loginPath) || URI.equals(loginPath + "CheckLogin") || URI.equals(loginPath + "loginManagement2.js") || URI.equals(loginPath + "utils.js") || URI.equals(loginPath + "login.css") || URI.equals(loginPath + "CheckSignUp"))) {
         		res.sendRedirect(loginPath);
                 return;          
                 }
