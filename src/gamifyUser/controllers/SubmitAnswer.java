@@ -1,4 +1,4 @@
-package gamifyUser.controllers;
+/*package gamifyUser.controllers;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,6 +7,9 @@ import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.persistence.Column;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -22,22 +25,22 @@ import gamifyUser.utility.Utility;
 
 import polimi.db2.gamifyDB.entities.Question;
 import polimi.db2.gamifyDB.entities.Questionnaire;
-import polimi.db2.gamifyDB.services.AnswerService;
+import polimi.db2.gamifyDB.entities.Review;
+import polimi.db2.gamifyDB.entities.User;
 import polimi.db2.gamifyDB.services.QuestionService;
 import polimi.db2.gamifyDB.services.QuestionnaireService;
+import polimi.db2.gamifyDB.services.UserService;
 
-@WebServlet("/GetQuestionnaire")
+@WebServlet("/SubmitAnswer")
 @MultipartConfig
-public class GetQuestionnaire extends HttpServlet{
+public class SubmitAnswer extends HttpServlet{
 	private static final long serialVersionUID = 123211111L;
-	@EJB(name = "gamifyDB.services/QuestionnaireService")
+	@EJB(name = "gamifyDB.services/UserService")
 	private QuestionnaireService questionnaireService;
-	@EJB(name = "gamifyDB.services/QuestionService")
-	private QuestionService questionService;
-	@EJB(name = "gamifyDB.services/AnswerService")
+	@EJB(name = "gamifyDB.services/ReviewService")
 	private AnswerService answerService;
 
-		public GetQuestionnaire() {
+		public SubmitAnswer() {
 			super();
 		}
 
@@ -47,36 +50,26 @@ public class GetQuestionnaire extends HttpServlet{
 		public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			
 			
-			
-			//get the product	
-			List<Question> answers=null;
-
 			Questionnaire questionnaire;
+			Answer answer;
 
 			try {
-				List<Question> questions=null;
-
-		        
-	     		questionnaire = questionnaireService.findByDate(new Date());
-	     		questions=questionnaire.getQuestions();
-	     		
-	     		
-	     		
-				Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-				response.setStatus(HttpServletResponse.SC_OK);
-				response.setContentType("application/json");
-				response.setCharacterEncoding("UTF-8");
-				response.getWriter().print(gson.toJson(questions));
-
-				return;
 				
-			} catch (Exception e){
-				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-				response.getWriter().println("Not possible to retrieve the questionnaire");
-				return;			}
+				answer= answerService.
+				user.setSex(sex);
+				userService.updateProfile(user);
 
-      }
-		public void destroy(){
+
+				response.setStatus(HttpServletResponse.SC_OK);
+				response.setCharacterEncoding("UTF-8");}
+				catch (Exception e) {
+					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+					response.getWriter().println("Bad request.");
+					return;
+				}
+		}
+
+		public void destroy() {
 		}
 }
-	
+*/

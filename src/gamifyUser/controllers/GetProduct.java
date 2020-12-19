@@ -49,14 +49,13 @@ public class GetProduct extends HttpServlet{
 			//get the product	
 			Questionnaire questionnaire=null;
 
-			try {
-				  				
-				
+			try {		  				
 				questionnaire = questionnaireService.findByDate(new Date());
 				Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 				String applicationPath = request.getServletContext().getRealPath("");
-				String uploadFilePath = applicationPath + File.separator + "uploads/campaignImages";
-				questionnaire.setImage(uploadFilePath);
+				String img= applicationPath+questionnaire.getImage();
+				questionnaire.setImage(img);
+				
 				response.setStatus(HttpServletResponse.SC_OK);
 				response.setContentType("application/json");
 				response.setCharacterEncoding("UTF-8");
@@ -69,5 +68,7 @@ public class GetProduct extends HttpServlet{
 				return;			}
 
       }
+		public void destroy() {
+		}
 }
 		
