@@ -1,4 +1,6 @@
-(function() { // avoid variables ending up in the global scope
+/**
+ * 
+ */(function() { // avoid variables ending up in the global scope
 // page components
     var productFrame, leaderBoardFrame, questionnaireFrame, logout, homeButton, questionnaireButton, leaderBoardButton, mainFrame;
 
@@ -60,7 +62,7 @@ function LeaderBoardButton(){
   window.addEventListener("load", () => {
 	   orchestrator.start(); 
 	   orchestrator.refresh(0); // initialize the components
-	  }, false);
+	  }, false); 
   
 
 /************************************************BEGIN PRODUCT***************************************************************** */
@@ -87,7 +89,7 @@ function LeaderBoardButton(){
 	        // build the figure with the product image and product image
 	          var figure = document.createElement("FIGURE");
 	          figure.textContent= questionnaire.name
-	          figure.setAttribute('id', questionnaire.id);
+	          figure.setAttribute('id', questionnaire.questionnaireId);
 			  var i = document.createElement("IMG");
 			 
 			  
@@ -207,25 +209,36 @@ this.updateCommentSection= function(array, target){
 		    	      var alert= document.createElement("p");
 			          alert.textContent = "Nothing to display!";	
 			          item= document.createElement("div");
-			          item.setAttribute("class", "se");
+			          item.setAttribute("class", "sex");
 				      item.appendChild(alert);
 				      self.frame.appendChild(item);
 		}else{
+						  var self=this;
+
 	 
-        var prod=document.getElementById("questionnaireFrame")
 
         //first container which contains the whole internal part of the form
+
         containerDiv=document.createElement("div"); 
 		containerDiv.setAttribute("class", "container");
-		form=document.createElement("FORM"); 
-		prod.appendChild(form);
+		form=document.createElement("FORM"); 		
 		form.appendChild(containerDiv);
 		fieldset=document.createElement("fieldset"); 
+		fieldset.setAttribute("id", "questionsForm");
+	    fieldset2=document.createElement("fieldset"); 
+	    fieldset2.setAttribute("id", "statsForm");
+	    
+		
+		
+		self.frame.appendChild(form);
+
 	
 	    //first container which contains the just the fieldset
 		fieldsetDiv=document.createElement("div"); 
 		fieldsetDiv.setAttribute("class", "container");
 		fieldsetDiv.appendChild(fieldset);
+		fieldsetDiv.appendChild(fieldset2);
+		containerDiv.appendChild(fieldsetDiv);
 	
         // for each question create label + input
 		questions.forEach(function(question) { // self visible here, not this
@@ -268,9 +281,9 @@ this.updateCommentSection= function(array, target){
 	  fieldsetDiv.appendChild(buttonDiv);
       
       self.registerEvents(button);
-}
+  }
 
-	      }
+}	      
 
   this.registerEvents= function(element){
 		  
@@ -292,95 +305,78 @@ this.updateCommentSection= function(array, target){
 
  this.showStats = function(target){
 			 var self = this;
-			 questionnaireId=target.id;
-			  makeCall("GET", "GetStats?questionnaireId="+questionnaireId, null,
-				        function(req) {
-				          if (req.readyState == 4) {
-				            var message = req.responseText;
-				            if (req.status == 200) {
-				             self.showStaticsForm(JSON.parse(req.responseText),target); 
-				            } else {
-				              self.alert.textContent = message;
-				            }
-				          }
-				        }
-				      );
+			 
+			 
+			 var form =target.closest("form");
+			 
+			 if(form.checkValidity()){
+			 button=target;
+			 target.parentNode.removeChild(button);
+			 self.showStatiticsForm();
+			
+		      }
 		  }	  
 
 this.showStatiticsForm= function(array, target){
          
-         var self=this;
-		 var container=target.parentNode;
+          fieldset=document.getElementById("statsForm")
 
-        //first container which contains the whole internal part of the form
-        containerDiv=document.createElement("div"); 
-		containerDiv.setAttribute("class", "container");
-		form=document.createElement("FORM"); 
-		prod.appendChild(form);
-		form.appendChild(containerDiv);
-		fieldset=document.createElement("fieldset"); 
-	
-	    //first container which contains the just the fieldset
-		fieldsetDiv=document.createElement("div"); 
-		fieldsetDiv.setAttribute("class", "container");
-		fieldsetDiv.appendChild(fieldset);
-	
+
+
+       
         // for each question create label + input
 		 // self visible here, not this
 		
  
-	  			  var input, age;
+	  			  var input, sex;
 
                   //each question (item)is contained in a div
 				  itemDiv0=document.createElement("div"); 
 				  itemDiv0.setAttribute("class", "item");	  
-				  
-				  age=document.createElement("label");
-				  age.setAttribute("for", "age");
-			      age.textContent="Age";
-					
+		          selectSex=document.createElement("p"); 
+		          selectSex.textContent="Select your sex";
+				
 				  options=document.createElement("select");
+				  options.name="Sex";
 						  option1=document.createElement("option");
-						  option1.responseText("Female");
+						  option1.text="Female";
 						  option1.value="Female";
-						  option1.setAttribute("id", "age")
+						  option1.setAttribute("id", "sex")
 
 
  						  option2=document.createElement("option");
-						  option2.responseText("Male");
+ 						  option2.text="Male";
 						  option2.value="Male";
-						  option2.setAttribute("id", "age")
-
+						  option2.setAttribute("id", "sex")
 
 				          option3=document.createElement("option");
-						  option3.responseText("Prefer not to tell");
+						  option3.setAttribute("responseText","Prefer not to tell");
+						  option3.text="Prefer not to tell";
 				          option3.value="PreferNotToTell";
-						  option3.setAttribute("id", "age")
+						  option3.setAttribute("id", "sex")
 				
-				          options.addChild(option1);
-						  options.addChild(option2);
-						  options.addChild(option3);
+				          options.appendChild(option1);
+						  options.appendChild(option2);
+						  options.appendChild(option3);
 
-		          itemDiv0.appendChild(age);
+                  itemDiv0.appendChild(selectSex);
 				  itemDiv0.appendChild(options);
 		          
-   				var input, sex;
+   				var input, age;
 
                   //each question (item)is contained in a div
 				  itemDiv1=document.createElement("div"); 
 				  itemDiv1.setAttribute("class", "item");	  
 				  
-				  sex=document.createElement("label");
-			      sex.textContent="sex";
+				  age=document.createElement("label");
+			      age.textContent="age";
 		        
 				  input=document.createElement("input");
 				  input.setAttribute("placeholder","Insert Here Your Answer");
-				  input.setAttribute("id", "sexInput");
-				  input.required="required";
-				  input.name="question";
+				  input.setAttribute("id", "age");
 		
 				  
-		            itemDiv1.appendChild(sex);
+		            itemDiv1.appendChild(age);
 				    itemDiv1.appendChild(input);
 		
 		          var input2, expertise;
@@ -394,27 +390,25 @@ this.showStatiticsForm= function(array, target){
 				 
 				  input2=document.createElement("input");
 				  input2.setAttribute("placeholder","Insert Here Your Expertise Level");
-				  input2.setAttribute("id", "expertiseInput");
-
-				  input2.name="question";
-	
+				  input2.setAttribute("id", "expertise");	
 				  
-		          itemDiv2.appendChild(age);
-				  itemDiv2.appendChild(input);
+		          itemDiv2.appendChild(expertise);
+				  itemDiv2.appendChild(input2);
 		
 		
 				
 		
 		          //add each question in the field set
+		          
+		          fieldset.appendChild(itemDiv0);
+		          fieldset.appendChild(itemDiv1);
 		          fieldset.appendChild(itemDiv2);
 	              fieldset.appendChild(document.createElement("br"));
 
 
 				
            
-	      
-	  container.appendChild(form);
-
+	     
       var buttonsDiv=document.createElement("div"); 
 	  
        buttonDiv.setAttribute("class", "container");
@@ -430,13 +424,13 @@ this.showStatiticsForm= function(array, target){
 	  buttonDiv1.setAttribute("class", "item");
 	  var button1=document.createElement("button");
 	  button1.textContent="Cancel";
-	  buttonDiv1.appendChild(button);
+	  buttonDiv1.appendChild(button1);
 
       buttonDiv2=document.createElement("div"); 
 	  buttonDiv2.setAttribute("class", "item");
 	  var button2=document.createElement("button");
 	  button2.textContent="Sumbit";
-	  buttonDiv2.appendChild(button);
+	  buttonDiv2.appendChild(button2);
 
 	  
 	  var errormessage=document.createElement("p");
@@ -451,14 +445,76 @@ this.showStatiticsForm= function(array, target){
 
       fieldsetDiv.appendChild(buttonsDiv);
       
+      qf=document.getElementById("questionsForm");
+      qf.style.visibility = "hidden";
+      
 
 
       
-      self.registerEvents(button);
+      self.registerEventBack(button, qf);
+      self.registerEventCancel(button1);
+      self.registerEventSubmit(button2);
 
 
 	         
 	  }
+	  
+this.registerEventBack=function(element){
+
+element.addEventListener("click", (e) => {	 
+	    	 e.stopPropagation();
+	    	  qf.style.visibility = "visible";
+	      	 
+ 			}, false);	  
+	  }
+	  
+
+
+this.registerEventCancel=function(element){
+
+element.addEventListener("click", (e) => {	 
+	    	 e.stopPropagation();
+	    	   makeCall("GET", "GetProduct", null,
+			        function(req){
+	          if (req.readyState == 4) {
+	            var message = req.responseText;
+	            if (req.status == 200){
+			        self.update(JSON.parse(req.responseText),state); 
+	            } else {
+		          var alertContainer = document.getElementById("id_alert");
+	              self.alert.textContent = message;
+	            }
+	          }
+	        }
+	      );	 
+ 			}, false);	  
+	  }
+	  
+
+
+this.registerEventSumbit=function(element){
+
+element.addEventListener("click", (e) => {	 
+	    	 e.stopPropagation();
+	    	    makeCall("GET", "SubmitQuestionnaire", null,
+			        function(req){
+	          if (req.readyState == 4) {
+	            var message = req.responseText;
+	            if (req.status == 200){
+			        self.update(JSON.parse(req.responseText),state); 
+	            } else {
+		          var alertContainer = document.getElementById("id_alert");
+	              self.alert.textContent = message;
+	            }
+	          }
+	        }
+	      );	 
+	    	 
+ 			}, false);	  
+	  }
+	  
+
+
 
 
  }  

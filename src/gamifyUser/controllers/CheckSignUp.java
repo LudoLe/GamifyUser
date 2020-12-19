@@ -87,9 +87,9 @@ public class CheckSignUp extends HttpServlet {
 
 		request.getSession().setAttribute("user", user);
 		response.setStatus(HttpServletResponse.SC_OK);
-		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
-		response.getWriter().print(request.getServletContext().getContextPath() + "/user");
+		String redirectPath = "/user";
+		response.getWriter().print(redirectPath);
 
 	}
 
