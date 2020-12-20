@@ -45,37 +45,23 @@ public class GetQuestionnaire extends HttpServlet{
 		}
 		
 		public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-			
-			
-			
 			//get the product	
-			List<Question> answers=null;
-
 			Questionnaire questionnaire;
-
 			try {
 				List<Question> questions=null;
-
-		        
 	     		questionnaire = questionnaireService.findByDate(new Date());
-	     		questions=questionnaire.getQuestions();
-	     		
-	     		
-	     		
+	     		questions=questionnaire.getQuestions();		
 				Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 				response.setStatus(HttpServletResponse.SC_OK);
 				response.setContentType("application/json");
 				response.setCharacterEncoding("UTF-8");
 				response.getWriter().print(gson.toJson(questions));
-
-				return;
-				
+				return;	
 			} catch (Exception e){
 				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 				response.getWriter().println("Not possible to retrieve the questionnaire");
 				return;			}
-
-      }
+    }
 		public void destroy(){
 		}
 }

@@ -5,7 +5,7 @@
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
-  <filter>
+   <filter>
     <filter-name>CorsFilter</filter-name>
     <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
     <init-param>
@@ -55,4 +55,5 @@
         <url-pattern> /user </url-pattern>
     <url-pattern> /user/* </url-pattern>
 </filter-mapping>
+
 </web-app>
