@@ -78,34 +78,45 @@ public class SubmitQuestionnaire extends HttpServlet{
 			Questionnaire questionnaire;
 			Date birthDate=null;
 			String sexIn;
+			Integer pointsFirst=0;
+			Integer pointsSecond=0;
+
+			
 					
 			User user=(User) request.getSession().getAttribute("user");
 			birthDate= user.getBirth();
 			sexIn= user.getSex();
 		
  			String age = StringEscapeUtils.escapeJava(request.getParameter("age"));
- 			Date todate=simpleDateFormat.parse(age);
+ 			
  			if(age!=null){
  				canAccessAge=1;
+ 				Date todate=simpleDateFormat.parse(age);
  	 			if(birthDate==null){user.setBirth(todate);}
+	 			 pointsSecond=+1;
  				}
  			String sex = StringEscapeUtils.escapeJava(request.getParameter("sex"));
  			if(sex!=null){
  				canAccessSex=1;
- 				if(sexIn==null){user.setSex(sex);}
- 			} 			String expertise = StringEscapeUtils.escapeJava(request.getParameter("expertise"));
- 			
+ 				if(sexIn==null){user.setSex(sex);
+	 			 pointsSecond=+1;}
+ 			} 		
+ 			String expertise = StringEscapeUtils.escapeJava(request.getParameter("expertise"));
+ 			if(expertise!=null){			
+	 			 pointsSecond=+1;
+ 			} 	
  		    userService.updateProfile(user);
  			
  			questionnaire = questionnaireService.findByDate(new Date());
-			reviewId = reviewService.createReview(canAccessAge, canAccessSex, new Date(), expertise, user.getUserId(), questionnaire.getQuestionnaireId());
-			
-	 		questions=questionnaire.getQuestions();
+			reviewId = reviewService.createReview(canAccessAge, canAccessSex, new Date(), expertise, user, questionnaire, pointsFirst, pointsSecond);
+
+			questions=questionnaire.getQuestions();
 	 		int count=0;
 	 		for(Question question : questions){ 
 	 			String content = StringEscapeUtils.escapeJava(request.getParameter("answer"+count));
-	 			answerService.createAnswer(content, question.getQuestionId(), reviewId);
+	 			answerService.createAnswer(content, question, reviewId);
 	 			count++;
+	 			pointsFirst=+2;
 	 			}
 	 			
 			response.setStatus(HttpServletResponse.SC_OK);
