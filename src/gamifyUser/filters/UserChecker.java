@@ -22,7 +22,7 @@ public class UserChecker implements Filter {
             res.sendRedirect(redirectPath);
             return;
         }
-        //  filterChain.doFilter(servletRequest, servletResponse);
+          filterChain.doFilter(servletRequest, servletResponse);
     }
 
     @Override

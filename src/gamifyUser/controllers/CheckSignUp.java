@@ -88,7 +88,7 @@ public class CheckSignUp extends HttpServlet {
 		request.getSession().setAttribute("user", user);
 		response.setStatus(HttpServletResponse.SC_OK);
 		response.setCharacterEncoding("UTF-8");
-		String redirectPath = "/user";
+		String redirectPath = "GamifyUser/user";
 		response.getWriter().print(redirectPath);
 
 	}

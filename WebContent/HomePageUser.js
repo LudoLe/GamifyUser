@@ -198,305 +198,281 @@ this.updateCommentSection= function(array, target){
 
   function QuestionnaireFrame(_frame){
 	    this.frame=_frame;
-	   var self = this;
- 
-	  
-  this.show= function(questions){
-	
-	
+	    var self = this;
+  
+this.show= function(questions){
 	if(questions==null){
-			  var self=this;
-		    	      var alert= document.createElement("p");
-			          alert.textContent = "Nothing to display!";	
-			          item= document.createElement("div");
-			          item.setAttribute("class", "sex");
-				      item.appendChild(alert);
-				      self.frame.appendChild(item);
+		 var self=this;
+		 var alert= document.createElement("p");
+		 alert.textContent = "Nothing to display!";	
+		 item= document.createElement("div");
+		 item.setAttribute("class", "container");
+		 item.appendChild(alert);
+		 self.frame.appendChild(item);
 		}else{
-						  var self=this;
-
-	 
-
-        //first container which contains the whole internal part of the form
-
+		var self=this;
+        //container that contains the form fields
         containerDiv=document.createElement("div"); 
 		containerDiv.setAttribute("class", "container");
+		containerDiv.setAttribute("id", "formContainer");
 		form=document.createElement("FORM"); 		
 		form.appendChild(containerDiv);
+		//the fieldset of the questions
 		fieldset=document.createElement("fieldset"); 
 		fieldset.setAttribute("id", "questionsForm");
+		//the fieldset of the statistics
 	    fieldset2=document.createElement("fieldset"); 
 	    fieldset2.setAttribute("id", "statsForm");
 	    
-		
-		
 		self.frame.appendChild(form);
-
-	
 	    //first container which contains the just the fieldset
-		fieldsetDiv=document.createElement("div"); 
-		fieldsetDiv.setAttribute("class", "container");
-		fieldsetDiv.appendChild(fieldset);
-		fieldsetDiv.appendChild(fieldset2);
-		containerDiv.appendChild(fieldsetDiv);
-	
+		fieldsetQuestionsDiv=document.createElement("div"); 
+		fieldsetQuestionsDiv.setAttribute("class", "container");
+		fieldsetQuestionsDiv.setAttribute("id", "fieldsetQuestionsDiv");
+		fieldsetQuestionsDiv.appendChild(fieldset);
+		//second container that contains the stats fieldset
+		fieldsetStatsDiv=document.createElement("div"); 
+		fieldsetStatsDiv.setAttribute("class", "container");
+		fieldsetStatsDiv.setAttribute("id", "fieldsetStatsDiv");
+		fieldsetStatsDiv.appendChild(fieldset2);
+		//we append both of the fieldset at the main container
+		containerDiv.appendChild(fieldsetQuestionsDiv);
+		containerDiv.appendChild(fieldsetStatsDiv);
+		
         // for each question create label + input
 		questions.forEach(function(question) { // self visible here, not this
-		
-	  			  var input, label, mex;
-
+	  			  var input, label, mex, count;
+	  			  count=0;
                   //each question (item)is contained in a div
 				  itemDiv=document.createElement("div"); 
-				  itemDiv.setAttribute("class", "item");	  
-				  
+				  itemDiv.setAttribute("class", "item");	  		  
 				  label=document.createElement("label");
 			      label.textContent=question.content;
 				  input=document.createElement("input");
 				  input.setAttribute("placeholder","Insert Here Your Answer");
 				  input.setAttribute("id", question.id);
 				  input.required="required";
-				  input.name="question";
-				  
+				  input.name="answer"+count;  
 		          itemDiv.appendChild(label);
 				  itemDiv.appendChild(input);
-		
 		          //add each question in the field set
 		          fieldset.appendChild(itemDiv);
-	              fieldset.appendChild(document.createElement("br"));
-	    
+	              fieldset.appendChild(document.createElement("br")); 
 	        });
     
-      buttonDiv=document.createElement("div"); 
+     //button to show the stats container
+     //everytime, this button calls a servlet that checks if the user has already
+     //entered data about sex age etc, if so,
+     // a pop up shows up asking for permission to autofill the data
+	 //a button with "allow/not allow" there will be always there
+	 //
+	  buttonDiv=document.createElement("div"); 
 	  buttonDiv.setAttribute("class", "item");
-	 
 	  var button=document.createElement("button");
-	  button.textContent="Go To Stats Section";
-	  buttonDiv.appendChild(button);
-
-	  
+	  button.textContent="Show To Stats Section";
+	  buttonDiv.appendChild(button);  
+	  //
 	  var errormessage=document.createElement("p");
 	  errormessage.setAttribute("id","errormessage");
+	  //
 	  fieldset.appendChild(errormessage);
 	  fieldset.appendChild(document.createElement("br"));
-	  fieldsetDiv.appendChild(buttonDiv);
-      
+	  fieldsetStatsDiv.appendChild(buttonDiv);
+	  //
       self.registerEvents(button);
   }
 
 }	      
 
-  this.registerEvents= function(element){
-		  
-		  var token =0;
-	 	    
+  this.registerEvents=function(element){   
+		var alreadyin=0;
+		//TODO servlet that checks if age etc already insterted if so
 	    element.addEventListener("click", (e) => {	 
 	    	 e.stopPropagation();
-	    	  if(token===0){
-	    			self.showStats(e.target);
-	 		     	token=1;
-				}
-		    	else{ 	 
-		         element.removeChild(ul);
-		         token=0;
-		    	} 
- 			}, false);	  
-	  }
-
-
- this.showStats = function(target){
-			 var self = this;
-			 
-			 
-			 var form =target.closest("form");
-			 
-			 if(form.checkValidity()){
-			 button=target;
-			 target.parentNode.removeChild(button);
-			 self.showStatiticsForm();
-			
-		      }
-		  }	  
+	         element.parentNode.removeChild(element);
+	         self.showStatiticsForm();
+	 	     token=1;
+ 			}, false);	    
+  }
+  
 
 this.showStatiticsForm= function(array, target){
-         
-          fieldset=document.getElementById("statsForm")
+   fieldset=document.getElementById("statsForm")        
+   var input, sex;
+   //we have three fields
+   //sex
+   // i will replace this with radio buttons cuz nicer ^^
+	itemDiv0=document.createElement("div"); 
+	itemDiv0.setAttribute("class", "item");	 
+	
+	sex=document.createElement("label");
+    sex.textContent="select your sex";
+    
+    w=document.createElement("input");
+	w.name="sex";  
+    k=document.createElement("input");
+	k.name="sex";  
+    s=document.createElement("input");
+	s.name="sex";  
+    
+    w.setAttribute("type", "radio");
+    w.setAttribute("value", "female");
+    wl=document.createElement("label");
+    wl.textContent="female";
+    itemw=document.createElement("div"); 
+    itemw.setAttribute("class", "item");
+    itemw.appendChild(w);
+    itemw.appendChild(wl);
+    
+    k.setAttribute("type", "radio");
+    k.setAttribute("value", "female");
+    kl=document.createElement("label");
+    kl.textContent="female";
+    itemk=document.createElement("div"); 
+    itemk.setAttribute("class", "item");
+    itemk.appendChild(k);
+    itemk.appendChild(kl);
 
-
-
-       
-        // for each question create label + input
-		 // self visible here, not this
-		
+    s.setAttribute("type", "radio");
+    s.setAttribute("value", "prefer not to tell");
+    sl=document.createElement("label");
+    sl.textContent="prefer not to tell";
+    items=document.createElement("div"); 
+    items.setAttribute("class", "item");
+    items.appendChild(s);
+    items.appendChild(sl);
  
-	  			  var input, sex;
+    itemDiv0.appendChild(sex);
+    itemDiv0.appendChild(itemw);
+    itemDiv0.appendChild(itemk);
+    itemDiv0.appendChild(items);
+   
+    //age
+	var input, age;
+	
+    itemDiv1=document.createElement("div"); 
+    itemDiv1.setAttribute("class", "item");	  
+ 
+    age=document.createElement("label");
+    age.textContent="age";
 
-                  //each question (item)is contained in a div
-				  itemDiv0=document.createElement("div"); 
-				  itemDiv0.setAttribute("class", "item");	  
-		          selectSex=document.createElement("p"); 
-		          selectSex.textContent="Select your sex";
-				
-				  options=document.createElement("select");
-				  options.name="Sex";
-						  option1=document.createElement("option");
-						  option1.text="Female";
-						  option1.value="Female";
-						  option1.setAttribute("id", "sex")
+    input=document.createElement("input");
+    input.setAttribute("type", "date");
+    input.setAttribute("id", "age");
+    input.name="age";
 
+    itemDiv1.appendChild(age);
+    itemDiv1.appendChild(input);
 
- 						  option2=document.createElement("option");
- 						  option2.text="Male";
-						  option2.value="Male";
-						  option2.setAttribute("id", "sex")
+    //expertise
+    var input2, expertise;
+    //be replaced with radiobuttons
+    itemDiv2=document.createElement("div"); 
+    itemDiv2.setAttribute("class", "item");	  
+  
+    expertise=document.createElement("label");
+    expertise.textContent="expertise";
+    
+    x=document.createElement("input");
+	x.name="expertise";  
+    y=document.createElement("input");
+	y.name="expertise";  
+    z=document.createElement("input");
+	z.name="expertise";  
+    
+    x.setAttribute("type", "radio");
+    x.setAttribute("value", "low");
+    xl=document.createElement("label");
+    xl.textContent="low";
+    itemx=document.createElement("div"); 
+    itemx.setAttribute("class", "item");
+    itemx.appendChild(x);
+    itemx.appendChild(xl);
+    
+    y.setAttribute("type", "radio");
+    y.setAttribute("value", "medium");
+    yl=document.createElement("label");
+    yl.textContent="medium";
+    itemy=document.createElement("div"); 
+    itemy.setAttribute("class", "item");
+    itemy.appendChild(y);
+    itemy.appendChild(yl);
 
-				          option3=document.createElement("option");
-						  option3.setAttribute("responseText","Prefer not to tell");
-						  option3.text="Prefer not to tell";
-				          option3.value="PreferNotToTell";
-						  option3.setAttribute("id", "sex")
-				
-				          options.appendChild(option1);
-						  options.appendChild(option2);
-						  options.appendChild(option3);
+    z.setAttribute("type", "radio");
+    z.setAttribute("value", "high");
+    zl=document.createElement("label");
+    zl.textContent="high";
+    itemz=document.createElement("div"); 
+    itemz.setAttribute("class", "item");
+    itemz.appendChild(z);
+    itemz.appendChild(zl);
+ 
+    itemDiv2.appendChild(expertise);
+    itemDiv2.appendChild(itemx);
+    itemDiv2.appendChild(itemy);
+    itemDiv2.appendChild(itemz);
+    
+    fieldset.appendChild(itemDiv0);
+    fieldset.appendChild(itemDiv1);
+    fieldset.appendChild(itemDiv2);
+    
+    fieldset.appendChild(document.createElement("br"));
+    
+    //here we create the buttons   
+    var buttonsDiv=document.createElement("div"); 
+    //this button gets you back to the product section
+    buttonDiv1=document.createElement("div"); 
+    buttonDiv1.setAttribute("class", "item");
+    var button1=document.createElement("button");
+    button1.textContent="back to product";
+    buttonDiv1.appendChild(button1);
+    //this button makes you submit your answers 
+    buttonDiv2=document.createElement("div"); 
+    buttonDiv2.setAttribute("class", "item");
+    var button2=document.createElement("button");
+    button2.textContent="Sumbit";
+    buttonDiv2.appendChild(button2);
 
-                  itemDiv0.appendChild(selectSex);
-				  itemDiv0.appendChild(options);
-		          
-   				var input, age;
+    var errormessage=document.createElement("p");
+    errormessage.setAttribute("id","errormessage");
+    fieldset.appendChild(errormessage); 
+    fieldset.appendChild(document.createElement("br"));
+   
+    //this button makes you clear your answers
+    var reset=document.createElement("input");
+    reset.type="reset";
+    reset.value="clean";
+    reset.required="required";
+ 
+    buttonsDiv.appendChild(reset);
+    buttonsDiv.appendChild(buttonDiv1);
+    buttonsDiv.appendChild(buttonDiv2);
+    document.getElementById("formContainer").appendChild(buttonsDiv);
 
-                  //each question (item)is contained in a div
-				  itemDiv1=document.createElement("div"); 
-				  itemDiv1.setAttribute("class", "item");	  
-				  
-				  age=document.createElement("label");
-			      age.textContent="age";
-		        
-				  input=document.createElement("input");
-				  input.setAttribute("placeholder","Insert Here Your Answer");
-				  input.setAttribute("id", "age");
-		
-				  
-		            itemDiv1.appendChild(age);
-				    itemDiv1.appendChild(input);
-		
-		          var input2, expertise;
-
-                  //each question (item)is contained in a div
-				  itemDiv2=document.createElement("div"); 
-				  itemDiv2.setAttribute("class", "item");	  
-				  
-				  expertise=document.createElement("label");
-			      expertise.textContent="expertise"
-				 
-				  input2=document.createElement("input");
-				  input2.setAttribute("placeholder","Insert Here Your Expertise Level");
-				  input2.setAttribute("id", "expertise");	
-				  
-		          itemDiv2.appendChild(expertise);
-				  itemDiv2.appendChild(input2);
-		
-		
-				
-		
-		          //add each question in the field set
-		          
-		          fieldset.appendChild(itemDiv0);
-		          fieldset.appendChild(itemDiv1);
-		          fieldset.appendChild(itemDiv2);
-	              fieldset.appendChild(document.createElement("br"));
-
-
-				
-           
-	     
-      var buttonsDiv=document.createElement("div"); 
-	  
-       buttonDiv.setAttribute("class", "container");
-       buttonDiv.setAttribute("id", "buttonsStatContainer");
-
-      buttonDiv=document.createElement("div"); 
-	  buttonDiv.setAttribute("class", "item");
-	  var button=document.createElement("button");
-	  button.textContent="Back";
-	  buttonDiv.appendChild(button);
-     
-      buttonDiv1=document.createElement("div"); 
-	  buttonDiv1.setAttribute("class", "item");
-	  var button1=document.createElement("button");
-	  button1.textContent="Cancel";
-	  buttonDiv1.appendChild(button1);
-
-      buttonDiv2=document.createElement("div"); 
-	  buttonDiv2.setAttribute("class", "item");
-	  var button2=document.createElement("button");
-	  button2.textContent="Sumbit";
-	  buttonDiv2.appendChild(button2);
-
-	  
-	  var errormessage=document.createElement("p");
-	  errormessage.setAttribute("id","errormessage");
-	  fieldset.appendChild(errormessage);
-	  
-      fieldset.appendChild(document.createElement("br"));
-	  
-      buttonsDiv.appendChild(buttonDiv);
-      buttonsDiv.appendChild(buttonDiv1);
-      buttonsDiv.appendChild(buttonDiv2);
-
-      fieldsetDiv.appendChild(buttonsDiv);
-      
-      qf=document.getElementById("questionsForm");
-      qf.style.visibility = "hidden";
-      
-
-
-      
-      self.registerEventBack(button, qf);
-      self.registerEventCancel(button1);
-      self.registerEventSubmit(button2);
+    reset=document.createElement("input");
+    
+ 
+    self.registerEventCancel(button1);
+    self.registerEventSubmit(button2);
 
 
 	         
 	  }
-	  
-this.registerEventBack=function(element){
 
-element.addEventListener("click", (e) => {	 
-	    	 e.stopPropagation();
-	    	  qf.style.visibility = "visible";
-	      	 
- 			}, false);	  
-	  }
-	  
-
-
+//on click, reaload the product page
 this.registerEventCancel=function(element){
-
 element.addEventListener("click", (e) => {	 
 	    	 e.stopPropagation();
-	    	   makeCall("GET", "GetProduct", null,
-			        function(req){
-	          if (req.readyState == 4) {
-	            var message = req.responseText;
-	            if (req.status == 200){
-			        self.update(JSON.parse(req.responseText),state); 
-	            } else {
-		          var alertContainer = document.getElementById("id_alert");
-	              self.alert.textContent = message;
-	            }
-	          }
-	        }
-	      );	 
- 			}, false);	  
+	     	 orchestrator.refresh(0); 
+  			}, false);	  
 	  }
 	  
 
-
-this.registerEventSumbit=function(element){
-
+//on click submit the questionnaire and display a "Thanks for having submitted the questionnaire ^^"
+this.registerEventSubmit=function(element){
 element.addEventListener("click", (e) => {	 
 	    	 e.stopPropagation();
-	    	    makeCall("GET", "SubmitQuestionnaire", null,
+	    	    makeCall("POST", "SubmitQuestionnaire", e.target.closest("form"),
 			        function(req){
 	          if (req.readyState == 4) {
 	            var message = req.responseText;
