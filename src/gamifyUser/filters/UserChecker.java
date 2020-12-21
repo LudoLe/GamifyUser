@@ -22,6 +22,9 @@ public class UserChecker implements Filter {
             res.sendRedirect(redirectPath);
             return;
         }
+        else if(user.getBlocked() == 1) {
+            res.sendError(403, "You have been blocked for using an offensive word.");
+        }
           filterChain.doFilter(servletRequest, servletResponse);
     }
 
