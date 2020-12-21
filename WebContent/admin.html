@@ -13,6 +13,7 @@
     ></script>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
     <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link id="darkModeCSSLink" rel="stylesheet" type="text/css" href="css/dark-admin.css" />
     <script
       src="https://kit.fontawesome.com/2079f21d9c.js"
       crossorigin="anonymous"
@@ -20,20 +21,22 @@
     <title>Admin</title>
   </head>
   <body>
-    <!-- START SIDENAV -->
-    <div class="sidenav bg-white sidenav-admin" id="sidenav">
-      <img src="images/gamify_lowres.png" class="sidenav-image">
-      <a href="#" id="creation" class="sidenav-button text-primary">Creation</a>
-      <a href="#" id="inspection" class="sidenav-button text-primary">Inspection</a>
-      <a href="#" id="deletion" class="sidenav-button text-primary">Deletion</a>
-      <a href="/GamifyUser/logout" id="logout" class="sidenav-button text-primary">Logout</a>
-    </div>
-    <!-- END SIDENAV -->
-
-    <!-- START MAIN CONTAINER -->
+    
     <div class="container container-admin" id="mainContainer">
     </div>
-    <!-- END MAIN CONTAINER -->
+
+    <!-- START NAVBAR -->
+    <div class="row bg-white sidenav-admin" id="sidenav">
+        <div class="btn-group" style="width: 100%;" id="btnGroupNavbar">
+          <img src="images/gamify_lowres.png" class="sidenav-image" id="gamifyLogo">
+          <button id="creation" class="btn text-primary sidenav-button"><i class="fas fa-plus"></i> Creation</button>
+          <button id="inspection" class="btn text-primary sidenav-button"><i class="fas fa-search"></i> Inspection</button>
+          <button id="deletion" class="btn text-primary sidenav-button"><i class="far fa-trash-alt"></i> Deletion</button>
+          <button id="logout" class="btn text-primary sidenav-button text-primary">Logout</button>
+        </div>
+      </div>
+    </div>
+    <!-- END NAVBAR -->
   </body>
-  <script src="admin.js"></script>
+  <script src="js/admin.js" type="module"></script>
 </html>
