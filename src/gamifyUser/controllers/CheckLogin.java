@@ -1,6 +1,8 @@
 package gamifyUser.controllers;
 
 import java.io.IOException;
+import java.util.Date;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.servlet.ServletException;
@@ -63,6 +65,7 @@ public class CheckLogin extends HttpServlet {
 			response.getWriter().println("Incorrect credentials");
 		} else {
 			request.getSession().setAttribute("user", user);
+			request.getSession().setAttribute("log", new Date());
 			response.setStatus(HttpServletResponse.SC_OK);
 			response.setCharacterEncoding("UTF-8");
 			response.setContentType("application/json");

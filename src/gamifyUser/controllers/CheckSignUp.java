@@ -3,6 +3,7 @@ package gamifyUser.controllers;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import polimi.db2.gamifyDB.entities.User;
@@ -86,6 +87,7 @@ public class CheckSignUp extends HttpServlet {
 		}
 
 		request.getSession().setAttribute("user", user);
+		request.getSession().setAttribute("log", new Date());
 		response.setStatus(HttpServletResponse.SC_OK);
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("application/json");

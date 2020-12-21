@@ -60,5 +60,11 @@ public class Utility {
         Map<String,String[]> parameterMap = req.getParameterMap();
         return parameterMap.keySet().stream().filter(name -> name.contains("Question")).map(parameterMap::get).map(contents -> contents[0]).filter(content -> !content.isEmpty() && !(content.length() > MAX_QUESTION_LENGTH)).collect(Collectors.toList());
     }
+    
+    public static List<String> retrieveAnswers(HttpServletRequest req) {
+        Map<String,String[]> parameterMap = req.getParameterMap();
+        return parameterMap.keySet().stream().filter(name -> name.contains("answer")).map(parameterMap::get).map(contents -> contents[0]).filter(content -> !content.isEmpty() && !(content.length() > MAX_QUESTION_LENGTH)).collect(Collectors.toList());
+    }
+
 
 }

@@ -55,36 +55,26 @@ public class SubmitQuestionnaire extends HttpServlet{
 	
 	public void init(){}
 	
-	/*devo: 
-	 * 1.creare una lista di domande
-	 * 2. prendere il questionario di oggi e vedere quante domande ci stanno
-	 * 3.creare una review
-	 * 4. per ogni domanda, leggere la risposta, creare una Answer, riempire i campi e metterli nei db
-	 * 5. prendere i dati di stats e se non sono nulli, metterli nello user
-	 * 
-	 *      
-	//se è la prima volta che entro, allora 
-	*/
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
 	
 		try {
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			List<Question> questions=null;
-			List<Answer> answers=null;
+			List<Answer> answers= new ArrayList<Answer>();
 			int canAccessAge=0;
 			int canAccessSex=0;
-			int reviewId;
 			Review review=null;
 			Questionnaire questionnaire;
 			Date birthDate=null;
 			String sexIn;
 			Integer pointsFirst=0;
 			Integer pointsSecond=0;
-
-			//List<String> mandatoryParams = new ArrayList<>(Arrays.asList("user2", "mail2", "pass2", "pass3"));
-			//if (!Utility.paramExists(request, response, mandatoryParams)
-			//		|| Utility.paramIsEmpty(request, response, mandatoryParams))
-			//	return;
+           
+			
+			List<String> mandatoryParams = new ArrayList<>(Arrays.asList("age", "sex", "expertise"));
+			if (!Utility.paramExists(request, response, mandatoryParams)
+					|| Utility.paramIsEmpty(request, response, mandatoryParams))
+				return;
 
 					
 			User user=(User) request.getSession().getAttribute("user");
@@ -112,16 +102,28 @@ public class SubmitQuestionnaire extends HttpServlet{
  		    userService.updateProfile(user);
  			
  			questionnaire = questionnaireService.findByDate(new Date());
-			reviewId = reviewService.createReview(canAccessAge, canAccessSex, new Date(), expertise, user, questionnaire, pointsFirst, pointsSecond);
+			review = reviewService.createReview(canAccessAge, canAccessSex, new Date(), expertise, user, questionnaire, pointsFirst, pointsSecond);
 
 			questions=questionnaire.getQuestions();
 	 		int count=0;
-	 		for(Question question : questions){ 
+	 		for(Question question : questions){     
 	 			String content = StringEscapeUtils.escapeJava(request.getParameter("answer"+count));
-	 			answerService.createAnswer(content, question, reviewId);
+	 		    if(content==null||!content.isEmpty()){
+	 		    	response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+	 		    	response.setCharacterEncoding("UTF-8");
+					response.getWriter().println("");
+					return;
+		
+	 		    }
+	 		    Answer answer= new Answer();
+	 		    answer.setContent(content);
+	 		    answer.setQuestion(question);
+	 		    answer.setReview(review);
+	 		    answers.add(answer);
 	 			count++;
 	 			pointsFirst=+2;
 	 			}
+	 		    answerService.createAnswers(answers);
 	 			
 			response.setStatus(HttpServletResponse.SC_OK);
 			response.setCharacterEncoding("UTF-8");
