@@ -317,7 +317,7 @@ this.waitAlreadyIn=function(){
           }
         }
         if(alreadyIn){
-	         if(window.confirm("Can we autofill the stats with your data sweetie? Let us in <3\n")){
+	         if(window.confirm("Allows us autofill the stats with your data?")){
 	 			  self.autoFill();
 	 		  }}
          });
@@ -405,7 +405,7 @@ this.showStatiticsForm= function(array, target){
     k.setAttribute("value", "male");
     kl=document.createElement("label");
     k.setAttribute("id", "male");
-    kl.textContent="female";
+    kl.textContent="male";
     itemk=document.createElement("div"); 
     itemk.setAttribute("class", "item");
     itemk.appendChild(k);
@@ -563,7 +563,24 @@ element.addEventListener("click", (e) => {
 this.registerEventCancel=function(element){
 element.addEventListener("click", (e) => {	 
 	    	 e.stopPropagation();
-	     	 orchestrator.refresh(0); 
+	  if(window.confirm("Are you sure you want to cancel the questionnaire? You will be redirected to the product")){  	 
+	    	 makeCall("Get", "RecordLog", null,
+	 		        function(req){
+	         if (req.readyState == 4) {
+	           var message = req.responseText;
+	           if (req.status == 200){
+	  	     	     orchestrator.refresh(0); 
+	           } else {
+	 	          var alertContainer = document.getElementById("id_alert");
+	               self.alert.textContent = message;
+	               
+	           }
+	         }
+	         
+	 	         
+	 	 		  }
+	          );}
+	    	 
   			}, false);	  
 	  }
 	  
@@ -610,7 +627,44 @@ if(element.closest("form").checkValidity()){
 
  function LeaderBoardFrame(_frame){
 	    this.frame=_frame;
-	   var self = this;
+	    var self = this;
+	    
+	    this.show= function(players){
+	    	if(players==null){
+	    		 var self=this;
+	    		 var alert= document.createElement("p");
+	    		 alert.textContent = "Nothing to display yet!";	
+	    		 item= document.createElement("div");
+	    		 item.setAttribute("class", "container");
+	    		 item.appendChild(alert);
+	    		 self.frame.appendChild(item);
+	    		}else{
+	    		var self=this;
+	            //container that contains the the 
+	            containerDiv=document.createElement("div"); 
+	    		containerDiv.setAttribute("class", "container");
+	    		containerDiv.setAttribute("id", "formContainer");
+	 
+	    		players.forEach(function(player) { // self visible here, not this
+	    	  			 
+	                      //each question (item)is contained in a div
+	    				  itemDiv=document.createElement("div"); 
+	    				  itemDiv.setAttribute("class", "item");	  		  
+	    				  p=document.createElement("p");
+	    			      p.textContent=player.user.username+player.points;
+	    				  input.setAttribute("id", player.id);
+	    				  itemDiv.appendChild(p);
+	    		          //add each question in the field set
+	    		          fieldset.appendChild(itemDiv);
+	    	              fieldset.appendChild(document.createElement("br")); 
+	    	              count++;
+	    	        });
+        
+	      }
+
+	    }	      
+	    
+	    
 }
 
 /************************************************END LEADERBOARDFRAME***************************************************************** */
