@@ -238,11 +238,10 @@ this.show= function(questions){
 		//we append both of the fieldset at the main container
 		containerDiv.appendChild(fieldsetQuestionsDiv);
 		containerDiv.appendChild(fieldsetStatsDiv);
-		
+		count=0;
         // for each question create label + input
 		questions.forEach(function(question) { // self visible here, not this
-	  			  var input, label, mex, count;
-	  			  count=0;
+	  			  var input, label, mex;
                   //each question (item)is contained in a div
 				  itemDiv=document.createElement("div"); 
 				  itemDiv.setAttribute("class", "item");	  		  
@@ -258,6 +257,7 @@ this.show= function(questions){
 		          //add each question in the field set
 		          fieldset.appendChild(itemDiv);
 	              fieldset.appendChild(document.createElement("br")); 
+	              count++;
 	        });
     
      //button to show the stats container
