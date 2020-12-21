@@ -93,7 +93,7 @@ function LeaderBoardButton(){
 			  var i = document.createElement("IMG");
 			 
 			  
-      		  i.setAttribute("src", questionnaire.image);
+      		  i.setAttribute("src", "uploads/campaignImages/" + questionnaire.image);
       		  i.setAttribute("width", "250");
       		  i.setAttribute("height", "200");
      		  i.setAttribute("alt", questionnaire.name);
@@ -284,24 +284,100 @@ this.show= function(questions){
 
 }	      
 
-  this.registerEvents=function(element){   
-		var alreadyin=0;
+var user;
+
+this.registerEvents=function(element){    
 		//TODO servlet that checks if age etc already insterted if so
-	    element.addEventListener("click", (e) => {	 
+	    element.addEventListener("click", (e) => {	 	    	
 	    	 e.stopPropagation();
 	         element.parentNode.removeChild(element);
 	         self.showStatiticsForm();
-	 	     token=1;
+	         self.waitAlreadyIn();
+	
  			}, false);	    
   }
   
+this.waitAlreadyIn=function(){
+	
+	
+	makeCall("Get", "AutoFill", null,
+		        function(req){
+        if (req.readyState == 4) {
+          var alreadyIn=0;
+          var message = req.responseText;
+          if (req.status == 200){
+		        user = JSON.parse(req.responseText); 
+				if((user.sex!=null)||(user.birth!=null)){	
+					alreadyIn=1;
+				}
+          } else {
+	          var alertContainer = document.getElementById("id_alert");
+              self.alert.textContent = message;
+              
+          }
+        }
+        if(alreadyIn){
+	         if(window.confirm("Can we autofill the stats with your data sweetie? Let us in <3\n")){
+	 			  self.autoFill();
+	 		  }}
+         });
+	
+	
+}
+  
+this.autoFill=function(){
+		var sex=user.sex;
+		var age=user.birth;
+	    var d = new Date(age)
 
+
+		if(sex!=null){
+			switch(sex){
+			case "female": document.getElementById("female").checked="true";
+    		break; 
+			case "male":document.getElementById("male").checked="true";
+    		break; 
+			case "prefer not to tell":document.getElementById("prefer not to tell").checked="true";
+    		break; 
+
+			} 
+		}
+		if(age!=null){
+			 month = '' + (d.getMonth() + 1),
+				        day = '' + d.getDate(),
+				        year = d.getFullYear();
+
+				    if (month.length < 2) 
+				        month = '0' + month;
+				    if (day.length < 2) 
+				        day = '0' + day;
+
+		    var date=[year, month, day].join('-');
+			document.getElementById('age').value=date;
+		
+		}
+			
+			 
+		}
+	
+	
+  
+  
 this.showStatiticsForm= function(array, target){
-   fieldset=document.getElementById("statsForm")        
+   fieldset=document.getElementById("statsForm") 
+	
+    
+	buttonDiv=document.createElement("div"); 
+	buttonDiv.setAttribute("class", "item");
+	var autofill=document.createElement("button");
+	autofill.textContent="autofill";
+	buttonDiv.appendChild(autofill);  
+	fieldset.appendChild(buttonDiv);
+	
+		   
    var input, sex;
    //we have three fields
    //sex
-   // i will replace this with radio buttons cuz nicer ^^
 	itemDiv0=document.createElement("div"); 
 	itemDiv0.setAttribute("class", "item");	 
 	
@@ -317,6 +393,7 @@ this.showStatiticsForm= function(array, target){
     
     w.setAttribute("type", "radio");
     w.setAttribute("value", "female");
+    w.setAttribute("id", "female");
     wl=document.createElement("label");
     wl.textContent="female";
     itemw=document.createElement("div"); 
@@ -325,8 +402,9 @@ this.showStatiticsForm= function(array, target){
     itemw.appendChild(wl);
     
     k.setAttribute("type", "radio");
-    k.setAttribute("value", "female");
+    k.setAttribute("value", "male");
     kl=document.createElement("label");
+    k.setAttribute("id", "male");
     kl.textContent="female";
     itemk=document.createElement("div"); 
     itemk.setAttribute("class", "item");
@@ -335,6 +413,7 @@ this.showStatiticsForm= function(array, target){
 
     s.setAttribute("type", "radio");
     s.setAttribute("value", "prefer not to tell");
+    s.setAttribute("id", "prefer not to tell");
     sl=document.createElement("label");
     sl.textContent="prefer not to tell";
     items=document.createElement("div"); 
@@ -359,6 +438,8 @@ this.showStatiticsForm= function(array, target){
     input=document.createElement("input");
     input.setAttribute("type", "date");
     input.setAttribute("id", "age");
+    input.max="2010-12-31";
+    input.min="1930-12-31";
     input.name="age";
 
     itemDiv1.appendChild(age);
@@ -454,9 +535,28 @@ this.showStatiticsForm= function(array, target){
  
     self.registerEventCancel(button1);
     self.registerEventSubmit(button2);
+    self.registerAutoFill(autofill);
+         
+	  }
 
+//on click, reaload the product page
+this.registerAutoFill=function(element){
+token=0;
+element.addEventListener("click", (e) => {	 
+	    	 e.stopPropagation();
+	    	if(!token) {
+		         document.getElementById("male").checked=false;
+		         document.getElementById("female").checked=false;
+		         document.getElementById("prefer not to tell").checked=false;
+		         document.getElementById("age").value="yyyy-mm-dd";
+		         token=1;
+		         }
+	    	else{
+	    		self.autoFill();
+	    		token=0;
+	    	}
 
-	         
+			}, false);	  
 	  }
 
 //on click, reaload the product page
@@ -470,10 +570,12 @@ element.addEventListener("click", (e) => {
 
 //on click submit the questionnaire and display a "Thanks for having submitted the questionnaire ^^"
 this.registerEventSubmit=function(element){
-element.addEventListener("click", (e) => {	 
+if(element.closest("form").checkValidity()){
+	element.addEventListener("click", (e) => {	 
 	    	 e.stopPropagation();
 	    	    makeCall("POST", "SubmitQuestionnaire", e.target.closest("form"),
 			        function(req){
+	    	
 	          if (req.readyState == 4) {
 	            var message = req.responseText;
 	            if (req.status == 200){
@@ -483,10 +585,11 @@ element.addEventListener("click", (e) => {
 	              self.alert.textContent = message;
 	            }
 	          }
-	        }
+	    	    }
+	        
 	      );	 
 	    	 
- 			}, false);	  
+ 			}, false);	}  
 	  }
 	  
 
