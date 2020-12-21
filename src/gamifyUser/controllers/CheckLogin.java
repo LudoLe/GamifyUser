@@ -2,6 +2,7 @@ package gamifyUser.controllers;
 
 import java.io.IOException;
 import javax.ejb.EJB;
+import javax.ejb.Stateful;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -12,7 +13,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 import polimi.db2.gamifyDB.services.UserService;
 import polimi.db2.gamifyDB.entities.User;
 
-
+@Stateful
 @WebServlet("/CheckLogin")
 @MultipartConfig
 public class CheckLogin extends HttpServlet {
@@ -62,9 +63,9 @@ public class CheckLogin extends HttpServlet {
 			response.getWriter().println("Incorrect credentials");
 		} else {
 			request.getSession().setAttribute("user", user);
-
 			response.setStatus(HttpServletResponse.SC_OK);
 			response.setCharacterEncoding("UTF-8");
+			response.setContentType("application/json");
 			String redirectPath = request.getServletContext().getContextPath() + (user.getAdmin() == 1 ? "/admin" : "/user");
 			response.getWriter().print(redirectPath);
 		}
