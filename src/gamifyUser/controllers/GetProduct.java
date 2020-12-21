@@ -52,9 +52,7 @@ public class GetProduct extends HttpServlet{
 			try {		  				
 				questionnaire = questionnaireService.findByDate(new Date());
 				Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-				String applicationPath = request.getServletContext().getRealPath("");
-				String img= applicationPath+questionnaire.getImage();
-				questionnaire.setImage(img);
+				
 				
 				response.setStatus(HttpServletResponse.SC_OK);
 				response.setContentType("application/json");

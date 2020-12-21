@@ -81,7 +81,11 @@ public class SubmitQuestionnaire extends HttpServlet{
 			Integer pointsFirst=0;
 			Integer pointsSecond=0;
 
-			
+			//List<String> mandatoryParams = new ArrayList<>(Arrays.asList("user2", "mail2", "pass2", "pass3"));
+			//if (!Utility.paramExists(request, response, mandatoryParams)
+			//		|| Utility.paramIsEmpty(request, response, mandatoryParams))
+			//	return;
+
 					
 			User user=(User) request.getSession().getAttribute("user");
 			birthDate= user.getBirth();
