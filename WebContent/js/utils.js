@@ -24,7 +24,8 @@ export function showModal(title, content, cback = null) {
     $(".modal").modal("show");
     $(".modal").on("hidden.bs.modal", function () {
         document.getElementById("mainContainer").removeChild($(".modal")[0]);
-        if (cback != null)
-            cback();
+        for (const fun of cback) {
+            fun();
+        }
     });
 }
