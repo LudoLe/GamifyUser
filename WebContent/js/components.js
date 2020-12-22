@@ -57,7 +57,7 @@ export const inspectionUserList = (questId) => {
             ul.append(li);
         });
         let script = document.createElement("script");
-        script.src = "js/inspectionUserList.js";
+        script.src = "js/inspectionUserPage.js";
         mainDiv.append(script);
     });
     // gets list of users who canceled the questionnaire
@@ -71,6 +71,73 @@ export const inspectionUserList = (questId) => {
             li.id = val.userId;
             ul.append(li);
         });
+    });
+    return mainDiv;
+};
+export const searchByDate = (ajaxURL, onSuccess, onError) => {
+    let mainDiv = document.createElement("div");
+    let h3 = document.createElement("h5");
+    h3.textContent = "Search by Date";
+    mainDiv.append(h3);
+    let input = document.createElement("input");
+    mainDiv.append(input);
+    input.type = "date";
+    input.name = "searchDate";
+    input.classList.add("form-control");
+    input.id = "searchDate";
+    input.addEventListener('input', (e) => {
+        e.preventDefault();
+        if (input.value === "")
+            return;
+        $.ajax({
+            method: "GET",
+            url: ajaxURL + input.value,
+            success: (data) => {
+                onSuccess(data);
+            },
+            error: (res, err, stat) => {
+                onError();
+            }
+        });
+    });
+    return mainDiv;
+};
+export const searchByName = (ajaxURL, onSuccess, onError, onSearchSubmit) => {
+    let mainDiv = document.createElement("div");
+    mainDiv.id = "containerSearchName";
+    let h3 = document.createElement("h5");
+    h3.textContent = "Search by Name";
+    mainDiv.append(h3);
+    mainDiv.style.setProperty("margin-top", "28px");
+    let input = document.createElement("input");
+    mainDiv.append(input);
+    input.type = "text";
+    input.name = "name";
+    input.placeholder = "Fill me";
+    input.autocomplete = "off";
+    input.setAttribute("list", "datalistSearch");
+    input.classList.add("form-control");
+    input.id = "searchName";
+    input.addEventListener('input', (e) => {
+        e.preventDefault();
+        if (input.value === "")
+            return;
+        $.ajax({
+            method: "GET",
+            url: ajaxURL + input.value,
+            success: function (data) {
+                onSuccess(data);
+            },
+            error: function (res, err, stat) {
+                onError();
+            }
+        });
+    });
+    mainDiv.addEventListener('keyup', (e) => {
+        e.preventDefault();
+        if (e.key === "Enter") {
+            onSearchSubmit(input.value);
+        }
     });
     return mainDiv;
 };

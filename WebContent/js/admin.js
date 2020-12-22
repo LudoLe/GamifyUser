@@ -5,6 +5,10 @@ import { creationTab, inspectionTab, deletionTab } from "./tabs.js";
 import { inspectionUserList } from "./components.js";
 import { showModal } from "./utils.js";
 let currentContainer = $("#mainContainer");
+document.documentElement.style.setProperty('--screen-y', window.innerHeight + "px");
+document.addEventListener('resize', () => {
+    document.documentElement.style.setProperty('--screen-y', window.innerHeight + "px");
+});
 // called whenever the current tab changes
 const onTabChange = (newPage, data) => {
     console.log("Changing tab to => " + newPage);
