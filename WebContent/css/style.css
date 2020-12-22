@@ -10,16 +10,23 @@
   font-size: 40px;
 }
 
-
 .container-admin {
   margin-top: 30px;
-  overflow-y: hidden;
-  max-height: 750px;
+  overflow: hidden;
+  max-height: calc(var(--screen-y) - 150px);
 }
 
 .container-questionnaire {
   max-width: 800px;
   margin-top: 20px;
+}
+
+.col-search {
+  padding: 10px 40px 0 40px;
+  margin-top: 48px;
+  position: fixed;
+  top: 0;
+  right: 0;
 }
 
 .questionnaire-title {
@@ -89,17 +96,73 @@ body .modal-dialog {
 }
 
 .optional-answers-scrollable::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
-  box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
-
+  -webkit-box-shadow: inset 0 0 6px white;
+  box-shadow: inset 0 0 6px white;
   border-radius: 10px;
 }
 
 .optional-answers-scrollable::-webkit-scrollbar-thumb {
   border-radius: 10px;
-  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
-  box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+  -webkit-box-shadow: inset 0 0 6px #007bff;
+  box-shadow: inset 0 0 6px #007bff;
 }
+
+.col-table-8 {
+  overflow-y: scroll;
+  max-height: calc(var(--screen-y) - 152px);
+}
+
+.col-table-8-red {
+  overflow-y: scroll;
+  max-height: calc(var(--screen-y) - 180px);
+}
+
+.col-table-8::-webkit-scrollbar {
+  width: 2px;
+}
+
+.col-table-8::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px white;
+  box-shadow: inset 0 0 6px white;
+  border-radius: 10px;
+  margin-top: 50px;
+}
+
+.col-table-8::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px #007bff;
+  box-shadow: inset 0 0 6px #007bff;
+}
+
+.col-table-8-red::-webkit-scrollbar {
+  width: 2px;
+}
+
+.col-table-8-red::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px white;
+  box-shadow: inset 0 0 6px white;
+  border-radius: 10px;
+  margin-top: 50px;
+}
+
+.col-table-8-red::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px red;
+  box-shadow: inset 0 0 6px red;
+}
+
+.container-admin::-webkit-scrollbar {
+  width: 0px;
+}
+
+table th {
+  position: -webkit-sticky; 
+  position: sticky !important;
+  top: 0;
+  z-index: 5;
+  background: #fff;
+}
+
 
 .protip-div {
   margin-left: 12px;
