@@ -20,6 +20,19 @@ const dataListCreator = (data) => {
     return datalist;
 };
 export const deletionTab = () => {
+    const deleteFunction = (val) => {
+        $.ajax({
+            url: deleteUrl + val.questionnaireId,
+            success: function (data) {
+                showModal("Success!", "Questionnaire deleted correctly", [
+                    () => location.reload(),
+                ]);
+            },
+            error: function (request, status, error) {
+                showModal("Error", request.responseText);
+            },
+        });
+    };
     const pastListUrl = "/GamifyUser/admin/listQuestionnaires?start=0&size=100&past=true";
     const deleteUrl = "/GamifyUser/admin/delete?id=";
     // start page content
@@ -36,7 +49,7 @@ export const deletionTab = () => {
     mainDiv.append(col4);
     let currentFillData = null;
     col4.append(searchByDate("/GamifyUser/admin/getQuestionnaire?mode=3&date=", (data) => {
-        inspectionTabChange(data.questionnaireId);
+        deleteFunction(data);
     }, () => showModal("No result", "Got nothing on that date.")));
     col4.append(searchByName("/GamifyUser/admin/getQuestionnaire?mode=4&name=", (data) => {
         currentFillData = data;
@@ -44,7 +57,7 @@ export const deletionTab = () => {
     }, () => showModal("Error", "Error"), (value) => {
         for (const elem of currentFillData) {
             if (elem.name === value) {
-                inspectionTabChange(elem.questionnaireId);
+                deleteFunction(elem);
                 return;
             }
         }
@@ -85,17 +98,7 @@ export const deletionTab = () => {
             let i = document.createElement("i");
             // adds listener to click on deletion button; when clicked, a call
             // to deleteUrl happens, which if successful deletes the questionnaire
-            button.addEventListener("click", (ev) => {
-                $.ajax({
-                    url: deleteUrl + val.questionnaireId,
-                    success: function (data) {
-                        showModal("Success!", "Questionnaire deleted correctly", () => location.reload());
-                    },
-                    error: function (request, status, error) {
-                        showModal("Error", request.responseText);
-                    },
-                });
-            });
+            button.addEventListener("click", () => deleteFunction(val));
             i.style.setProperty("font-weight", "lighter");
             i.classList.add("fas", "fa-newspaper");
             i.textContent = " Delete";
