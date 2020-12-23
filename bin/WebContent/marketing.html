@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" data-th-src="@{https://code.jquery.com/jquery-3.5.1.min.js}"></script>
+    <link id="mainCssLink" rel="stylesheet" type="text/css" href="css/style.css" data-th-href="@{/css/style.css}"/>
+    <title>Marketing questions</title>
+</head>
+<body>
+<div class="container container-questionnaire">
+  
+<form data-th-each="question: ${questions}">
+  <div class="form-group">
+    <label data-th-for="${question.id}">I wanna know</label>
+    <input type="text" class="form-control" id="input1" placeholder="If this feeling flows both ways">
+  </div>
+  <button type="submit" class="btn btn-primary">Next</button>
+</form>
+</div>
+</body>
+</html>
