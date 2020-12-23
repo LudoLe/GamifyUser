@@ -4,20 +4,24 @@ This script takes care of orchestrating the admin page's tabs (Creation, Inspect
 import { creationTab, inspectionTab, deletionTab } from "./tabs.js";
 import { inspectionUserList } from "./components.js";
 import { showModal } from "./utils.js";
+// points to the current page container
 let currentContainer = $("#mainContainer");
+// get screen available height (and update on resize); set it it css variable
 document.documentElement.style.setProperty('--screen-y', window.innerHeight + "px");
 document.addEventListener('resize', () => {
     document.documentElement.style.setProperty('--screen-y', window.innerHeight + "px");
 });
-// called whenever the current tab changes
+// handles tab change
 const onTabChange = (newPage, data) => {
     console.log("Changing tab to => " + newPage);
+    // prevCont = container to be dismissed
     let prevCont = currentContainer[0];
+    // do not trigger animation if reloading the same tab
     if (newPage === sessionStorage.getItem("currentTab")) {
         document.body.removeChild(prevCont);
     }
     else {
-        // adds the slide-out class to trigger the animation
+        // adds the slide-out class to trigger the slide out animation
         currentContainer.addClass("slide-out");
         // when the animation ends, destroy the container
         prevCont.addEventListener("animationend", (e) => {
@@ -25,6 +29,7 @@ const onTabChange = (newPage, data) => {
         });
     }
     let div = null;
+    // get new page content
     switch (newPage) {
         case "creation":
             div = creationTab();
@@ -49,6 +54,7 @@ const onTabChange = (newPage, data) => {
     newContainer.classList.add("container", "container-admin");
     newContainer.id = "mainContainer";
     newContainer.append(div);
+    // add fade in animation to new container
     newContainer.classList.add("fade-in");
     newContainer.addEventListener("animationend", (e) => {
         newContainer.classList.remove("fade-in");
@@ -61,7 +67,8 @@ const onTabChange = (newPage, data) => {
     if (newPage != "logout")
         sessionStorage.setItem("currentTab", newPage);
 };
-// changes page theme
+// changes page theme (dark/light)
+// works by swapping the dark css stylesheet link between empty and actual link
 const changeTheme = (newTheme, speed = 700) => {
     $("body").fadeOut(speed, function () {
         document
@@ -70,6 +77,7 @@ const changeTheme = (newTheme, speed = 700) => {
         $(this).fadeIn(speed);
     });
 };
+// IIFE
 (function () {
     // list of sidenav buttons
     const tabElements = Array.from(document.getElementsByClassName("sidenav-button"));
@@ -81,6 +89,7 @@ const changeTheme = (newTheme, speed = 700) => {
             onTabChange(target.id, null);
         }
     });
+    // page logo in left-bottom corner
     const gamifyLogo = document.getElementById("gamifyLogo");
     // creates protip to instruct user on how to change theme
     if (localStorage.getItem("protipOpened") === null) {
@@ -122,16 +131,19 @@ const changeTheme = (newTheme, speed = 700) => {
         let date = new Date($(this)[0][2].value);
         let today = new Date();
         today.setHours(0, 0, 0, 0);
+        // control that date isn't before today
         if (date == null || date < today) {
             showModal("Error", "Time travel doesn't exist yet, so please try entering a date that's not in the past.");
             return;
         }
+        // checks that an image has been uploaded
         if (sessionStorage.getItem("imageUploaded") === null) {
             showModal("Error", "Please upload an image");
             return;
         }
         let formData = new FormData($(this)[0]);
         const url = "/GamifyUser/admin/create";
+        // ajax call to create questionnaire
         $.ajax({
             method: "POST",
             url: url,
@@ -153,6 +165,7 @@ const changeTheme = (newTheme, speed = 700) => {
         });
     });
 })();
+// this function is used by the inspection tah to switch to the users list page
 export const inspectionTabChange = (data) => {
     onTabChange("inspectionUserList", data);
 };

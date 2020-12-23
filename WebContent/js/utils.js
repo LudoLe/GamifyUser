@@ -1,3 +1,5 @@
+// basic function to show bootstrap modal with a title, some content
+// and optionally an array of callback functions to be called on modal close
 export function showModal(title, content, cback = null) {
     $("#mainContainer").append(`<div class="modal" tabindex="-1" id="#mainModal">
 	<div class="modal-dialog">
@@ -24,8 +26,10 @@ export function showModal(title, content, cback = null) {
     $(".modal").modal("show");
     $(".modal").on("hidden.bs.modal", function () {
         document.getElementById("mainContainer").removeChild($(".modal")[0]);
-        for (const fun of cback) {
-            fun();
+        if (cback != null) {
+            for (const fun of cback) {
+                fun();
+            }
         }
     });
 }
