@@ -1,6 +1,10 @@
+/*
+ * Exports the functions that create the tab elements
+ */
 import { showModal } from "./utils.js";
 import { inspectionTabChange } from "./admin.js";
 import { searchByDate, searchByName } from "./components.js";
+// takes a data array and provides a datalist element, to be used to give autofill suggestions
 const dataListCreator = (data) => {
     let datalist = document.getElementById("datalistSearch");
     if (datalist == null) {
@@ -20,6 +24,8 @@ const dataListCreator = (data) => {
     return datalist;
 };
 export const deletionTab = () => {
+    const deleteUrl = "/GamifyUser/admin/delete?id=";
+    // called when a questionnaire has to be deleted
     const deleteFunction = (val) => {
         $.ajax({
             url: deleteUrl + val.questionnaireId,
@@ -34,7 +40,6 @@ export const deletionTab = () => {
         });
     };
     const pastListUrl = "/GamifyUser/admin/listQuestionnaires?start=0&size=100&past=true";
-    const deleteUrl = "/GamifyUser/admin/delete?id=";
     // start page content
     let mainDiv = document.createElement("div");
     mainDiv.classList.add("row");
@@ -164,7 +169,7 @@ export const inspectionTab = () => {
         $.each(data, function (key, val) {
             let tr = document.createElement("tr");
             let td = document.createElement("td");
-            td.textContent = val.datetime.slice(0, 12);
+            td.textContent = val.datetime.slice(0, 12).replace(",", "");
             tr.append(td);
             td = document.createElement("td");
             td.textContent = val.name;
