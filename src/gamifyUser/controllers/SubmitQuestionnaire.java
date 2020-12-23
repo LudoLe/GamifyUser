@@ -66,49 +66,50 @@ public class SubmitQuestionnaire extends HttpServlet{
 			Review review=null;
 			Questionnaire questionnaire;
 			Date birthDate=null;
-			String sexIn;
-			Integer pointsFirst=0;
-			Integer pointsSecond=0;
+			String sex;
            
 			
-			List<String> mandatoryParams = new ArrayList<>(Arrays.asList("age", "sex", "expertise"));
+			List<String> mandatoryParams = new ArrayList<>(Arrays.asList("expertise"));
+			/*
 			if (!Utility.paramExists(request, response, mandatoryParams)
 					|| Utility.paramIsEmpty(request, response, mandatoryParams))
 				return;
-
-					
+			 */
+			
 			User user=(User) request.getSession().getAttribute("user");
-			birthDate= user.getBirth();
-			sexIn= user.getSex();
-		
- 			String age = StringEscapeUtils.escapeJava(request.getParameter("age"));
- 			
- 			if(age!=null){
- 				canAccessAge=1;
- 				Date todate=simpleDateFormat.parse(age);
- 	 			if(birthDate==null){user.setBirth(todate);}
-	 			 pointsSecond=+1;
- 				}
- 			String sex = StringEscapeUtils.escapeJava(request.getParameter("sex"));
- 			if(sex!=null){
- 				canAccessSex=1;
- 				if(sexIn==null){user.setSex(sex);
-	 			 pointsSecond=+1;}
- 			} 		
+			System.out.println(user.getUserId());
+			System.out.println(user.getBirth());
+			System.out.println(user.getSex());
+			birthDate = user.getBirth();
+			sex = user.getSex();
+			
+			//System.out.println(birthDate+" "+(StringEscapeUtils.escapeJava(request.getParameter("can_access_age")))+" "+sex+" "+(StringEscapeUtils.escapeJava(request.getParameter("can_access_sex"))));
+			String age_string = (StringEscapeUtils.escapeJava(request.getParameter("can_access_age")));
+			if(age_string != null && age_string.equals("on")) {
+				if(birthDate == null) // non posso dare l'autorizzazione
+					return;
+				canAccessAge = 1;
+			}
+			String sex_string = (StringEscapeUtils.escapeJava(request.getParameter("can_access_sex")));
+			if(sex_string != null && sex_string.equals("on")) {
+				if(sex == null) // non posso dare l'autorizzazione
+					return;
+				canAccessSex = 1;
+			}
+			
  			String expertise = StringEscapeUtils.escapeJava(request.getParameter("expertise"));
- 			if(expertise!=null){			
-	 			 pointsSecond=+1;
- 			} 	
  		    userService.updateProfile(user);
  			
  			questionnaire = questionnaireService.findByDate(new Date());
-			review = reviewService.createReview(canAccessAge, canAccessSex, new Date(), expertise, user, questionnaire, pointsFirst, pointsSecond);
 
+			//System.out.println(canAccessAge+" "+canAccessSex+" "+expertise+" "+user+" "+questionnaire);
+			review = reviewService.createReview(canAccessAge, canAccessSex, new Date(), expertise, user, questionnaire);
+			//System.out.println("ok");
 			questions=questionnaire.getQuestions();
 	 		int count=0;
 	 		for(Question question : questions){     
 	 			String content = StringEscapeUtils.escapeJava(request.getParameter("answer"+count));
-	 		    if(content==null||!content.isEmpty()){
+	 		    if(content==null||content.isEmpty()){
 	 		    	response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 	 		    	response.setCharacterEncoding("UTF-8");
 					response.getWriter().println("");
@@ -121,7 +122,6 @@ public class SubmitQuestionnaire extends HttpServlet{
 	 		    answer.setReview(review);
 	 		    answers.add(answer);
 	 			count++;
-	 			pointsFirst=+2;
 	 			}
 	 		    answerService.createAnswers(answers);
 	 			

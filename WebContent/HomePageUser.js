@@ -1,44 +1,45 @@
 /**
  * 
- */(function() { // avoid variables ending up in the global scope
+ */
+(function() { // avoid variables ending up in the global scope
 // page components
-    var productFrame, leaderBoardFrame, questionnaireFrame, logout, homeButton, questionnaireButton, leaderBoardButton, mainFrame;
+	var productFrame, leaderBoardFrame, questionnaireFrame, logout, homeButton, questionnaireButton, leaderBoardButton, mainFrame;
 
-    orchestrator = new PageOrchestrator(); 
+	orchestrator = new PageOrchestrator(); 
    
 
 
- function PersonalMessage(_username, messagecontainer) {
+	function PersonalMessage(_username, messagecontainer) {
 	    this.username = _username;
 	    this.show = function() {
 	      messagecontainer.textContent = this.username;
 	    }
- } 
+	} 
 
 
- function HomeButton(){
+	function HomeButton(){
 	 var home = document.getElementById("home");
 	 home.addEventListener("click", (e)=>{	
- 	 orchestrator.refresh(0); 
-   }, false);
-  
-	 }
+		 orchestrator.refresh(0); 
+		}, false);
 
-function QuestionnaireButton(){
+	}
+
+	function QuestionnaireButton(){
 	 var questionnaire = document.getElementById("questionnaireButton");
 	 questionnaire.addEventListener("click", (e)=>{	
 	           	   orchestrator.refresh(1); 
- }, false);
-	 }
+		}, false);
+	}
 
-function LeaderBoardButton(){
+	function LeaderBoardButton(){
 	 var home = document.getElementById("leaderBoardButton");
 	 home.addEventListener("click", (e)=>{	
-	 orchestrator.refresh(2); 
- }, false);
-	 }
- 
- function Logout(){
+		 orchestrator.refresh(2); 
+		}, false);
+	}
+
+	function Logout(){
 	 var button = document.getElementById("logout");
 	 button.addEventListener("click", (e)=>{
 		 makeCall("GET", "LogOut", null,
@@ -57,23 +58,23 @@ function LeaderBoardButton(){
 		 
 		 
 	 }, false )
- }
- 
-  window.addEventListener("load", () => {
+	}
+
+	window.addEventListener("load", () => {
 	   orchestrator.start(); 
 	   orchestrator.refresh(0); // initialize the components
 	  }, false); 
-  
 
-/************************************************BEGIN PRODUCT***************************************************************** */
-  function ProductFrame(_frame){
+
+	/************************************************BEGIN PRODUCT***************************************************************** */
+	function ProductFrame(_frame){
 	      this.frame=_frame;
 	   var self = this;
- 
+
 	  
-  this.show= function(questionnaire){
+	this.show= function(questionnaire){
 	 
-        var prod=document.getElementById("productFrameImage")
+	    var prod=document.getElementById("productFrameImage")
 
 		if(questionnaire==null){
 			  var self=this;
@@ -93,33 +94,33 @@ function LeaderBoardButton(){
 			  var i = document.createElement("IMG");
 			 
 			  
-      		  i.setAttribute("src", "uploads/campaignImages/" + questionnaire.image);
-      		  i.setAttribute("width", "250");
-      		  i.setAttribute("height", "200");
-     		  i.setAttribute("alt", questionnaire.name);
+	  		  i.setAttribute("src", "uploads/campaignImages/" + questionnaire.image);
+	  		  i.setAttribute("width", "250");
+	  		  i.setAttribute("height", "200");
+	 		  i.setAttribute("alt", questionnaire.name);
 	          figure.appendChild(i);
 
-            //  var c = document.createElement("FIGCAPTION");
-            //  var t = document.createTextNode(questionnaire.details);
+	        //  var c = document.createElement("FIGCAPTION");
+	        //  var t = document.createTextNode(questionnaire.details);
 			//  c.appendChild(t);
 	        //  figure.appendChild(c);
 	       
 			 // build the the button that, if clicked, make you see the reviews 
 		      var button = document.createElement("button");
-              button.setAttribute("open","0");
+	          button.setAttribute("open","0");
 			  button.setAttribute("class","btn");
 	          button.setAttribute('id', questionnaire.questionnaireId); 
-             //set the icon
+	         //set the icon
 			  var fafas=document.createElement("i");
 			  fafas.setAttribute("class","fas fa-comments");
 	          button.appendChild(fafas);
 
-             //retrieve the div dedicated to the product visualition and fills it with the newly created elements		
+	         //retrieve the div dedicated to the product visualition and fills it with the newly created elements		
 
 	          self.frame.appendChild(figure);	
 	          self.frame.appendChild(button);	
 	          self.registerEvents(button); 
-             }
+	         }
 	      }       
 	  
 
@@ -138,11 +139,11 @@ function LeaderBoardButton(){
 		         element.removeChild(ul);
 		         token=0;
 		    	} 
- 			}, false);	  
+				}, false);	  
 	  }
 
-   
-	
+
+
 	  
 	  this.showComments = function(target){
 			 var self = this;
@@ -164,8 +165,8 @@ function LeaderBoardButton(){
 
 
 
-this.updateCommentSection= function(array, target){
-          var self=this;
+	this.updateCommentSection= function(array, target){
+	      var self=this;
 		  var l = arrayComment.length,
 		  ul, element, commentV;
 		  ul = document.createElement("ul");
@@ -188,19 +189,19 @@ this.updateCommentSection= function(array, target){
 
 	         
 	  }
-}
-/************************************************END PRODUCT***************************************************************** */
+	}
+	/************************************************END PRODUCT***************************************************************** */
 
 
 
-  
-/************************************************BEGIN QUESTIONNAIRE***************************************************************** */
 
-  function QuestionnaireFrame(_frame){
+	/************************************************BEGIN QUESTIONNAIRE***************************************************************** */
+
+	function QuestionnaireFrame(_frame){
 	    this.frame=_frame;
 	    var self = this;
-  
-this.show= function(questions){
+
+	this.show= function(questions){
 	if(questions==null){
 		 var self=this;
 		 var alert= document.createElement("p");
@@ -211,8 +212,8 @@ this.show= function(questions){
 		 self.frame.appendChild(item);
 		}else{
 		var self=this;
-        //container that contains the form fields
-        containerDiv=document.createElement("div"); 
+	    //container that contains the form fields
+	    containerDiv=document.createElement("div"); 
 		containerDiv.setAttribute("class", "container");
 		containerDiv.setAttribute("id", "formContainer");
 		form=document.createElement("FORM"); 		
@@ -239,10 +240,10 @@ this.show= function(questions){
 		containerDiv.appendChild(fieldsetQuestionsDiv);
 		containerDiv.appendChild(fieldsetStatsDiv);
 		count=0;
-        // for each question create label + input
+	    // for each question create label + input
 		questions.forEach(function(question) { // self visible here, not this
 	  			  var input, label, mex;
-                  //each question (item)is contained in a div
+	              //each question (item)is contained in a div
 				  itemDiv=document.createElement("div"); 
 				  itemDiv.setAttribute("class", "item");	  		  
 				  label=document.createElement("label");
@@ -259,11 +260,11 @@ this.show= function(questions){
 	              fieldset.appendChild(document.createElement("br")); 
 	              count++;
 	        });
-    
-     //button to show the stats container
-     //everytime, this button calls a servlet that checks if the user has already
-     //entered data about sex age etc, if so,
-     // a pop up shows up asking for permission to autofill the data
+
+	 //button to show the stats container
+	 //everytime, this button calls a servlet that checks if the user has already
+	 //entered data about sex age etc, if so,
+	 // a pop up shows up asking for permission to autofill the data
 	 //a button with "allow/not allow" there will be always there
 	 //
 	  buttonDiv=document.createElement("div"); 
@@ -279,53 +280,53 @@ this.show= function(questions){
 	  fieldset.appendChild(document.createElement("br"));
 	  fieldsetStatsDiv.appendChild(buttonDiv);
 	  //
-      self.registerEvents(button);
-  }
+	  self.registerEvents(button);
+	}
 
-}	      
+	}	      
 
-var user;
+	var user;
 
-this.registerEvents=function(element){    
+	this.registerEvents=function(element){    
 		//TODO servlet that checks if age etc already insterted if so
 	    element.addEventListener("click", (e) => {	 	    	
 	    	 e.stopPropagation();
 	         element.parentNode.removeChild(element);
 	         self.showStatiticsForm();
 	         self.waitAlreadyIn();
-	
- 			}, false);	    
-  }
-  
-this.waitAlreadyIn=function(){
-	
-	
+
+				}, false);	    
+	}
+
+	this.waitAlreadyIn=function(){
+
+
 	makeCall("Get", "AutoFill", null,
 		        function(req){
-        if (req.readyState == 4) {
-          var alreadyIn=0;
-          var message = req.responseText;
-          if (req.status == 200){
+	    if (req.readyState == 4) {
+	      var alreadyIn=0;
+	      var message = req.responseText;
+	      if (req.status == 200){
 		        user = JSON.parse(req.responseText); 
 				if((user.sex!=null)||(user.birth!=null)){	
 					alreadyIn=1;
 				}
-          } else {
+	      } else {
 	          var alertContainer = document.getElementById("id_alert");
-              self.alert.textContent = message;
-              
-          }
-        }
-        if(alreadyIn){
+	          self.alert.textContent = message;
+	          
+	      }
+	    }
+	    if(alreadyIn){
 	         if(window.confirm("Allows us autofill the stats with your data?")){
 	 			  self.autoFill();
 	 		  }}
-         });
-	
-	
-}
-  
-this.autoFill=function(){
+	     });
+
+
+	}
+
+	this.autoFill=function(){
 		var sex=user.sex;
 		var age=user.birth;
 	    var d = new Date(age)
@@ -334,11 +335,11 @@ this.autoFill=function(){
 		if(sex!=null){
 			switch(sex){
 			case "female": document.getElementById("female").checked="true";
-    		break; 
+			break; 
 			case "male":document.getElementById("male").checked="true";
-    		break; 
+			break; 
 			case "prefer not to tell":document.getElementById("prefer not to tell").checked="true";
-    		break; 
+			break; 
 
 			} 
 		}
@@ -359,273 +360,207 @@ this.autoFill=function(){
 			
 			 
 		}
-	
-	
-  
-  
-this.showStatiticsForm= function(array, target){
-   fieldset=document.getElementById("statsForm") 
-	
-    
-	buttonDiv=document.createElement("div"); 
-	buttonDiv.setAttribute("class", "item");
-	var autofill=document.createElement("button");
-	autofill.textContent="autofill";
-	buttonDiv.appendChild(autofill);  
-	fieldset.appendChild(buttonDiv);
-	
-		   
-   var input, sex;
-   //we have three fields
-   //sex
+
+
+
+
+	this.showStatiticsForm= function(array, target){
+	fieldset=document.getElementById("statsForm") 
+
+	//we have three fields
+	//sex
+		
+		var can_access_sex, can_access_sex_label;
+		
 	itemDiv0=document.createElement("div"); 
 	itemDiv0.setAttribute("class", "item");	 
-	
-	sex=document.createElement("label");
-    sex.textContent="select your sex";
-    
-    w=document.createElement("input");
-	w.name="sex";  
-    k=document.createElement("input");
-	k.name="sex";  
-    s=document.createElement("input");
-	s.name="sex";  
-    
-    w.setAttribute("type", "radio");
-    w.setAttribute("value", "female");
-    w.setAttribute("id", "female");
-    wl=document.createElement("label");
-    wl.textContent="female";
-    itemw=document.createElement("div"); 
-    itemw.setAttribute("class", "item");
-    itemw.appendChild(w);
-    itemw.appendChild(wl);
-    
-    k.setAttribute("type", "radio");
-    k.setAttribute("value", "male");
-    kl=document.createElement("label");
-    k.setAttribute("id", "male");
-    kl.textContent="male";
-    itemk=document.createElement("div"); 
-    itemk.setAttribute("class", "item");
-    itemk.appendChild(k);
-    itemk.appendChild(kl);
 
-    s.setAttribute("type", "radio");
-    s.setAttribute("value", "prefer not to tell");
-    s.setAttribute("id", "prefer not to tell");
-    sl=document.createElement("label");
-    sl.textContent="prefer not to tell";
-    items=document.createElement("div"); 
-    items.setAttribute("class", "item");
-    items.appendChild(s);
-    items.appendChild(sl);
- 
-    itemDiv0.appendChild(sex);
-    itemDiv0.appendChild(itemw);
-    itemDiv0.appendChild(itemk);
-    itemDiv0.appendChild(items);
-   
-    //age
-	var input, age;
-	
-    itemDiv1=document.createElement("div"); 
-    itemDiv1.setAttribute("class", "item");	  
- 
-    age=document.createElement("label");
-    age.textContent="age";
+	can_access_sex=document.createElement("input");
+	can_access_sex.setAttribute("type", "checkbox");
+	can_access_sex.setAttribute("id", "can_access_sex_checkbox");
+	can_access_sex.name="can_access_sex";
 
-    input=document.createElement("input");
-    input.setAttribute("type", "date");
-    input.setAttribute("id", "age");
-    input.max="2010-12-31";
-    input.min="1930-12-31";
-    input.name="age";
+		can_access_sex_label =document.createElement("label");
+	can_access_sex_label.setAttribute("for", "can_access_sex_checkbox");
+	can_access_sex_label.innerHTML = "I allow access to my sex";
 
-    itemDiv1.appendChild(age);
-    itemDiv1.appendChild(input);
 
-    //expertise
-    var input2, expertise;
-    //be replaced with radiobuttons
-    itemDiv2=document.createElement("div"); 
-    itemDiv2.setAttribute("class", "item");	  
-  
-    expertise=document.createElement("label");
-    expertise.textContent="expertise";
-    
-    x=document.createElement("input");
+	itemDiv0.appendChild(can_access_sex);
+	itemDiv0.appendChild(can_access_sex_label);
+
+	//allow age access
+	var can_access_age, can_access_age_label;
+
+	itemDiv1=document.createElement("div"); 
+	itemDiv1.setAttribute("class", "item");	  
+
+
+	can_access_age=document.createElement("input");
+	can_access_age.setAttribute("type", "checkbox");
+	can_access_age.setAttribute("id", "can_access_age_checkbox");
+	can_access_age.name="can_access_age";
+
+
+	can_access_age_label =document.createElement("label");
+	can_access_age_label.setAttribute("for", "can_access_age_checkbox");
+	can_access_age_label.innerHTML = "I allow access to my age";
+
+	itemDiv1.appendChild(can_access_age);
+	itemDiv1.appendChild(can_access_age_label);
+	//expertise
+	var input2, expertise;
+	//be replaced with radiobuttons
+	itemDiv2=document.createElement("div"); 
+	itemDiv2.setAttribute("class", "item");	  
+
+	expertise=document.createElement("label");
+	expertise.textContent="expertise";
+
+	x=document.createElement("input");
 	x.name="expertise";  
-    y=document.createElement("input");
+	y=document.createElement("input");
 	y.name="expertise";  
-    z=document.createElement("input");
+	z=document.createElement("input");
 	z.name="expertise";  
-    
-    x.setAttribute("type", "radio");
-    x.setAttribute("value", "low");
-    xl=document.createElement("label");
-    xl.textContent="low";
-    itemx=document.createElement("div"); 
-    itemx.setAttribute("class", "item");
-    itemx.appendChild(x);
-    itemx.appendChild(xl);
-    
-    y.setAttribute("type", "radio");
-    y.setAttribute("value", "medium");
-    yl=document.createElement("label");
-    yl.textContent="medium";
-    itemy=document.createElement("div"); 
-    itemy.setAttribute("class", "item");
-    itemy.appendChild(y);
-    itemy.appendChild(yl);
 
-    z.setAttribute("type", "radio");
-    z.setAttribute("value", "high");
-    zl=document.createElement("label");
-    zl.textContent="high";
-    itemz=document.createElement("div"); 
-    itemz.setAttribute("class", "item");
-    itemz.appendChild(z);
-    itemz.appendChild(zl);
- 
-    itemDiv2.appendChild(expertise);
-    itemDiv2.appendChild(itemx);
-    itemDiv2.appendChild(itemy);
-    itemDiv2.appendChild(itemz);
-    
-    fieldset.appendChild(itemDiv0);
-    fieldset.appendChild(itemDiv1);
-    fieldset.appendChild(itemDiv2);
-    
-    fieldset.appendChild(document.createElement("br"));
-    
-    //here we create the buttons   
-    var buttonsDiv=document.createElement("div"); 
-    //this button gets you back to the product section
-    buttonDiv1=document.createElement("div"); 
-    buttonDiv1.setAttribute("class", "item");
-    var button1=document.createElement("button");
-    button1.textContent="back to product";
-    buttonDiv1.appendChild(button1);
-    //this button makes you submit your answers 
-    buttonDiv2=document.createElement("div"); 
-    buttonDiv2.setAttribute("class", "item");
-    var button2=document.createElement("button");
-    button2.textContent="Sumbit";
-    buttonDiv2.appendChild(button2);
+	x.setAttribute("type", "radio");
+	x.setAttribute("value", "low");
+	xl=document.createElement("label");
+	xl.textContent="low";
+	itemx=document.createElement("div"); 
+	itemx.setAttribute("class", "item");
+	itemx.appendChild(x);
+	itemx.appendChild(xl);
 
-    var errormessage=document.createElement("p");
-    errormessage.setAttribute("id","errormessage");
-    fieldset.appendChild(errormessage); 
-    fieldset.appendChild(document.createElement("br"));
-   
-    //this button makes you clear your answers
-    var reset=document.createElement("input");
-    reset.type="reset";
-    reset.value="clean";
-    reset.required="required";
- 
-    buttonsDiv.appendChild(reset);
-    buttonsDiv.appendChild(buttonDiv1);
-    buttonsDiv.appendChild(buttonDiv2);
-    document.getElementById("formContainer").appendChild(buttonsDiv);
+	y.setAttribute("type", "radio");
+	y.setAttribute("value", "medium");
+	yl=document.createElement("label");
+	yl.textContent="medium";
+	itemy=document.createElement("div"); 
+	itemy.setAttribute("class", "item");
+	itemy.appendChild(y);
+	itemy.appendChild(yl);
 
-    reset=document.createElement("input");
-    
- 
-    self.registerEventCancel(button1);
-    self.registerEventSubmit(button2);
-    self.registerAutoFill(autofill);
-         
-	  }
+	z.setAttribute("type", "radio");
+	z.setAttribute("value", "high");
+	zl=document.createElement("label");
+	zl.textContent="high";
+	itemz=document.createElement("div"); 
+	itemz.setAttribute("class", "item");
+	itemz.appendChild(z);
+	itemz.appendChild(zl);
 
-//on click, reaload the product page
-this.registerAutoFill=function(element){
-token=0;
-element.addEventListener("click", (e) => {	 
-	    	 e.stopPropagation();
-	    	if(!token) {
-		         document.getElementById("male").checked=false;
-		         document.getElementById("female").checked=false;
-		         document.getElementById("prefer not to tell").checked=false;
-		         document.getElementById("age").value="yyyy-mm-dd";
-		         token=1;
-		         }
-	    	else{
-	    		self.autoFill();
-	    		token=0;
-	    	}
+	itemDiv2.appendChild(expertise);
+	itemDiv2.appendChild(itemx);
+	itemDiv2.appendChild(itemy);
+	itemDiv2.appendChild(itemz);
 
-			}, false);	  
-	  }
+	fieldset.appendChild(itemDiv0);
+	fieldset.appendChild(itemDiv1);
+	fieldset.appendChild(itemDiv2);
 
-//on click, reaload the product page
-this.registerEventCancel=function(element){
-element.addEventListener("click", (e) => {	 
-	    	 e.stopPropagation();
-	  if(window.confirm("Are you sure you want to cancel the questionnaire? You will be redirected to the product")){  	 
-	    	 makeCall("Get", "RecordLog", null,
-	 		        function(req){
-	         if (req.readyState == 4) {
-	           var message = req.responseText;
-	           if (req.status == 200){
-	  	     	     orchestrator.refresh(0); 
-	           } else {
-	 	          var alertContainer = document.getElementById("id_alert");
-	               self.alert.textContent = message;
-	               
-	           }
-	         }
-	         
-	 	         
-	 	 		  }
-	          );}
-	    	 
-  			}, false);	  
-	  }
+	fieldset.appendChild(document.createElement("br"));
+
+	//here we create the buttons   
+	var buttonsDiv=document.createElement("div"); 
+	//this button gets you back to the product section
+	buttonDiv1=document.createElement("div"); 
+	buttonDiv1.setAttribute("class", "item");
+	var button1=document.createElement("button");
+	button1.textContent="back to product";
+	buttonDiv1.appendChild(button1);
+	//this button makes you submit your answers 
+	buttonDiv2=document.createElement("div"); 
+	buttonDiv2.setAttribute("class", "item");
+	var button2=document.createElement("button");
+	button2.textContent="Submit";
+	buttonDiv2.appendChild(button2);
+
+	var errormessage=document.createElement("p");
+	errormessage.setAttribute("id","errormessage");
+	fieldset.appendChild(errormessage); 
+	fieldset.appendChild(document.createElement("br"));
+
+	//this button makes you clear your answers
+	var reset=document.createElement("input");
+	reset.type="reset";
+	reset.value="clean";
+	reset.required="required";
+
+	buttonsDiv.appendChild(reset);
+	buttonsDiv.appendChild(buttonDiv1);
+	buttonsDiv.appendChild(buttonDiv2);
+	document.getElementById("formContainer").appendChild(buttonsDiv);
+
+	reset=document.createElement("input");
+
+
+	self.registerEventCancel(button1);
+	self.registerEventSubmit(button2);
+	     
+	}
+
+	//on click, reaload the product page
+	this.registerEventCancel=function(element){
+		element.addEventListener("click", (e) => {	 
+			e.stopPropagation();
+			if(window.confirm("Are you sure you want to cancel the questionnaire? You will be redirected to the product")){  	 
+				makeCall("Get", "RecordLog", null,
+					function(req){
+						if (req.readyState == 4) {
+							var message = req.responseText;
+							if (req.status == 200){
+								orchestrator.refresh(0); 
+							} else {
+								var alertContainer = document.getElementById("id_alert");
+								self.alert.textContent = message;
+
+							}
+						}
+					}
+				);
+			}
+		}, false);	  
+	}
 	  
 
-//on click submit the questionnaire and display a "Thanks for having submitted the questionnaire ^^"
-this.registerEventSubmit=function(element){
-if(element.closest("form").checkValidity()){
-	element.addEventListener("click", (e) => {	 
-	    	 e.stopPropagation();
-	    	    makeCall("POST", "SubmitQuestionnaire", e.target.closest("form"),
-			        function(req){
-	    	
-	          if (req.readyState == 4) {
-	            var message = req.responseText;
-	            if (req.status == 200){
-			        self.update(JSON.parse(req.responseText),state); 
-	            } else {
-		          var alertContainer = document.getElementById("id_alert");
-	              self.alert.textContent = message;
-	            }
-	          }
-	    	    }
-	        
-	      );	 
-	    	 
- 			}, false);	}  
-	  }
-	  
+	//on click submit the questionnaire and display a "Thanks for having submitted the questionnaire ^^"
+	this.registerEventSubmit=function(element){
+		if(element.closest("form").checkValidity()){
+			element.addEventListener("click", (e) => {	 
+				e.stopPropagation();
+				makeCall("POST", "SubmitQuestionnaire", e.target.closest("form"),
+				    function(req){
+
+							if (req.readyState == 4) {
+								var message = req.responseText;
+								if (req.status == 200){
+								    self.update(JSON.parse(req.responseText),state); 
+								} else {
+									var alertContainer = document.getElementById("id_alert");
+									self.alert.textContent = message;
+								}
+							}
+					}
+				);	 
+
+				}, false);	
+			}  
+		}
+
+	}  
 
 
 
-
- }  
-
-
-  
 	 
 
 
-/************************************************END QUESTIONNAIRE***************************************************************** */
+	/************************************************END QUESTIONNAIRE***************************************************************** */
 
 
-/************************************************BEGIN LEADERBOARDFRAME***************************************************************** */
+	/************************************************BEGIN LEADERBOARDFRAME***************************************************************** */
 
- function LeaderBoardFrame(_frame){
+	function LeaderBoardFrame(_frame){
 	    this.frame=_frame;
 	    var self = this;
 	    
@@ -659,31 +594,31 @@ if(element.closest("form").checkValidity()){
 	    	              fieldset.appendChild(document.createElement("br")); 
 	    	              count++;
 	    	        });
-        
+	    
 	      }
 
 	    }	      
 	    
 	    
-}
+	}
 
-/************************************************END LEADERBOARDFRAME***************************************************************** */
-
-
+	/************************************************END LEADERBOARDFRAME***************************************************************** */
 
 
 
-//Questa funzione gestisce tutta la pagina in generale (tramite il page orchestrator), ha una lista degli stati in cui
-//può trovarsi la pagina e a seconda dei parametri che le vengono passati nelle varie fnuzioni costruisce
-//il giusto template
-function MainFrame(_framecontainer){
+
+
+	//Questa funzione gestisce tutta la pagina in generale (tramite il page orchestrator), ha una lista degli stati in cui
+	//può trovarsi la pagina e a seconda dei parametri che le vengono passati nelle varie fnuzioni costruisce
+	//il giusto template
+	function MainFrame(_framecontainer){
 
 
 
-      productFrame = new ProductFrame(document.getElementById("productFrame"));
+	  productFrame = new ProductFrame(document.getElementById("productFrame"));
 	  questionnaireFrame = new QuestionnaireFrame(document.getElementById("questionnaireFrame"));
 	  leaderBoardFrame = new LeaderBoardFrame(document.getElementById("leaderBoardFrame"));
- 
+
 	  this.frameContainer = _framecontainer;
 	  var self=this;
 	  this.alertContainer = document.getElementById("id_alert");
@@ -721,11 +656,11 @@ function MainFrame(_framecontainer){
 	 
 	 this.update= function(array,state){
 		 
-	
-	
+
+
 	switch(state){
 	    	case 0: 
-                     document.getElementById("id_alert").innerHTML="";
+	                 document.getElementById("id_alert").innerHTML="";
 
 					 document.getElementById("productFrame").innerHTML = "";
 					 document.getElementById("questionnaireFrame").innerHTML = "";
@@ -734,8 +669,8 @@ function MainFrame(_framecontainer){
 
 			    break; 
 	    	case 1: 
-                    
-                    document.getElementById("id_alert").innerHTML="";
+	                
+	                document.getElementById("id_alert").innerHTML="";
 
 					 document.getElementById("questionnaireFrame").innerHTML = "";
 					 document.getElementById("productFrame").innerHTML = "";
@@ -745,8 +680,8 @@ function MainFrame(_framecontainer){
 
 	    		break;
 	    	case 2: 
-                      
-                    document.getElementById("id_alert").innerHTML="";
+	                  
+	                document.getElementById("id_alert").innerHTML="";
 
 					 document.getElementById("productFrame").innerHTML = "";
 					 document.getElementById("questionnaireFrame").innerHTML = "";
@@ -761,13 +696,13 @@ function MainFrame(_framecontainer){
 	  } 	
 
 
-var state=0;
+	var state=0;
 
- function PageOrchestrator(){
+	function PageOrchestrator(){
 	 
 	    this.start = function(){
 		    
-           
+	       
 	    	//messaggio di welcome back
 			personalMessage = new PersonalMessage(sessionStorage.getItem('username'),  document.getElementById("id_username"));
 	        personalMessage.show();
@@ -776,21 +711,21 @@ var state=0;
 	        mainFrame=new MainFrame(document.getElementById("mainFrame"));
 
 		  //directory coi bottoni
-           questionnaireButton= new QuestionnaireButton(state);
-           leaderBoardButton= new LeaderBoardButton(state);
+	       questionnaireButton= new QuestionnaireButton(state);
+	       leaderBoardButton= new LeaderBoardButton(state);
 
 		   homeButton=new HomeButton(state);
 	       logout= new Logout();
-        }
+	    }
 	    
 	    
 	        this.refresh = function(state){
 	    	mainFrame.show(state);
 	    
-	
+
 	     }
- }
-  
-  	   
+	}
+
+		   
 
 })()
