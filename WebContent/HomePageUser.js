@@ -494,22 +494,27 @@ this.showStatiticsForm= function(array, target){
     itemDiv2.appendChild(itemz);
     
     fieldset.appendChild(itemDiv0);
+    fieldset.appendChild(document.createElement("br")); 
     fieldset.appendChild(itemDiv1);
+    fieldset.appendChild(document.createElement("br")); 
     fieldset.appendChild(itemDiv2);
+    fieldset.appendChild(document.createElement("br")); 
+
     
     fieldset.appendChild(document.createElement("br"));
     
     //here we create the buttons   
     var buttonsDiv=document.createElement("div"); 
+    buttonsDiv.setAttribute("class", "containerButton");
     //this button gets you back to the product section
     buttonDiv1=document.createElement("div"); 
-    buttonDiv1.setAttribute("class", "item");
+    buttonDiv1.setAttribute("class", "questionnaireButton");
     var button1=document.createElement("button");
     button1.textContent="back to product";
     buttonDiv1.appendChild(button1);
     //this button makes you submit your answers 
     buttonDiv2=document.createElement("div"); 
-    buttonDiv2.setAttribute("class", "item");
+    buttonDiv2.setAttribute("class", "questionnaireButton");
     var button2=document.createElement("button");
     button2.textContent="Sumbit";
     buttonDiv2.appendChild(button2);
@@ -524,6 +529,8 @@ this.showStatiticsForm= function(array, target){
     reset.type="reset";
     reset.value="clean";
     reset.required="required";
+    reset.setAttribute("class", "questionnaireButton");
+
  
     buttonsDiv.appendChild(reset);
     buttonsDiv.appendChild(buttonDiv1);
