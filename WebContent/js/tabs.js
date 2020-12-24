@@ -92,7 +92,7 @@ export const deletionTab = () => {
             //start row element
             let tr = document.createElement("tr");
             let td = document.createElement("td");
-            td.textContent = val.datetime.slice(0, 12).replace(",", "");
+            td.textContent = val.datetime.slice(0, 12).replaceAll(",", "");
             tr.append(td);
             td = document.createElement("td");
             td.textContent = val.name;
@@ -169,7 +169,7 @@ export const inspectionTab = () => {
         $.each(data, function (key, val) {
             let tr = document.createElement("tr");
             let td = document.createElement("td");
-            td.textContent = val.datetime.slice(0, 12).replace(",", "");
+            td.textContent = val.datetime.slice(0, 12).replaceAll(",", "");
             tr.append(td);
             td = document.createElement("td");
             td.textContent = val.name;
