@@ -39,8 +39,8 @@ const onTabChange = (newPage, data = null) => {
         // name of the tab, and a data element, which currently contains the questionnaire id if the tab is
         // inspectionUserList, or null otherwise.
         history.pushState({ url: newPage, data: data }, newPage);
-        document.title = "Admin: " + newPage;
     }
+    document.title = "Admin: " + newPage;
     // prevCont = container to be dismissed
     let prevCont = currentContainer[0];
     // do not trigger animation if reloading the same tab
