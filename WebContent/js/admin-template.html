@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.min.js" 
+      crossorigin="anonymous" defer
+    ></script>
+    <script src="https://unpkg.com/@popperjs/core@2" defer></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+      crossorigin="anonymous" defer
+    ></script>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link id="darkModeCSSLink" rel="stylesheet" type="text/css" href="" />
+    <script
+      src="https://kit.fontawesome.com/2079f21d9c.js"
+      crossorigin="anonymous"
+      defer
+    ></script>
+    <title>Admin</title>
+  </head>
+  <body>
+    
+    <div class="container container-admin" id="mainContainer">
+    </div>
+
+    <!-- START NAVBAR -->
+    <div class="row bg-white sidenav-admin" id="sidenav">
+        <div class="btn-group" style="width: 100%;" id="btnGroupNavbar">
+          <img src="images/gamify_lowres.png" class="sidenav-image" id="gamifyLogo">
+          <button id="creation" class="btn text-primary sidenav-button"><i class="fas fa-plus"></i> Creation</button>
+          <button id="inspection" class="btn text-primary sidenav-button"><i class="fas fa-search"></i> Inspection</button>
+          <button id="deletion" class="btn text-primary sidenav-button"><i class="far fa-trash-alt"></i> Deletion</button>
+          <button id="logout" class="btn text-primary sidenav-button text-primary">Logout</button>
+        </div>
+      </div>
+    </div>
+    <!-- END NAVBAR -->
+  </body>
+</html>
