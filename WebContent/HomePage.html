@@ -10,8 +10,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css"
     />
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
-    <link rel="stylesheet" type="text/css" href="css/style.css" />
+   
     <link rel="stylesheet" type="text/css" media="all" href="inline.css" />
     <script
       src="https://code.jquery.com/jquery-3.5.1.min.js"
@@ -32,47 +31,24 @@
     <script src="HomePageUser.js" charset="utf-8" defer></script>
   </head>
   <body>
-    <div class="container" id="Page">
-  
-  <! -- buttons directory  -->   
-      <div class="container">
-        <div class="itemsDirectory">
-        
-              <button id="home" class="btn">
-                <i class="fas fa-gamepad"></i>
-              </button>
-           </div>
-           <div class="itemsDirectory">
-              <button id="questionnaireButton" class="btn">
-                <i class="fas fa-file-signature"></i>
-              </button>
-           </div>
-        
-        <div class="itemsDirectory">
-              <button id="leaderBoardButton" class="btn">
-                <i class="fas fa-chess-queen"></i>
-              </button>
-         </div>
-         <div class="itemsDirectory">
-
-              <button id="logout" class="btn">
-                <i class="fas fa-sign-out-alt"></i>
-              </button>
-                      </div>
-
+  <span  id="id_alert"></span> 
+<div class="logOut button" id="logout"><i class="fa fa-sign-out"></i></div>
+    <div class="topGradient"></div>
+    <div class="bottomGradient"></div>
+    <div class="tab flexCenter">
+        <div class="tabContainer flexCenter">
+            <div class="banner">
+                <span class="bannerButton firstBanner selectedBanner" id="home">PRODUCT OF THE DAY</span>
+                <span class="bannerButton" id="questionnaireButton">FILL IN THE QUESTIONNAIRE</span>
+                 <span class="bannerButton" id="leaderBoardButton">SEE LEADERBOARD</span>
+            </div>
         </div>
-        <div class="item">
-          <p>Nice to see you again <span id="id_username"></span></p>
-          <div id="id_alert" class="alertmessage"></div>
-        </div>
-      </div>
-
-
-
-      <div class="container">
-      <! - the main container with:  --> 
-        <div class="maincontainer" id="mainFrame">
-       
+    </div>
+    <div class="main">
+        <div class="flexCenter">
+            <div class="spacer"></div>
+                <div class="mainContent">
+ 
         <div class="mainItem" id="productFrame">
           <div class="mainItem0" id="productFrameImage"></div>
           <div class="mainItem1" id="productReviews"></div>
@@ -82,9 +58,15 @@
           </div>
           
          </div>
+         
+            <div class="spacer"></div>
+            <div class="spacer"></div>            
+        </div>
+   
+</body>
         
         
-      </div>
+      
 
   </body>
 </html>
