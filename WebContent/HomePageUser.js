@@ -65,17 +65,14 @@
 	   orchestrator.refresh(0); // initialize the components
 	  }, false); 
 
-
-	/************************************************BEGIN PRODUCT***************************************************************** */
-	function ProductFrame(_frame){
-	      this.frame=_frame;
+/************************************************BEGIN PRODUCT***************************************************************** */
+  function ProductFrame(_frame){
+	      this.frame=_frame[0];
 	   var self = this;
 
 	  
 	this.show= function(questionnaire){
 	 
-	    var prod=document.getElementById("productFrameImage")
-
 		if(questionnaire==null){
 			  var self=this;
 		    	      var alert= document.createElement("p");
@@ -197,8 +194,8 @@
 
 	/************************************************BEGIN QUESTIONNAIRE***************************************************************** */
 
-	function QuestionnaireFrame(_frame){
-	    this.frame=_frame;
+  function QuestionnaireFrame(_frame){
+	    this.frame=_frame[0];
 	    var self = this;
 
 	this.show= function(questions){
@@ -422,6 +419,113 @@
 	y.name="expertise";  
 	z=document.createElement("input");
 	z.name="expertise";  
+/*
+    
+    x.setAttribute("type", "radio");
+    x.setAttribute("value", "low");
+    xl=document.createElement("label");
+    xl.textContent="low";
+    itemx=document.createElement("div"); 
+    itemx.setAttribute("class", "item");
+    itemx.appendChild(x);
+    itemx.appendChild(xl);
+    
+    y.setAttribute("type", "radio");
+    y.setAttribute("value", "medium");
+    yl=document.createElement("label");
+    yl.textContent="medium";
+    itemy=document.createElement("div"); 
+    itemy.setAttribute("class", "item");
+    itemy.appendChild(y);
+    itemy.appendChild(yl);
+
+    z.setAttribute("type", "radio");
+    z.setAttribute("value", "high");
+    zl=document.createElement("label");
+    zl.textContent="high";
+    itemz=document.createElement("div"); 
+    itemz.setAttribute("class", "item");
+    itemz.appendChild(z);
+    itemz.appendChild(zl);
+ 
+    itemDiv2.appendChild(expertise);
+    itemDiv2.appendChild(itemx);
+    itemDiv2.appendChild(itemy);
+    itemDiv2.appendChild(itemz);
+    
+    fieldset.appendChild(itemDiv0);
+    fieldset.appendChild(document.createElement("br")); 
+    fieldset.appendChild(itemDiv1);
+    fieldset.appendChild(document.createElement("br")); 
+    fieldset.appendChild(itemDiv2);
+    fieldset.appendChild(document.createElement("br")); 
+
+    
+    fieldset.appendChild(document.createElement("br"));
+    
+    //here we create the buttons   
+    var buttonsDiv=document.createElement("div"); 
+    buttonsDiv.setAttribute("class", "containerButton");
+    //this button gets you back to the product section
+    buttonDiv1=document.createElement("div"); 
+    buttonDiv1.setAttribute("class", "questionnaireButton");
+    var button1=document.createElement("button");
+    button1.textContent="back to product";
+    buttonDiv1.appendChild(button1);
+    //this button makes you submit your answers 
+    buttonDiv2=document.createElement("div"); 
+    buttonDiv2.setAttribute("class", "questionnaireButton");
+    var button2=document.createElement("button");
+    button2.textContent="Sumbit";
+    buttonDiv2.appendChild(button2);
+
+    var errormessage=document.createElement("p");
+    errormessage.setAttribute("id","errormessage");
+    fieldset.appendChild(errormessage); 
+    fieldset.appendChild(document.createElement("br"));
+   
+    //this button makes you clear your answers
+    var reset=document.createElement("input");
+    reset.type="reset";
+    reset.value="clean";
+    reset.required="required";
+    reset.setAttribute("class", "questionnaireButton");
+
+ 
+    buttonsDiv.appendChild(reset);
+    buttonsDiv.appendChild(buttonDiv1);
+    buttonsDiv.appendChild(buttonDiv2);
+    document.getElementById("formContainer").appendChild(buttonsDiv);
+
+    reset=document.createElement("input");
+    
+ 
+    self.registerEventCancel(button1);
+    self.registerEventSubmit(button2);
+    self.registerAutoFill(autofill);
+         
+	  }
+
+//on click, reaload the product page
+this.registerAutoFill=function(element){
+token=0;
+element.addEventListener("click", (e) => {	 
+	    	 e.stopPropagation();
+	    	if(!token) {
+		         document.getElementById("male").checked=false;
+		         document.getElementById("female").checked=false;
+		         document.getElementById("prefer not to tell").checked=false;
+		         document.getElementById("age").value="yyyy-mm-dd";
+		         token=1;
+		         }
+	    	else{
+	    		self.autoFill();
+	    		token=0;
+	    	}
+
+			}, false);	  
+	  }
+*/
 
 	x.setAttribute("type", "radio");
 	x.setAttribute("value", "low");
@@ -560,8 +664,8 @@
 
 	/************************************************BEGIN LEADERBOARDFRAME***************************************************************** */
 
-	function LeaderBoardFrame(_frame){
-	    this.frame=_frame;
+ function LeaderBoardFrame(_frame){
+	    this.frame=_frame[0];
 	    var self = this;
 	    
 	    this.show= function(players){
@@ -615,10 +719,6 @@
 
 
 
-	  productFrame = new ProductFrame(document.getElementById("productFrame"));
-	  questionnaireFrame = new QuestionnaireFrame(document.getElementById("questionnaireFrame"));
-	  leaderBoardFrame = new LeaderBoardFrame(document.getElementById("leaderBoardFrame"));
-
 	  this.frameContainer = _framecontainer;
 	  var self=this;
 	  this.alertContainer = document.getElementById("id_alert");
@@ -629,11 +729,18 @@
 		 var self=this;
 	 
 		 switch(state){
-	    	case 0: url="GetProduct";
+	    	case 0: 
+		    	productFrame = new ProductFrame(document.getElementsByClassName("mainContent"));
+	    		url="GetProduct";
 	    		break; 
-	    	case 1: url="GetQuestionnaire";
+	    	case 1: 
+		    	questionnaireFrame = new QuestionnaireFrame(document.getElementsByClassName("mainContent"));
+	    		url="GetQuestionnaire";
+
 	    		break;
-	    	case 2: url="GetLeaderBoard";
+	    	case 2: 
+	    	leaderBoardFrame = new LeaderBoardFrame(document.getElementsByClassName("mainContent"));
+	    	url="GetLeaderBoard";
 	    		break;
 	    	
 		 }
@@ -662,9 +769,7 @@
 	    	case 0: 
 	                 document.getElementById("id_alert").innerHTML="";
 
-					 document.getElementById("productFrame").innerHTML = "";
-					 document.getElementById("questionnaireFrame").innerHTML = "";
-					 document.getElementById("leaderBoardFrame").innerHTML = "";
+					 document.getElementsByClassName("mainContent")[0].innerHTML = "";
 				     productFrame.show(array)
 
 			    break; 
@@ -672,9 +777,8 @@
 	                
 	                document.getElementById("id_alert").innerHTML="";
 
-					 document.getElementById("questionnaireFrame").innerHTML = "";
-					 document.getElementById("productFrame").innerHTML = "";
-					 document.getElementById("leaderBoardFrame").innerHTML = "";
+					 document.getElementsByClassName("mainContent")[0].innerHTML = "";
+
 					 questionnaireFrame.show(array);
 					
 
@@ -683,9 +787,8 @@
 	                  
 	                document.getElementById("id_alert").innerHTML="";
 
-					 document.getElementById("productFrame").innerHTML = "";
-					 document.getElementById("questionnaireFrame").innerHTML = "";
-					 document.getElementById("leaderBoardFrame").innerHTML = "";
+					 document.getElementsByClassName("mainContent")[0].innerHTML = "";
+
 					 leaderBoardFrame.show(array);
 			           
 	    		break;	         
@@ -704,11 +807,11 @@
 		    
 	       
 	    	//messaggio di welcome back
-			personalMessage = new PersonalMessage(sessionStorage.getItem('username'),  document.getElementById("id_username"));
-	        personalMessage.show();
+			/*personalMessage = new PersonalMessage(sessionStorage.getItem('username'),  document.getElementById("id_username"));
+	        personalMessage.show();*/
 
 	       //struttura principale
-	        mainFrame=new MainFrame(document.getElementById("mainFrame"));
+	        mainFrame=new MainFrame(document.getElementsByClassName("main")[0]);
 
 		  //directory coi bottoni
 	       questionnaireButton= new QuestionnaireButton(state);
@@ -720,11 +823,28 @@
 	    
 	    
 	        this.refresh = function(state){
-	    	mainFrame.show(state);
+	        	openTab();
+	        mainFrame.show(state);
+	    	closeTab();
+	    	
 	    
 
 	     }
+	       
+ }
+function closeTab(){
+	    document.getElementsByClassName("main")[0].style.width = "60vw";
+	    document.getElementsByClassName("tab")[0].style.right = "-20vw";
+	    //document.getElementsByClassName("banner")[0].style.right = "20%";
 	}
+function openTab(){
+	    document.getElementsByClassName("main")[0].style.width = "50vw";
+	    document.getElementsByClassName("tab")[0].style.right = "0vw";
+	   // document.getElementsByClassName("banner")[0].style.right = "40%";
+	}
+ 
+  	   
+	
 
 		   
 

@@ -1,19 +1,514 @@
-.container{
-	display:flex;
-	flex-direction: column;
-	    border: solid red 1px;
-	
+body{
+    font-family: 'Roboto', sans-serif;
+    background-color: black;
+    color: white ;
 }
-.itemdirectory{
-		border: solid black 1px;
+.flexCenter{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
 }
-.maincontainer{
-    border: solid black 1px;
-	display:flex;
-	flex-direction: row;
-	justify-content:flex-start;
-	align-items:stretch;
-	border: solid black 
-		
+
+
+/*default*/
+html{
+    overflow: auto;
 }
-ul#directory li{display: inline;}
+.topGradient{
+    position: fixed;
+    top: 10%;
+    height: 10%;
+    width: 80%; 
+    transition: 0.7s;
+    background: linear-gradient(180deg, rgba(0,0,0,1) 00%, rgba(0,0,0,0) 100%);
+    z-index: 1;
+}
+.bottomGradient{
+    position: fixed;
+    bottom: 10%;
+    height: 10%;
+    width: 80%; 
+    transition: 0.7s;
+    background: linear-gradient(0deg, rgba(0,0,0,1) 00%, rgba(0,0,0,1) 43%, rgba(0,0,0,0) 100%);
+    z-index: 1;
+}
+.main{
+    width: 60vw; /*set to 50 when showing tab*/
+    transition: 0.7s;
+    position: fixed;
+    bottom: 10vh;
+    top: 10vh;
+    left: 0;
+    overflow-y: auto;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+/*Chrome, Safari and Opera */
+.main::-webkit-scrollbar {
+    display: none;
+}
+.mainContent{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: flex-end;
+}
+.spacer{
+    height: 13vh;
+    width: 100%;
+}
+.tab{
+    position: fixed;
+    bottom: 0;
+    right: -20vw; /*set to 0 when showing tab*/
+    top: 0;
+    width: 40vw;
+    z-index: 3;
+    transition: 0.7s;
+}
+.tabContainer{
+    transition: 0.5s;
+    border-left: 3px solid white;
+    opacity: 1;
+    height: 80vh;
+    width: 100%;
+}
+.button{
+    background-color: black;
+    color: white;
+    padding: 1vh 1vw;
+    border: 2px solid white;
+    transition: 0.3s;
+}
+.button:hover{
+    background-color: white;
+    color: black;
+    padding: 1vh 2vw;
+}
+.button:focus{
+    background-color: white;
+    color: black;
+    padding: 1vh 2vw;
+}
+.button:active{
+    padding: 1vh 1.5vw;
+}
+.logOut{
+    position: fixed;
+    z-index: 1400;
+    bottom: 10%;
+    right: 20%; /*move with tab in js*/
+    transition: 0.7s;
+}
+
+
+/*error*/
+.errorBackground{
+    position: fixed;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+
+    background-color: #ffffff2b;
+    z-index: 1500;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.errorContainer{
+    padding: 5vh 5vw;
+    max-width: 90vw;
+    max-height: 90vh;
+    background-color: black;
+    color: white;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.error{
+    font-weight: bolder;
+    padding: 1vh 1vw;
+}
+.errorMessage{
+    color: red;
+}
+.errorOk{
+    padding: 0.8vh 1vw;
+    margin-top: 3vh;
+    background-color: black;
+    color: white;
+    transition: 0.3s;
+    border: 1px solid white;
+}
+.errorOk:hover{
+    background-color: white;
+    color: black;
+    padding: 1vh 1.5vw;
+}
+.errorOk:active{
+    padding: 0.9vh 1.2vw;
+}
+.errorNone{
+    visibility: hidden;
+}
+.errorVisible{
+    visibility: visible;
+}
+
+/*banner*/
+.banner{
+    background-color: black;
+
+    position: fixed;
+    top: 10%;
+    right: 20%; /*set to 40 when showing tab*/
+    transition: 0.7s;
+    z-index: 10;    
+
+    display: flex;
+    flex-direction: column;
+    
+}
+.firstBanner{
+    border-top: 2px solid white;
+}
+.bannerButton{
+    background-color: black;
+    color: #ffffff75;
+    padding: 1.5vh 1.5vw;
+    border-bottom: 2px solid #ffffff75;
+    border-left: 2px solid #ffffff75;
+    border-right: 2px solid #ffffff75;
+    transition: 0.3s;
+}
+.bannerButton:hover{
+    background-color: rgba(255, 255, 255, 0.274);
+}
+.bannerButton:active{
+    background-color: rgba(255, 255, 255, 0.178);
+}
+.selectedBanner{
+    background-color: white !important;
+    color: black !important;
+}
+.selectedBanner:hover{
+    background-color: white;
+    color: black;
+}
+
+/*price quotation*/
+form{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    width: 90%;
+
+    align-self: flex-start;
+    padding-left: 2vw;
+    padding-top: 2vh;
+}
+input{
+    line-height: 1.40;
+    width: 30%;
+    transition: 0.3s;
+    background-color: white;
+    border: 1px solid black;
+    color: black;
+    height: 3vh;
+}
+input:focus{
+    width:33%;
+}
+#wholePart{
+    text-align: right;
+    margin-right: 4px;
+}
+.dot{
+    font-size: large;
+    font-weight: bolder;
+    margin-top: 4px;
+    margin-right: 4px;
+}
+.priceInputs{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-self: start;
+
+    align-items: flex-end;
+}
+.noQuotationSelected{
+    padding: 3vh 3vw;
+    border: 1px dotted rgba(255, 255, 255, 0.30);
+    color: rgba(255, 255, 255, 0.30);
+}
+.MANAGEBUTTON{
+    margin-top: 2vh;
+}
+.priceError{
+    color:red;
+    padding-top: 1vh;
+}
+.priceCaption{
+    padding-bottom: 1vh;
+}
+
+/*new quotation tab*/
+.NQlorem{
+    text-align: left;
+    padding: 5vh 9vh;
+}
+.NQtitle{
+    font-weight: bolder;
+}
+
+/*quotations*/
+.quotationContainer{
+    display: flex;
+    flex-direction: row-reverse;
+    flex-wrap: nowrap;
+    width: 80%;
+    min-height: 17vh;
+    transition: 0.3s;
+    padding-bottom: 2vh;
+}
+.quotationContainer:hover{
+    width: 100%;
+}
+.quotationImage{
+    width: 10%;
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: white;
+}
+.quotationImage>img{
+    max-width: 70%;
+    max-height: 70%;
+    display: block;
+}
+.quotationInfo{
+    width: 10%;
+    flex-grow: 3;
+    display: flex;
+    flex-flow: column;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    padding-right: 1vh;
+}
+.quotationName{
+    display: flex;
+    flex-flow: row-reverse;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    flex-grow: 1;
+    font-weight: bolder;
+    font-size: larger;
+    align-items: flex-end;
+    font-size: 1.8rem;
+}
+.options{
+    flex-grow: 2;
+    display: flex;
+    flex-flow: column;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: flex-end;
+}
+.optionLabel{
+    font-size: 2vh;
+    font-weight: bold;
+}
+.promotionDiv:hover .promotionText{
+    opacity: 100%;
+}
+.promotionOption{
+    padding-left: 5px;
+    border-left: 4px solid #03e00a;
+}
+.promotionText{
+    font-family: 'Roboto', sans-serif;
+    background-color: #03e00a;
+    color: white;
+    opacity: 0%;
+    transition: 0.5s;
+    padding-right: 10px;
+    padding-left: 5px;
+}
+.normalText{
+	display: none;
+}
+.price{
+    font-weight: bold;
+    padding-top: 3px;
+}
+
+
+/*options tab*/
+.productInfoContainer{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    width: 90%;
+    padding-left: 2vw;
+}
+.noProductSelectedContainer{
+    background-color: black;
+    padding: 5% 4%;
+    border: 2px dotted black;
+}
+.Otitle{
+    font-weight: bolder;
+    background-color: black;
+    border-top: 1px solid black;
+}
+.Otitle>span{
+    padding: 0 3px;
+    border-left: 3vw solid black;
+    border-right: 3vw solid black;
+    background-color: white;
+}
+.productImageInOptionTab{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    max-width: 80%;
+    background-color: white;
+    align-self: flex-start;
+    margin-left: 2vw;
+}
+.productImageInOptionTab>img{
+    max-width: 45%;
+    max-height: 45%;
+    display: block;
+}
+.prodNameInOptionTab{
+    font-weight: bolder;
+    padding: 1vh 0;
+}
+.lorem{
+    padding-right: 10%;
+}
+.option{
+    margin-right: 10%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    transition: 0.3s;
+}
+.option:hover{
+    margin-left: 1vw;
+}
+.optionSpan{
+    padding: 2px;
+    margin: 2px;
+    border: 1px solid black;
+    transition: 0.2s;
+    color: black;
+    background-color: white;
+}
+.optionSpan:hover{
+    padding: 2px 5px;
+}
+.selected{
+    transition: 0.2s;
+    background-color: greenyellow;
+    border: 0px solid black;
+}
+.createQuotation{
+    align-self: flex-start;
+    margin-top: 1vh;
+}
+/*products*/
+.productsBanner{
+    position: fixed;
+    top: 10%;
+    right: 40%;
+    z-index: 10;    
+    background-color: black;
+    color: white;
+    padding: 1.5vh 1.5vw;
+}
+.productsContainer{
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.productContainer{
+    width: 30%;
+    padding: 4% 0;
+    transition: 0.3s;
+    border: 0px solid black;
+}
+.productContainer:hover{
+    width: 37%;
+    border: 1px solid black;
+}
+.productImage{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.productImage>img{
+    max-width: 70%;
+    max-height: 70%;
+    display: block;
+}
+.chooseButton{
+    margin-top: 14%;
+    margin-bottom: 3%;
+    background-color: white;
+    color: black;
+    padding: 5% 5%;
+    border: 2px solid black;
+    transition: 0.3s;
+}
+.chooseButton:hover{
+    background-color: black;
+    color: white;
+    padding: 5% 10%;
+}
+.chooseButton:focus{
+    background-color: black;
+    color: white;
+    padding: 5% 10%;
+}
+.chooseButton:active{
+    padding: 5% 7%;
+}
+.backButton{
+    position: fixed;
+    top: 10%;
+    left: 10%;
+    z-index: 10;    
+    background-color: black;
+    color: white;
+    padding: 1.5vh 1.5vw;
+    transition: 0.3s;
+}
+.backButton:hover{
+    padding: 2vh 2vw;
+}
+.backButton:active{
+    padding: 1.8vh 1.8vw;
+}
+.quotationError{
+    color: red;
+    align-self: flex-start;
+    padding-left: 2vw;
+}
