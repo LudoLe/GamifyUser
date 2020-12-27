@@ -1,6 +1,13 @@
+/***
+ * Contains the functions to create components used multiple times,
+ * possibly by different tabs
+ ***/
+// creates the inspection user list tab
 export const inspectionUserList = (questId) => {
+    // this endpoint returns a JSON array with a list of users who completed the questionnaire
     const completedUsersUrl = "/GamifyUser/admin/listQuestionnaireCompletedUsers?start=0&size=100&id=" +
         questId;
+    // this endpoint returns a JSON array with a list of users who canceled the questionnaire
     const canceledUsersUrl = "/GamifyUser/admin/listQuestionnaireCanceledUsers?start=0&size=100&id=" +
         questId;
     // start page content
@@ -56,9 +63,11 @@ export const inspectionUserList = (questId) => {
             li.id = val.userId;
             ul.append(li);
         });
-        let script = document.createElement("script");
-        script.src = "js/inspectionUserList.js";
-        mainDiv.append(script);
+        // lazy load script to handle inspection user list and user answers
+        import(
+        /* webpackChunkName: "inspectionUserPage" */ "./inspectionUserPage.js").then((module) => {
+            module.default();
+        });
     });
     // gets list of users who canceled the questionnaire
     $.getJSON(canceledUsersUrl, function (data) {
@@ -71,6 +80,75 @@ export const inspectionUserList = (questId) => {
             li.id = val.userId;
             ul.append(li);
         });
+    });
+    return mainDiv;
+};
+// component to provide "search by date" functionality for inspection and deletion tabs
+export const searchByDate = (ajaxURL, onSuccess, onError) => {
+    let mainDiv = document.createElement("div");
+    let h3 = document.createElement("h5");
+    h3.textContent = "Search by Date";
+    mainDiv.append(h3);
+    let input = document.createElement("input");
+    mainDiv.append(input);
+    input.type = "date";
+    input.name = "searchDate";
+    input.classList.add("form-control");
+    input.id = "searchDate";
+    input.addEventListener("change", (e) => {
+        e.preventDefault();
+        if (input.value === "")
+            return;
+        $.ajax({
+            method: "GET",
+            url: ajaxURL + input.value,
+            success: (data) => {
+                onSuccess(data);
+            },
+            error: (res, err, stat) => {
+                onError();
+            },
+        });
+    });
+    return mainDiv;
+};
+// component to provide "search by name" functionality for inspection and deletion tabs
+export const searchByName = (ajaxURL, onSuccess, onError, onSearchSubmit) => {
+    let mainDiv = document.createElement("div");
+    mainDiv.id = "containerSearchName";
+    let h3 = document.createElement("h5");
+    h3.textContent = "Search by Name";
+    mainDiv.append(h3);
+    mainDiv.style.setProperty("margin-top", "28px");
+    let input = document.createElement("input");
+    mainDiv.append(input);
+    input.type = "text";
+    input.name = "name";
+    input.placeholder = "Fill me";
+    input.autocomplete = "off";
+    input.setAttribute("list", "datalistSearch");
+    input.classList.add("form-control");
+    input.id = "searchName";
+    input.addEventListener("input", (e) => {
+        e.preventDefault();
+        if (input.value === "")
+            return;
+        $.ajax({
+            method: "GET",
+            url: ajaxURL + input.value,
+            success: function (data) {
+                onSuccess(data);
+            },
+            error: function (res, err, stat) {
+                onError();
+            },
+        });
+    });
+    mainDiv.addEventListener("keyup", (e) => {
+        e.preventDefault();
+        if (e.key === "Enter") {
+            onSearchSubmit(input.value);
+        }
     });
     return mainDiv;
 };

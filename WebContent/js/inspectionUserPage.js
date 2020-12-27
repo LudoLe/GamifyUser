@@ -1,7 +1,5 @@
-//TODO:
-// mettere absolute url invece che localhost
-// collegare parametri negli url
-(function () {
+// called on demand to create inspection details page
+export default function () {
     const baseUrl = "/GamifyUser/admin/getAnswers?questionnaireId=" +
         document.getElementById("mainRow").name +
         "&userId=";
@@ -111,4 +109,5 @@
             });
         });
     }
-})();
+}
+;
