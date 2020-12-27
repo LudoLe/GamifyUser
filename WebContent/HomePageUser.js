@@ -67,13 +67,12 @@ function LeaderBoardButton(){
 
 /************************************************BEGIN PRODUCT***************************************************************** */
   function ProductFrame(_frame){
-	      this.frame=_frame;
+	      this.frame=_frame[0];
 	   var self = this;
  
 	  
   this.show= function(questionnaire){
 	 
-        var prod=document.getElementById("productFrameImage")
 
 		if(questionnaire==null){
 			  var self=this;
@@ -197,7 +196,7 @@ this.updateCommentSection= function(array, target){
 /************************************************BEGIN QUESTIONNAIRE***************************************************************** */
 
   function QuestionnaireFrame(_frame){
-	    this.frame=_frame;
+	    this.frame=_frame[0];
 	    var self = this;
   
 this.show= function(questions){
@@ -633,7 +632,7 @@ if(element.closest("form").checkValidity()){
 /************************************************BEGIN LEADERBOARDFRAME***************************************************************** */
 
  function LeaderBoardFrame(_frame){
-	    this.frame=_frame;
+	    this.frame=_frame[0];
 	    var self = this;
 	    
 	    this.show= function(players){
@@ -687,9 +686,7 @@ function MainFrame(_framecontainer){
 
 
 
-      productFrame = new ProductFrame(document.getElementById("productFrame"));
-	  questionnaireFrame = new QuestionnaireFrame(document.getElementById("questionnaireFrame"));
-	  leaderBoardFrame = new LeaderBoardFrame(document.getElementById("leaderBoardFrame"));
+     
  
 	  this.frameContainer = _framecontainer;
 	  var self=this;
@@ -701,11 +698,18 @@ function MainFrame(_framecontainer){
 		 var self=this;
 	 
 		 switch(state){
-	    	case 0: url="GetProduct";
+	    	case 0: 
+		    	productFrame = new ProductFrame(document.getElementsByClassName("mainContent"));
+	    		url="GetProduct";
 	    		break; 
-	    	case 1: url="GetQuestionnaire";
+	    	case 1: 
+		    	questionnaireFrame = new QuestionnaireFrame(document.getElementsByClassName("mainContent"));
+	    		url="GetQuestionnaire";
+
 	    		break;
-	    	case 2: url="GetLeaderBoard";
+	    	case 2: 
+	    	leaderBoardFrame = new LeaderBoardFrame(document.getElementsByClassName("mainContent"));
+	    	url="GetLeaderBoard";
 	    		break;
 	    	
 		 }
@@ -734,9 +738,7 @@ function MainFrame(_framecontainer){
 	    	case 0: 
                      document.getElementById("id_alert").innerHTML="";
 
-					 document.getElementById("productFrame").innerHTML = "";
-					 document.getElementById("questionnaireFrame").innerHTML = "";
-					 document.getElementById("leaderBoardFrame").innerHTML = "";
+					 document.getElementsByClassName("mainContent")[0].innerHTML = "";
 				     productFrame.show(array)
 
 			    break; 
@@ -744,9 +746,8 @@ function MainFrame(_framecontainer){
                     
                     document.getElementById("id_alert").innerHTML="";
 
-					 document.getElementById("questionnaireFrame").innerHTML = "";
-					 document.getElementById("productFrame").innerHTML = "";
-					 document.getElementById("leaderBoardFrame").innerHTML = "";
+					 document.getElementsByClassName("mainContent")[0].innerHTML = "";
+
 					 questionnaireFrame.show(array);
 					
 
@@ -755,9 +756,8 @@ function MainFrame(_framecontainer){
                       
                     document.getElementById("id_alert").innerHTML="";
 
-					 document.getElementById("productFrame").innerHTML = "";
-					 document.getElementById("questionnaireFrame").innerHTML = "";
-					 document.getElementById("leaderBoardFrame").innerHTML = "";
+					 document.getElementsByClassName("mainContent")[0].innerHTML = "";
+
 					 leaderBoardFrame.show(array);
 			           
 	    		break;	         
@@ -776,11 +776,11 @@ var state=0;
 		    
            
 	    	//messaggio di welcome back
-			personalMessage = new PersonalMessage(sessionStorage.getItem('username'),  document.getElementById("id_username"));
-	        personalMessage.show();
+			/*personalMessage = new PersonalMessage(sessionStorage.getItem('username'),  document.getElementById("id_username"));
+	        personalMessage.show();*/
 
 	       //struttura principale
-	        mainFrame=new MainFrame(document.getElementById("mainFrame"));
+	        mainFrame=new MainFrame(document.getElementsByClassName("main")[0]);
 
 		  //directory coi bottoni
            questionnaireButton= new QuestionnaireButton(state);
@@ -792,12 +792,26 @@ var state=0;
 	    
 	    
 	        this.refresh = function(state){
-	    	mainFrame.show(state);
+	        	openTab();
+	        mainFrame.show(state);
+	    	closeTab();
+	    	
 	    
 	
 	     }
+	       
  }
-  
+function closeTab(){
+	    document.getElementsByClassName("main")[0].style.width = "60vw";
+	    document.getElementsByClassName("tab")[0].style.right = "-20vw";
+	    //document.getElementsByClassName("banner")[0].style.right = "20%";
+	}
+function openTab(){
+	    document.getElementsByClassName("main")[0].style.width = "50vw";
+	    document.getElementsByClassName("tab")[0].style.right = "0vw";
+	   // document.getElementsByClassName("banner")[0].style.right = "40%";
+	}
+ 
   	   
 
 })()
