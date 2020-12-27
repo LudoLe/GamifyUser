@@ -152,3 +152,50 @@ export const searchByName = (ajaxURL, onSuccess, onError, onSearchSubmit) => {
     });
     return mainDiv;
 };
+export var TableOrder;
+(function (TableOrder) {
+    TableOrder[TableOrder["DATE"] = 0] = "DATE";
+    TableOrder[TableOrder["NAME"] = 1] = "NAME";
+})(TableOrder || (TableOrder = {}));
+(function (TableOrder) {
+    TableOrder.compare = (order, reverse = false) => (a, b) => {
+        let result = false; // -1
+        switch (order) {
+            case TableOrder.DATE:
+                result = new Date(a.datetime) < new Date(b.datetime);
+                break;
+            case TableOrder.NAME:
+                result = a.name < b.name;
+                break;
+            default:
+                return -1;
+        }
+        return !reverse === result ? 1 : -1;
+    };
+})(TableOrder || (TableOrder = {}));
+export const sortTable = (sortParameter, th1, otherTableHeaders, currentOrder, isReverse, data, tbody) => {
+    if (currentOrder != sortParameter) {
+        th1.textContent += "↓";
+        for (const theader of otherTableHeaders) {
+            theader.textContent = theader.textContent.replace("↑", "");
+            theader.textContent = theader.textContent.replace("↓", "");
+        }
+        currentOrder = sortParameter;
+    }
+    if (isReverse) {
+        data = data.sort(TableOrder.compare(sortParameter));
+        th1.textContent = th1.textContent.replace("↑", "↓");
+        isReverse = false;
+    }
+    else {
+        data = data.sort(TableOrder.compare(sortParameter, true));
+        th1.textContent = th1.textContent.replace("↓", "↑");
+        isReverse = true;
+    }
+    let currentIds = data.map((e) => e.questionnaireId);
+    for (const i of currentIds) {
+        let el = document.querySelector(`[data-table-id='${i}']`);
+        tbody.insertAdjacentElement("afterbegin", el);
+    }
+    return currentOrder;
+};

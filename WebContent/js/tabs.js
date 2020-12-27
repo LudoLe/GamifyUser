@@ -3,7 +3,7 @@
  */
 import { showModal } from "./utils.js";
 import { inspectionTabChange } from "./admin.js";
-import { searchByDate, searchByName } from "./components.js";
+import { TableOrder as TableOrder, searchByDate, searchByName, sortTable } from "./components.js";
 // takes a data array and provides a datalist element, to be used to give autofill suggestions
 const dataListCreator = (data) => {
     let datalist = document.getElementById("datalistSearch");
@@ -73,9 +73,9 @@ export const deletionTab = () => {
     table.append(thead);
     let tr = document.createElement("tr");
     let th1 = document.createElement("th");
-    th1.textContent = "Date";
+    th1.textContent = "Date ↓";
     let th2 = document.createElement("th");
-    th2.textContent = "Product";
+    th2.textContent = "Product ";
     let th3 = document.createElement("th");
     th3.textContent = "Detail";
     thead.append(tr);
@@ -85,12 +85,15 @@ export const deletionTab = () => {
     let tbody = document.createElement("tbody");
     table.append(tbody);
     // end page content
+    let currentData = null;
     // gets a list of questionnaires which are deletable, meaning they are in the past
     // creates a table row for each questionnaire
     $.getJSON(pastListUrl, function (data) {
+        currentData = data;
         $.each(data, function (key, val) {
             //start row element
             let tr = document.createElement("tr");
+            tr.setAttribute("data-table-id", val.questionnaireId);
             let td = document.createElement("td");
             td.textContent = val.datetime.slice(0, 12).replaceAll(",", "");
             tr.append(td);
@@ -114,6 +117,16 @@ export const deletionTab = () => {
             //end row element
         });
     });
+    let reverseDate = false, reverseName = false;
+    let currentOrder = TableOrder.DATE;
+    th1.onclick = () => {
+        currentOrder = sortTable(TableOrder.DATE, th1, [th2], currentOrder, reverseDate, currentData, tbody);
+        reverseDate = !reverseDate;
+    };
+    th2.onclick = () => {
+        currentOrder = sortTable(TableOrder.NAME, th2, [th1], currentOrder, reverseName, currentData, tbody);
+        reverseName = !reverseName;
+    };
     return mainDiv;
 };
 export const inspectionTab = () => {
@@ -151,9 +164,9 @@ export const inspectionTab = () => {
     table.append(thead);
     let tr = document.createElement("tr");
     let th1 = document.createElement("th");
-    th1.textContent = "Date";
+    th1.textContent = "Date ↓";
     let th2 = document.createElement("th");
-    th2.textContent = "Product";
+    th2.textContent = "Product ";
     let th3 = document.createElement("th");
     th3.textContent = "Detail";
     thead.append(tr);
@@ -163,11 +176,14 @@ export const inspectionTab = () => {
     let tbody = document.createElement("tbody");
     table.append(tbody);
     // end page content
+    let currentData = null;
     // gets a list of questionnaires
     // the json contains the questionnaireId, datetime and name of each questionnaire
     $.getJSON(listUrl, function (data) {
+        currentData = data;
         $.each(data, function (key, val) {
             let tr = document.createElement("tr");
+            tr.setAttribute("data-table-id", val.questionnaireId);
             let td = document.createElement("td");
             td.textContent = val.datetime.slice(0, 12).replaceAll(",", "");
             tr.append(td);
@@ -190,6 +206,16 @@ export const inspectionTab = () => {
             tbody.append(tr);
         });
     });
+    let reverseDate = false, reverseName = false;
+    let currentOrder = TableOrder.DATE;
+    th1.onclick = () => {
+        currentOrder = sortTable(TableOrder.DATE, th1, [th2], currentOrder, reverseDate, currentData, tbody);
+        reverseDate = !reverseDate;
+    };
+    th2.onclick = () => {
+        currentOrder = sortTable(TableOrder.NAME, th2, [th1], currentOrder, reverseName, currentData, tbody);
+        reverseName = !reverseName;
+    };
     return mainDiv;
 };
 export const creationTab = () => {
