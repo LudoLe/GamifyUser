@@ -1,11 +1,73 @@
+/*
+ * Exports the functions that create the tab elements
+ */
 import { showModal } from "./utils.js";
 import { inspectionTabChange } from "./admin.js";
+import { searchByDate, searchByName } from "./components.js";
+// takes a data array and provides a datalist element, to be used to give autofill suggestions
+const dataListCreator = (data) => {
+    let datalist = document.getElementById("datalistSearch");
+    if (datalist == null) {
+        datalist = document.createElement("datalist");
+        datalist.id = "datalistSearch";
+    }
+    else {
+        while (datalist.lastElementChild) {
+            datalist.removeChild(datalist.lastElementChild);
+        }
+    }
+    $.each(data, (key, val) => {
+        let opt = document.createElement("option");
+        opt.value = val.name;
+        datalist.append(opt);
+    });
+    return datalist;
+};
 export const deletionTab = () => {
-    const pastListUrl = "/GamifyUser/admin/listQuestionnaires?start=0&size=100&past=true";
     const deleteUrl = "/GamifyUser/admin/delete?id=";
+    // called when a questionnaire has to be deleted
+    const deleteFunction = (val) => {
+        $.ajax({
+            url: deleteUrl + val.questionnaireId,
+            success: function (data) {
+                showModal("Success!", "Questionnaire deleted correctly", [
+                    () => location.reload(),
+                ]);
+            },
+            error: function (request, status, error) {
+                showModal("Error", request.responseText);
+            },
+        });
+    };
+    const pastListUrl = "/GamifyUser/admin/listQuestionnaires?start=0&size=100&past=true";
     // start page content
+    let mainDiv = document.createElement("div");
+    mainDiv.classList.add("row");
+    let col8 = document.createElement("div");
+    col8.classList.add("col-md-8", "col-table-8-red");
+    let col4 = document.createElement("div");
+    col4.classList.add("col-md-4");
+    col4.classList.add("col-search");
     let table = document.createElement("table");
     table.classList.add("table", "table-borderless");
+    mainDiv.append(col8);
+    mainDiv.append(col4);
+    let currentFillData = null;
+    col4.append(searchByDate("/GamifyUser/admin/getQuestionnaire?mode=3&date=", (data) => {
+        deleteFunction(data);
+    }, () => showModal("No result", "Got nothing on that date.")));
+    col4.append(searchByName("/GamifyUser/admin/getQuestionnaire?mode=4&name=", (data) => {
+        currentFillData = data;
+        col4.append(dataListCreator(data));
+    }, () => showModal("Error", "Error"), (value) => {
+        for (const elem of currentFillData) {
+            if (elem.name === value) {
+                deleteFunction(elem);
+                return;
+            }
+        }
+    }));
+    col8.append(table);
     let thead = document.createElement("thead");
     thead.classList.add("thead");
     table.append(thead);
@@ -30,7 +92,7 @@ export const deletionTab = () => {
             //start row element
             let tr = document.createElement("tr");
             let td = document.createElement("td");
-            td.textContent = val.datetime.slice(0, 12);
+            td.textContent = val.datetime.slice(0, 12).replaceAll(",", "");
             tr.append(td);
             td = document.createElement("td");
             td.textContent = val.name;
@@ -41,17 +103,7 @@ export const deletionTab = () => {
             let i = document.createElement("i");
             // adds listener to click on deletion button; when clicked, a call
             // to deleteUrl happens, which if successful deletes the questionnaire
-            button.addEventListener("click", (ev) => {
-                $.ajax({
-                    url: deleteUrl + val.questionnaireId,
-                    success: function (data) {
-                        showModal("Success!", "Questionnaire deleted correctly", () => location.reload());
-                    },
-                    error: function (request, status, error) {
-                        showModal("Error", request.responseText);
-                    },
-                });
-            });
+            button.addEventListener("click", () => deleteFunction(val));
             i.style.setProperty("font-weight", "lighter");
             i.classList.add("fas", "fa-newspaper");
             i.textContent = " Delete";
@@ -62,13 +114,38 @@ export const deletionTab = () => {
             //end row element
         });
     });
-    return table;
+    return mainDiv;
 };
 export const inspectionTab = () => {
     const listUrl = "/GamifyUser/admin/listQuestionnaires?start=0&size=100";
     // start page content
+    let mainDiv = document.createElement("div");
+    mainDiv.classList.add("row");
+    let col8 = document.createElement("div");
+    col8.classList.add("col-md-8", "col-table-8");
+    let col4 = document.createElement("div");
+    col4.classList.add("col-md-4");
+    col4.classList.add("col-search");
     let table = document.createElement("table");
     table.classList.add("table", "table-borderless");
+    mainDiv.append(col8);
+    mainDiv.append(col4);
+    let currentFillData = null;
+    col4.append(searchByDate("/GamifyUser/admin/getQuestionnaire?mode=1&date=", (data) => {
+        inspectionTabChange(data.questionnaireId);
+    }, () => showModal("No result", "Got nothing on that date.")));
+    col4.append(searchByName("/GamifyUser/admin/getQuestionnaire?mode=2&name=", (data) => {
+        currentFillData = data;
+        col4.append(dataListCreator(data));
+    }, () => showModal("Error", "Error"), (value) => {
+        for (const elem of currentFillData) {
+            if (elem.name === value) {
+                inspectionTabChange(elem.questionnaireId);
+                return;
+            }
+        }
+    }));
+    col8.append(table);
     let thead = document.createElement("thead");
     thead.classList.add("thead");
     table.append(thead);
@@ -85,10 +162,6 @@ export const inspectionTab = () => {
     tr.append(th3);
     let tbody = document.createElement("tbody");
     table.append(tbody);
-    // start control buttons' row
-    let controlsRow = document.createElement("div");
-    controlsRow.classList.add("row");
-    // end control buttons' row
     // end page content
     // gets a list of questionnaires
     // the json contains the questionnaireId, datetime and name of each questionnaire
@@ -96,7 +169,7 @@ export const inspectionTab = () => {
         $.each(data, function (key, val) {
             let tr = document.createElement("tr");
             let td = document.createElement("td");
-            td.textContent = val.datetime.slice(0, 12);
+            td.textContent = val.datetime.slice(0, 12).replaceAll(",", "");
             tr.append(td);
             td = document.createElement("td");
             td.textContent = val.name;
@@ -117,7 +190,7 @@ export const inspectionTab = () => {
             tbody.append(tr);
         });
     });
-    return table;
+    return mainDiv;
 };
 export const creationTab = () => {
     // takes care of adding a question row to the creation page

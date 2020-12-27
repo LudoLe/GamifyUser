@@ -3,8 +3,8 @@
 	<name>GamifyUser</name>
 	<comment></comment>
 	<projects>
-		<project>Servers</project>
 		<project>GamifyEJB</project>
+		<project>Servers</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
