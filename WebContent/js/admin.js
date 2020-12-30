@@ -79,6 +79,8 @@ const onTabChange = (newPage, data = null) => {
     // create new page container
     let newContainer = document.createElement("div");
     newContainer.classList.add("container", "container-admin");
+    if (newPage === "creation")
+        newContainer.style.setProperty("overflow", "auto");
     newContainer.id = "mainContainer";
     newContainer.append(div);
     // add fade in animation to new container
