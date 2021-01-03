@@ -7,17 +7,21 @@ import { showModal } from "./utils.js";
 // convenience pointer to the current page container
 let currentContainer = $("#mainContainer");
 // get screen available height and set it into css variable
-document.documentElement.style.setProperty('--screen-y', window.innerHeight + "px");
+document.documentElement.style.setProperty("--screen-y", window.innerHeight + "px");
 // when page is resized, resize main container and tables accordingly
 window.onresize = () => {
-    document.getElementById("mainContainer").style.setProperty("max-height", (window.innerHeight - 150) + "px");
-    document.getElementsByClassName("col-table-8")[0].style.setProperty("max-height", (window.innerHeight - 150) + "px");
+    if (document.getElementsByClassName("col-table-8").length !== 0) {
+        document.getElementsByClassName("col-table-8")[0].style.setProperty("max-height", window.innerHeight - 150 + "px");
+    }
+    document
+        .getElementById("mainContainer")
+        .style.setProperty("max-height", window.innerHeight - 150 + "px");
 };
 // true if a popstate event is triggered
 // a popstate event is a back or forward button press
 let isPopEvent = false;
 // keeps track of back/forward button presses, to create the Full PWA Experience ™
-window.addEventListener('popstate', (e) => {
+window.addEventListener("popstate", (e) => {
     isPopEvent = true;
     if (e.state.url != null) {
         onTabChange(e.state.url, e.state.data);
@@ -35,7 +39,7 @@ const onTabChange = (newPage, data = null) => {
         isPopEvent = false;
     }
     else {
-        // pushes new state to history stack; the state element contains an 'url' element, which contains the 
+        // pushes new state to history stack; the state element contains an 'url' element, which contains the
         // name of the tab, and a data element, which currently contains the questionnaire id if the tab is
         // inspectionUserList, or null otherwise.
         history.pushState({ url: newPage, data: data }, newPage);
@@ -88,7 +92,7 @@ const onTabChange = (newPage, data = null) => {
     newContainer.addEventListener("animationend", (e) => {
         newContainer.classList.remove("fade-in");
     });
-    document.body.insertAdjacentElement('afterbegin', newContainer);
+    document.body.insertAdjacentElement("afterbegin", newContainer);
     currentContainer = $(newContainer);
 };
 // changes page theme (dark/light)
@@ -97,7 +101,7 @@ const changeTheme = (newTheme, speed = 700) => {
     $("body").fadeOut(speed, function () {
         document
             .getElementById("darkModeCSSLink")
-            .setAttribute("href", (newTheme === "dark" ? "css/dark-admin.css" : ""));
+            .setAttribute("href", newTheme === "dark" ? "css/dark-admin.css" : "");
         $(this).fadeIn(speed);
     });
 };
