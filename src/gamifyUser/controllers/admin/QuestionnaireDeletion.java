@@ -30,7 +30,7 @@ public class QuestionnaireDeletion extends HttpServlet {
 	
 	}
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		List<String> mandatoryParams = new ArrayList<>(Arrays.asList("id"));

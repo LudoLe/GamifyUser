@@ -29,6 +29,7 @@ export const deletionTab = () => {
     const deleteFunction = (val) => {
         $.ajax({
             url: deleteUrl + val.questionnaireId,
+            type: 'DELETE',
             success: function (data) {
                 showModal("Success!", "Questionnaire deleted correctly", [
                     () => location.reload(),
