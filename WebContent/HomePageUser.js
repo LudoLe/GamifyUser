@@ -294,11 +294,11 @@
                     //it is set in db
                     if(response.user.sex == "male"){
                         sex_x.checked = true;
+                        sex_y.disabled = true;
                     }else {
                         sex_y.checked = true;
+                        sex_x.disabled = true;
                     }
-                    sex_x.readOnly = true;
-                    sex_y.readOnly = true;
                 }
 
                 itemDiv0autofill.appendChild(sex);
@@ -553,6 +553,7 @@
         var self = this;
 
         this.show = function(players) {
+        	console.log(players);
             if (players == null) {
                 var self = this;
                 var alert = document.createElement("p");
@@ -569,20 +570,16 @@
                 containerDiv.setAttribute("id", "formContainer");
 
                 players.forEach(function(player) { // self visible here, not this
-
+					console.log(player.username)
                     //each question (item)is contained in a div
                     itemDiv = document.createElement("div");
                     itemDiv.setAttribute("class", "item");
                     p = document.createElement("p");
-                    p.textContent = player.user.username + player.points;
-                    input.setAttribute("id", player.id);
+                    p.textContent = player.username + " " +player.points;
                     itemDiv.appendChild(p);
-                    //add each question in the field set
-                    fieldset.appendChild(itemDiv);
-                    fieldset.appendChild(document.createElement("br"));
-                    count++;
+                    containerDiv.appendChild(itemDiv);
                 });
-
+				self.frame.appendChild(containerDiv);
             }
 
         }
@@ -623,7 +620,7 @@
                     break;
                 case 2:
                     leaderBoardFrame = new LeaderBoardFrame(document.getElementsByClassName("mainContent"));
-                    url = "GetLeaderBoard";
+                    url = "GetLeaderboard";
                     break;
 
             }
