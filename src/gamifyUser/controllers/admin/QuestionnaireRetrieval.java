@@ -1,9 +1,6 @@
 package gamifyUser.controllers.admin;
 
-import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-
 import java.util.*;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -14,18 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import polimi.db2.gamifyDB.entities.Questionnaire;
-import polimi.db2.gamifyDB.services.QuestionService;
 import polimi.db2.gamifyDB.services.QuestionnaireService;
-
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang3.RandomStringUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import gamifyUser.utility.Utility;
-
-import javax.servlet.http.Part;
 
 
 @WebServlet("/admin/listQuestionnaires")
