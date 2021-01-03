@@ -19,6 +19,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringEscapeUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import gamifyUser.exceptions.NoBirthException;
+import gamifyUser.exceptions.NoSexException;
 import gamifyUser.utility.Utility;
 import polimi.db2.gamifyDB.entities.Answer;
 import polimi.db2.gamifyDB.entities.Question;
@@ -58,52 +61,50 @@ public class SubmitQuestionnaire extends HttpServlet{
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
 	
 		try {
-			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			List<Question> questions=null;
 			List<Answer> answers= new ArrayList<Answer>();
 			int canAccessAge=0;
 			int canAccessSex=0;
 			Review review=null;
 			Questionnaire questionnaire;
-			Date birthDate=null;
-			String sex;
-           
-			
-			List<String> mandatoryParams = new ArrayList<>(Arrays.asList("expertise"));
-			/*
-			if (!Utility.paramExists(request, response, mandatoryParams)
-					|| Utility.paramIsEmpty(request, response, mandatoryParams))
-				return;
-			 */
 			
 			User user=(User) request.getSession().getAttribute("user");
-			System.out.println(user.getUserId());
-			System.out.println(user.getBirth());
-			System.out.println(user.getSex());
-			birthDate = user.getBirth();
-			sex = user.getSex();
+			
+			String birth_string = (StringEscapeUtils.escapeJava(request.getParameter("birth")));
+			System.out.println(birth_string);
+			Date birthDate = null;
+			if(birth_string != null && !birth_string.equals("")) {
+				birthDate = new SimpleDateFormat("yyyy-MM-dd").parse(birth_string);
+			}
+
+			System.out.println("ok");
+			String sex = (StringEscapeUtils.escapeJava(request.getParameter("sex")));
 			
 			//System.out.println(birthDate+" "+(StringEscapeUtils.escapeJava(request.getParameter("can_access_age")))+" "+sex+" "+(StringEscapeUtils.escapeJava(request.getParameter("can_access_sex"))));
-			String age_string = (StringEscapeUtils.escapeJava(request.getParameter("can_access_age")));
-			if(age_string != null && age_string.equals("on")) {
-				if(birthDate == null) // non posso dare l'autorizzazione
-					return;
+			String can_age_string = (StringEscapeUtils.escapeJava(request.getParameter("can_access_age")));
+			if(can_age_string != null && can_age_string.equals("on")) {
+				if(birthDate == null) {
+					System.out.println("NoBirthException");
+					throw new NoBirthException();
+				}
 				canAccessAge = 1;
 			}
-			String sex_string = (StringEscapeUtils.escapeJava(request.getParameter("can_access_sex")));
-			if(sex_string != null && sex_string.equals("on")) {
-				if(sex == null) // non posso dare l'autorizzazione
-					return;
+			System.out.println(birth_string+" "+sex);
+			String can_sex_string = (StringEscapeUtils.escapeJava(request.getParameter("can_access_sex")));
+			if(can_sex_string != null && can_sex_string.equals("on")) {
+				if(sex == null) {
+					System.out.println("NoSexException");
+					throw new NoSexException();
+				}
 				canAccessSex = 1;
 			}
 			
  			String expertise = StringEscapeUtils.escapeJava(request.getParameter("expertise"));
- 		    userService.updateProfile(user);
- 			
+ 		    
  			questionnaire = questionnaireService.findByDate(new Date());
 
-			//System.out.println(canAccessAge+" "+canAccessSex+" "+expertise+" "+user+" "+questionnaire);
-			review = reviewService.createReview(canAccessAge, canAccessSex, new Date(), expertise, user, questionnaire);
+			System.out.println(canAccessAge+" "+canAccessSex+" "+expertise+" "+user.getUserId()+" "+questionnaire.getQuestionnaireId());
+			
 			//System.out.println("ok");
 			questions=questionnaire.getQuestions();
 	 		int count=0;
@@ -122,17 +123,35 @@ public class SubmitQuestionnaire extends HttpServlet{
 	 		    answer.setReview(review);
 	 		    answers.add(answer);
 	 			count++;
-	 			}
-	 		    answerService.createAnswers(answers);
-	 			
+	 		}
+	 		System.out.println("sto per creare la review..");
+	 		review = reviewService.createReview(canAccessAge, canAccessSex, new Date(), expertise, user, questionnaire, answers, sex, birthDate);
+	 		System.out.println("escooo");
 			response.setStatus(HttpServletResponse.SC_OK);
 			response.setCharacterEncoding("UTF-8");
+			response.setContentType("text/plain"); 
 		    response.getWriter().println("Thank you for your help ^^.");
-	       }catch (Exception e){
+		    
+	       }catch (NoBirthException e){
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-				response.getWriter().println("Bad request.");
+				response.setContentType("text/plain"); 
+				response.getWriter().println("No birth to be given access");
 				return;
-			}
+	       }catch (NoSexException e){
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.setContentType("text/plain"); 
+				response.getWriter().println("No sex to be given access");
+				return;
+	       }catch (Exception e){
+	    	   	String mex = "Bad request.";
+    		    if (e instanceof NoBirthException || e instanceof NoSexException) {
+    		        mex = e.getMessage();
+    		    } 
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.setContentType("text/plain"); 
+				response.getWriter().println(mex);
+				return;
+	       }
 	}
 	
 	public void destroy() {

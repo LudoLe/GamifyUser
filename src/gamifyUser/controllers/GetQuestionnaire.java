@@ -22,6 +22,7 @@ import gamifyUser.utility.Utility;
 
 import polimi.db2.gamifyDB.entities.Question;
 import polimi.db2.gamifyDB.entities.Questionnaire;
+import polimi.db2.gamifyDB.entities.User;
 import polimi.db2.gamifyDB.services.AnswerService;
 import polimi.db2.gamifyDB.services.QuestionService;
 import polimi.db2.gamifyDB.services.QuestionnaireService;
@@ -52,15 +53,22 @@ public class GetQuestionnaire extends HttpServlet{
 	     		questionnaire = questionnaireService.findByDate(new Date());
 	     		questions=questionnaire.getQuestions();		
 				Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+				gson.toJson(questions);
+				
+				User user=(User) request.getSession().getAttribute("user");
+				
+				String json = "{ \"questions\": "+gson.toJson(questions)+", \"user\": "+gson.toJson(user)+" }";
+				
 				response.setStatus(HttpServletResponse.SC_OK);
 				response.setContentType("application/json");
 				response.setCharacterEncoding("UTF-8");
-				response.getWriter().print(gson.toJson(questions));
+				response.getWriter().print(json);
 				return;	
 			} catch (Exception e){
 				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 				response.getWriter().println("Not possible to retrieve the questionnaire");
-				return;			}
+				return;			
+			}
     }
 		public void destroy(){
 		}
