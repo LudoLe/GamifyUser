@@ -53,7 +53,6 @@ public class GetQuestionnaire extends HttpServlet{
 	     		questionnaire = questionnaireService.findByDate(new Date());
 	     		questions=questionnaire.getQuestions();		
 				Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-				gson.toJson(questions);
 				
 				User user=(User) request.getSession().getAttribute("user");
 				
