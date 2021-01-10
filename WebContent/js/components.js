@@ -2,6 +2,13 @@
  * Contains the functions to create components used multiple times,
  * possibly by different tabs
  ***/
+import { sort, default as init } from './sort_wasm.js';
+// init WASM sorting module
+// NOTE: if WASM is not available in the browser,
+// an error will be thrown in the debug console
+// ATM I can't figure out a way of calling this 
+// init function inside and if 
+init('js/sort_wasm_bg.wasm');
 // creates the inspection user list tab
 export const inspectionUserList = (questId) => {
     // this endpoint returns a JSON array with a list of users who completed the questionnaire
@@ -183,12 +190,25 @@ export const sortTable = (sortParameter, th1, otherTableHeaders, currentOrder, i
         currentOrder = sortParameter;
     }
     if (isReverse) {
-        data = data.sort(TableOrder.compare(sortParameter));
+        // table sorting function defaults to a very fast parallel
+        // see https://github.com/darklamp/sort-table-wasm
+        // sorting function written in Rust and deployed via WASM
+        // takes 3 params: data to be sorted, flag for reversing order, flag for sorting by date
+        // in case WASM is not available, it falls back to js sorting
+        if (sessionStorage.getItem("WASMavailable") === "true") {
+            data = sort(data, true, sortParameter === TableOrder.DATE);
+        }
+        else
+            data = data.sort(TableOrder.compare(sortParameter));
         th1.textContent = th1.textContent.replace("↑", "↓");
         isReverse = false;
     }
     else {
-        data = data.sort(TableOrder.compare(sortParameter, true));
+        if (sessionStorage.getItem("WASMavailable") === "true") {
+            data = sort(data, false, sortParameter === TableOrder.DATE);
+        }
+        else
+            data = data.sort(TableOrder.compare(sortParameter, true));
         th1.textContent = th1.textContent.replace("↓", "↑");
         isReverse = true;
     }

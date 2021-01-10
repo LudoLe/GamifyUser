@@ -3,7 +3,7 @@
  */
 import { showModal } from "./utils.js";
 import { inspectionTabChange } from "./admin.js";
-import { TableOrder as TableOrder, searchByDate, searchByName, sortTable } from "./components.js";
+import { TableOrder as TableOrder, searchByDate, searchByName, sortTable, } from "./components.js";
 // takes a data array and provides a datalist element, to be used to give autofill suggestions
 const dataListCreator = (data) => {
     let datalist = document.getElementById("datalistSearch");
@@ -29,7 +29,7 @@ export const deletionTab = () => {
     const deleteFunction = (val) => {
         $.ajax({
             url: deleteUrl + val.questionnaireId,
-            type: 'DELETE',
+            type: "DELETE",
             success: function (data) {
                 showModal("Success!", "Questionnaire deleted correctly", [
                     () => location.reload(),
