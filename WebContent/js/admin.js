@@ -8,6 +8,22 @@ import { showModal } from "./utils.js";
 let currentContainer = $("#mainContainer");
 // get screen available height and set it into css variable
 document.documentElement.style.setProperty("--screen-y", window.innerHeight + "px");
+// check if browser supports WASM
+// code from https://stackoverflow.com/questions/47879864/how-can-i-check-if-a-browser-supports-webassembly
+const supported = (() => {
+    try {
+        if (typeof WebAssembly === "object"
+            && typeof WebAssembly.instantiate === "function") {
+            const module = new WebAssembly.Module(Uint8Array.of(0x0, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00));
+            if (module instanceof WebAssembly.Module)
+                return new WebAssembly.Instance(module) instanceof WebAssembly.Instance;
+        }
+    }
+    catch (e) {
+    }
+    return false;
+})();
+sessionStorage.setItem("WASMavailable", supported.toString());
 // when page is resized, resize main container and tables accordingly
 window.onresize = () => {
     if (document.getElementsByClassName("col-table-8").length !== 0) {
