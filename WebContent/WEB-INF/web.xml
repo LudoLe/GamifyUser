@@ -65,6 +65,9 @@
     <filter-name>UserChecker</filter-name>
         <url-pattern> /user </url-pattern>
     <url-pattern> /user/* </url-pattern>
+    <url-pattern> /uploads/campaignImages </url-pattern>
+        <url-pattern> /uploads/campaignImages/* </url-pattern>
+    
 </filter-mapping>
    
 </web-app>
