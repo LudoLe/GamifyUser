@@ -27,7 +27,7 @@ public class UserHome extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		ServletContext context= getServletContext();
-		RequestDispatcher rd = context.getRequestDispatcher("/HomePage.html");
+		RequestDispatcher rd = context.getRequestDispatcher("/HomePage2.2.html");
 		rd.forward(request, response);		
 	}
 

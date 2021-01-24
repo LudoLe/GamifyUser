@@ -1,0 +1,302 @@
+body{
+    font-family: 'Roboto', sans-serif;
+    background-color: black;
+    color: white ;
+}
+.mainpage{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    align-items: flex-start;
+    
+}
+
+#logoutbutton{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: end;  
+    align-items: start;
+    align-self: flex-end;
+}
+
+#switchbutton{
+      display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-self: stretch;
+    
+}
+
+
+.leftside{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+     border-right: 5px solid white;
+    
+}
+
+
+
+.leftsidecontent{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.rightside{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.messagecontainer{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.productframe{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.commentsframe{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.mainpage::-webkit-scrollbar {
+    display: none;
+}
+
+.button:hover{
+    background-color: white;
+    color: black;
+    padding: 1vh 2vw;
+}
+.button:focus{
+    display: flex;
+    align-self: normal;
+    border: 1px solid white;
+    padding: 1vh 1.5vw;
+}
+
+.button{
+    border: 1px solid white;
+    padding: 1vh 1.5vw;
+      display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+
+.button:active{
+    padding: 2vh 1.5vw;
+}
+
+.reset-Button {
+	border: none;
+    margin: 0;
+       outline: none;
+   
+    width: auto;
+    overflow: visible;
+
+    background: transparent;
+
+    /* inherit font & color from ancestor */
+    color: inherit;
+    font: inherit;
+
+    /* Normalize `line-height`. Cannot be changed from `normal` in Firefox 4+. */
+    line-height: normal;
+
+    /* Corrects font smoothing for webkit */
+    -webkit-font-smoothing: inherit;
+    -moz-osx-font-smoothing: inherit;
+
+    /* Corrects inability to style clickable `input` types in iOS */
+    -webkit-appearance: none;
+}
+
+/* Remove excess padding and border in Firefox 4+ */
+&::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+.reset-Button:hover{
+    background-color: white;
+    color: black;
+    padding: 1vh 2vw;
+    
+}
+
+#logoutbutton:hover{
+    background-color: red;
+    color: black;
+    padding: 1vh 2vw;
+}
+
+.questionscontainer{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+       justify-content: stretch;
+    align-items: center;
+        border-bottom: 2px solid white;
+    
+    
+}
+#questionsForm{
+    
+        border: 2px solid white;
+    
+    
+}
+.questioninput{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: stretch;
+    align-self: stretch;
+    outline: none;
+    background-color:black;
+   color: -internal-light-dark(white, white);
+
+    border-width: 0px;
+    border-style: inset;
+    -webkit-writing-mode: horizontal-tb;
+    
+    color: #FFFFFF;
+    
+}
+
+.box{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: stretch;
+    align-items: center;
+    border: 2px solid white;
+    padding: 2vh 1.5vw;
+        
+    
+    
+}
+.questionnairefieldset{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: stretch;
+    align-items: space-evenly;
+    border-right: 7px solid white;
+     
+    
+    
+}
+.sexlabel{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: stretch;
+    align-items: center;
+        align-self: stretch;
+            padding: 2vh 1.5vw;
+        
+    
+    border: 2px solid white;
+    
+    
+}
+.expertiseitem{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: stretch;
+    align-items: start;
+        align-self: stretch;
+    
+    
+    
+}
+
+.expertiselabel{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: stretch;
+    align-items: center;
+     align-self: stretch;
+     padding: 2vh 1.5vw;
+   
+    border: 2px solid white;
+    
+    
+}
+
+
+.agelabel{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: stretch;
+    align-items: center;
+        align-self: stretch;
+    
+    border: 2px solid white;
+        padding: 2vh 1.5vw;
+    
+    
+    
+}
+
+
+
+
+.sexitem{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+       justify-content: center;
+    align-self: stretch;
+}
+
+.access{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+     justify-content: space-evenly;
+    align-items: center;
+    
+    
+}
+
+
+
+
+
+
+
