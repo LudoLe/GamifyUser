@@ -7,8 +7,8 @@ body{
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-   justify-content: space-around;
-    align-items: self-start;
+   justify-content: center;
+    align-items: end;
         background-color: black;
           opacity: 0.75;
           border: 10px solid white
@@ -16,6 +16,14 @@ body{
     
     
 }
+
+.mat-button-toggle-checked {
+	  box-shadow: 0 0 30px #000 !important;
+    border: 1px #000 solid !important;
+    border-radius: 5px !important;
+    background-color: #BA55D3	 !important;
+}
+
 
 #logoutbutton{
     display: flex;
@@ -35,13 +43,22 @@ body{
     
 }
 
+#productspan{
+      display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-self: stretch;
+    
+}
+
 
 .leftside{
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
     justify-content: center;
-    align-items: center;
+    align-items: initial;
      border-right: 5px solid white;
     
 }
@@ -56,12 +73,14 @@ body{
     align-items: center;
 }
 
-.rightside{
+.rightside {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    justify-content: center;
-    align-items: center;
+    justify-content: stretch;
+    align-items: start;
+         border-left: 5px solid white;
+    
 }
 
 .messagecontainer{
@@ -76,8 +95,8 @@ body{
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    justify-content: center;
-    align-items: center;
+    justify-content: stretch;
+    align-items: start;
 }
 
 .commentsframe{
@@ -302,6 +321,15 @@ body{
     align-items: center;
     
     
+}
+
+
+.messagecontainer{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
 }
 
 
