@@ -118,7 +118,7 @@
                 var i = document.createElement("IMG");
 
 
-                i.setAttribute("src", "uploads/campaignImages/" + questionnaire.image);
+                i.setAttribute("src", "uploads/campaignImages?name=" + questionnaire.image);
                 i.setAttribute("id", "productimage");
 
                 i.setAttribute("width", "250");
