@@ -9,38 +9,39 @@
 
 
 
- 
-
-    
-    function SwitchButton(_switch, state) {
-        var switchbutton = _switch;   
-        var  left = document.getElementsByClassName("leftsidecontent")[0];  
-        left.innerHtml="";
-        content = document.getElementById("switchbuttoncontent");  
-        content.textContent="SHOW QUESTIONNAIRE"
-        
-
-        switchbutton.addEventListener("click", (e) => {
-     	if(state){         
-                  content = document.getElementById("switchbuttoncontent");  
-                  content.textContent="SHOW QUESTIONNAIRE"
-     		      leaderBoardFrame.call();
-     		      state=0;
-     		      }
-        		else{
-        			 content = document.getElementById("switchbuttoncontent");  
-                     content.textContent="SHOW LEADERBOARD"
-                     questionnaireFrame.call();
-                     state=1;
-                     }    	
-        }, false);
-        
+    function PersonalMessage(_username, messagecontainer) {
+        this.username = _username;
+        this.show = function() {
+            messagecontainer.textContent = this.username;
+        }
     }
 
-   
 
-    function Logout(_button) {
-       _button.addEventListener("click", (e) => {
+    function HomeButton() {
+        var home = document.getElementById("home");
+        home.addEventListener("click", (e) => {
+            orchestrator.refresh(0);
+        }, false);
+
+    }
+
+    function QuestionnaireButton() {
+        var questionnaire = document.getElementById("questionnaireButton");
+        questionnaire.addEventListener("click", (e) => {
+            orchestrator.refresh(1);
+        }, false);
+    }
+
+    function LeaderBoardButton() {
+        var home = document.getElementById("leaderBoardButton");
+        home.addEventListener("click", (e) => {
+            orchestrator.refresh(2);
+        }, false);
+    }
+
+    function Logout() {
+        var button = document.getElementById("logout");
+        button.addEventListener("click", (e) => {
             makeCall("GET", "LogOut", null,
                 function(req) {
                     if (req.readyState == 4) {
@@ -61,28 +62,13 @@
 
     window.addEventListener("load", () => {
         orchestrator.start();
+        orchestrator.refresh(0); // initialize the components
     }, false);
 
     /************************************************BEGIN PRODUCT***************************************************************** */
     function ProductFrame(_frame) {
-        this.frame = _frame;
+        this.frame = _frame[0];
         var self = this;
-        
-        this.call = function() {
-            var self = this;
-            makeCall("GET", "GetProduct", null,
-                function(req) {
-                    if (req.readyState == 4) {
-                        var message = req.responseText;
-                        if (req.status == 200) {
-                            self.show(JSON.parse(req.responseText));
-                        } else {
-                            self.alert.textContent = message;
-                        }
-                    }
-                }
-            );
-        }
 
 
         this.show = function(questionnaire) {
@@ -116,24 +102,26 @@
                 //  figure.appendChild(c);
 
                 // build the the button that, if clicked, make you see the reviews 
-               /* var button = document.createElement("button");
+                var button = document.createElement("button");
                 button.setAttribute("open", "0");
                 button.setAttribute("class", "btn");
                 button.setAttribute('id', questionnaire.questionnaireId);
                 //set the icon
                 var fafas = document.createElement("i");
                 fafas.setAttribute("class", "fas fa-comments");
-                button.appendChild(fafas);*/
+                button.appendChild(fafas);
 
                 //retrieve the div dedicated to the product visualition and fills it with the newly created elements        
 
                 self.frame.appendChild(figure);
+                self.frame.appendChild(button);
+                self.registerEvents(button);
             }
         }
-    }
 
 
-       /* this.registerEvents = function(element) {
+
+        this.registerEvents = function(element) {
 
             let token = 0;
 
@@ -148,61 +136,55 @@
                 }
             }, false);
         }
-        */
-
-
- function CommentsFrame(_frame){
-	 this.frame = _frame;
-     var self = this;
-	 
-	 
-
-     this.call = function() {
-         var self = this;
-         makeCall("GET", "GetComments", null,
-             function(req) {
-                 if (req.readyState == 4) {
-                     var message = req.responseText;
-                     if (req.status == 200) {
-                         self.updateCommentSection(JSON.parse(req.responseText));
-                     } else {
-                         self.alert.textContent = message;
-                     }
-                 }
-             }
-         );
-     }
 
 
 
 
-     this.updateCommentSection = function(array) {
-         var self = this;
-         var l = arrayComment.length,
-             ul, element, commentV;
-         ul = document.createElement("ul");
-         ul.setAttribute("id", "s" + target.id);
-         if (l = !0) {
+        this.showComments = function(target) {
+            var self = this;
+            questionnaireId = target.id;
+            makeCall("GET", "GetComments?questionnaireId=" + questionnaireId, null,
+                function(req) {
+                    if (req.readyState == 4) {
+                        var message = req.responseText;
+                        if (req.status == 200) {
+                            self.updateCommentSection(JSON.parse(req.responseText), target);
+                        } else {
+                            self.alert.textContent = message;
+                        }
+                    }
+                }
+            );
+        }
 
-             array.forEach(function(comment) { // self visible here, not this
-                 element = document.createElement("li");
-                 commentV = document.createElement("i");
-                 commentV.textContent = comment.content;
-                 commentV.setAttribute("class", "comments");
-                 element.appendChild(commentV);
-                 commentV.setAttribute('id', comment.id);
-                 ul.appendChild(element);
 
-             });
-         }
 
-         self.frame.appendChild(ul);
 
-     }
-	 
- }
+        this.updateCommentSection = function(array, target) {
+            var self = this;
+            var l = arrayComment.length,
+                ul, element, commentV;
+            ul = document.createElement("ul");
+            ul.setAttribute("id", "s" + target.id);
+            if (l = !0) {
 
-    
+                array.forEach(function(comment) { // self visible here, not this
+                    element = document.createElement("li");
+                    commentV = document.createElement("i");
+                    commentV.textContent = comment.content;
+                    commentV.setAttribute("class", "comments");
+                    element.appendChild(commentV);
+                    commentV.setAttribute('id', comment.id);
+                    ul.appendChild(element);
+
+                });
+            }
+
+            target.appendChild(ul);
+
+
+        }
+    }
     /************************************************END PRODUCT***************************************************************** */
 
 
@@ -213,22 +195,6 @@
     function QuestionnaireFrame(_frame) {
         this.frame = _frame;
         var self = this;
-        
-        this.call = function() {
-            var self = this;
-            makeCall("GET", "GetQuestionnaire", null,
-                function(req) {
-                    if (req.readyState == 4) {
-                        var message = req.responseText;
-                        if (req.status == 200) {
-                            self.show(JSON.parse(req.responseText));
-                        } else {
-                            self.alert.textContent = message;
-                        }
-                    }
-                }
-            );
-        }
 
         this.show = function(response) {
             if (response.questions == null) {
@@ -274,18 +240,15 @@
                     var input, label, mex;
                     //each question (item)is contained in a div
                     itemDiv = document.createElement("div");
-                    itemDiv.setAttribute("class", "questionscontainer");
+                    itemDiv.setAttribute("class", "item");
                     label = document.createElement("label");
-                    label.setAttribute("class", "questioncontent");
                     label.textContent = question.content;
                     input = document.createElement("input");
-                   // input.setAttribute("placeholder", "Insert Here Your Answer");
+                    input.setAttribute("placeholder", "Insert Here Your Answer");
                     input.setAttribute("id", question.id);
-                    input.setAttribute("class", "questioninput");
                     input.required = "required";
                     input.name = "answer" + count;
                     itemDiv.appendChild(label);
-                    itemDiv.appendChild(document.createElement("br"));
                     itemDiv.appendChild(input);
                     //add each question in the field set
                     fieldset.appendChild(itemDiv);
@@ -299,11 +262,10 @@
                 //sex
                 var sex;
                 itemDiv0autofill = document.createElement("div");
-                itemDiv0autofill.setAttribute("class", "box");
+                itemDiv0autofill.setAttribute("class", "item");
 
                 sex = document.createElement("label");
-                sex.setAttribute("class", "sexlabel");
-                sex.textContent = "sex:";
+                sex.textContent = "Sex:";
 
                 sex_x = document.createElement("input");
                 sex_x.name = "sex";
@@ -315,7 +277,7 @@
                 sex_xl = document.createElement("label");
                 sex_xl.textContent = "Male";
                 itemx_sex = document.createElement("div");
-                itemx_sex.setAttribute("class", "sexitem");
+                itemx_sex.setAttribute("class", "item");
                 itemx_sex.appendChild(sex_x);
                 itemx_sex.appendChild(sex_xl);
 
@@ -324,7 +286,7 @@
                 sex_yl = document.createElement("label");
                 sex_yl.textContent = "Female";
                 itemy_sex = document.createElement("div");
-                itemy_sex.setAttribute("class", "sexitem");
+                itemy_sex.setAttribute("class", "item");
                 itemy_sex.appendChild(sex_y);
                 itemy_sex.appendChild(sex_yl);
 
@@ -340,15 +302,14 @@
                 }
 
                 itemDiv0autofill.appendChild(sex);
-                itemDiv0autofill.appendChild(document.createElement("br"));
+
                 itemDiv0autofill.appendChild(itemx_sex);
-                itemDiv0autofill.appendChild(document.createElement("br"));
                 itemDiv0autofill.appendChild(itemy_sex);
                 //allow sex access
                 var can_access_sex, can_access_sex_label;
 
                 itemDiv0 = document.createElement("div");
-                itemDiv0.setAttribute("class", "access");
+                itemDiv0.setAttribute("class", "item");
 
                 can_access_sex = document.createElement("input");
                 can_access_sex.setAttribute("type", "checkbox");
@@ -359,18 +320,16 @@
                 can_access_sex_label.setAttribute("for", "can_access_sex_checkbox");
                 can_access_sex_label.innerHTML = "I allow access to my sex";
 
-                itemDiv0autofill.appendChild(document.createElement("br"));
+
                 itemDiv0.appendChild(can_access_sex);
                 itemDiv0.appendChild(can_access_sex_label);
-                itemDiv0autofill.appendChild(itemDiv0);
                 //age
 
                 var age;
                 itemDiv1autofill = document.createElement("div");
-                itemDiv1autofill.setAttribute("class", "box");
+                itemDiv1autofill.setAttribute("class", "item");
 
                 age = document.createElement("label");
-                age.setAttribute("class", "agelabel")
                 age.textContent = "Date of birth:";
 
                 birth = document.createElement("input");
@@ -392,12 +351,13 @@
                     birth.readOnly = true;
                 }
 
-                
+                itemDiv1autofill.appendChild(age);
+                itemDiv1autofill.appendChild(birth);
                 //allow age access
                 var can_access_age, can_access_age_label;
 
                 itemDiv1 = document.createElement("div");
-                itemDiv1.setAttribute("class", "ageaccess");
+                itemDiv1.setAttribute("class", "item");
 
                 can_access_age = document.createElement("input");
                 can_access_age.setAttribute("type", "checkbox");
@@ -408,27 +368,16 @@
                 can_access_age_label = document.createElement("label");
                 can_access_age_label.setAttribute("for", "can_access_age_checkbox");
                 can_access_age_label.innerHTML = "I allow access to my age";
-                
-               
+
                 itemDiv1.appendChild(can_access_age);
                 itemDiv1.appendChild(can_access_age_label);
-                
-                itemDiv1autofill.appendChild(age);
-                itemDiv1autofill.appendChild(document.createElement("br"));
-                itemDiv1autofill.appendChild(birth);
-                itemDiv1autofill.appendChild(document.createElement("br"));
-                itemDiv1autofill.appendChild(itemDiv1);
-                
-                
                 //expertise
                 var input2, expertise;
                 //be replaced with radiobuttons
                 itemDiv2 = document.createElement("div");
-                itemDiv2.setAttribute("class", "box");
+                itemDiv2.setAttribute("class", "item");
 
                 expertise = document.createElement("label");
-                expertise.setAttribute("class","expertiselabel");
-
                 expertise.textContent = "expertise";
 
                 x = document.createElement("input");
@@ -443,7 +392,7 @@
                 xl = document.createElement("label");
                 xl.textContent = "low";
                 itemx = document.createElement("div");
-                itemx.setAttribute("class", "expertiseitem");
+                itemx.setAttribute("class", "item");
                 itemx.appendChild(x);
                 itemx.appendChild(xl);
 
@@ -452,7 +401,7 @@
                 yl = document.createElement("label");
                 yl.textContent = "medium";
                 itemy = document.createElement("div");
-                itemy.setAttribute("class", "expertiseitem");
+                itemy.setAttribute("class", "item");
                 itemy.appendChild(y);
                 itemy.appendChild(yl);
 
@@ -461,7 +410,7 @@
                 zl = document.createElement("label");
                 zl.textContent = "high";
                 itemz = document.createElement("div");
-                itemz.setAttribute("class", "expertiseitem");
+                itemz.setAttribute("class", "item");
                 itemz.appendChild(z);
                 itemz.appendChild(zl);
 
@@ -469,18 +418,11 @@
                 itemDiv2.appendChild(itemx);
                 itemDiv2.appendChild(itemy);
                 itemDiv2.appendChild(itemz);
-                
-                
-                fieldset.setAttribute("class", "questionnairefieldset");
 
                 fieldset.appendChild(itemDiv0autofill);
-                
-                fieldset.appendChild(document.createElement("br"));
-
+                fieldset.appendChild(itemDiv0);
                 fieldset.appendChild(itemDiv1autofill);
-                
-                fieldset.appendChild(document.createElement("br"));
-
+                fieldset.appendChild(itemDiv1);
                 fieldset.appendChild(itemDiv2);
 
                 fieldset.appendChild(document.createElement("br"));
@@ -489,19 +431,16 @@
                 var buttonsDiv = document.createElement("div");
                 
                 //this button gets you back to the product section
-               
-                
-                //this button makes you submit your answers 
-                
                 buttonDiv1 = document.createElement("div");
-                buttonDiv1.setAttribute("class", "button");
-                var button1 = document.createElement("span");
-                button1.textContent = "Cancel";
+                buttonDiv1.setAttribute("class", "item");
+                var button1 = document.createElement("button");
+                button1.textContent = "back to product";
                 buttonDiv1.appendChild(button1);
                 
+                //this button makes you submit your answers 
                 buttonDiv2 = document.createElement("div");
-                buttonDiv2.setAttribute("class", "button");
-                var button2 = document.createElement("span");
+                buttonDiv2.setAttribute("class", "item");
+                var button2 = document.createElement("button");
                 button2.textContent = "Submit";
                 buttonDiv2.appendChild(button2);
 
@@ -511,24 +450,18 @@
                 fieldset.appendChild(document.createElement("br"));
 
                 //this button makes you clear your answers
-                resetDiv = document.createElement("div");
-                resetDiv.setAttribute("class", "button");
                 var reset = document.createElement("input");
-                reset.setAttribute("class", "reset-Button");
                 reset.type = "reset";
                 reset.value = "clean";
                 reset.required = "required";
 
-                resetDiv.appendChild(reset);
-
-                buttonsDiv.appendChild(resetDiv);
+                buttonsDiv.appendChild(reset);
                 buttonsDiv.appendChild(buttonDiv1);
-
                 buttonsDiv.appendChild(buttonDiv2);
                 document.getElementById("formContainer").appendChild(buttonsDiv);
 
-                self.registerEventCancel(buttonDiv1);
-                self.registerEventSubmit(buttonDiv2);
+                self.registerEventCancel(button1);
+                self.registerEventSubmit(button2);
             }
 
            
@@ -552,14 +485,13 @@
             console.log("cancel");
             element.addEventListener("click", (e) => {
                 e.stopPropagation();
-                if (window.confirm("Are you sure you want to cancel the questionnaire?")) {
+                if (window.confirm("Are you sure you want to cancel the questionnaire? You will be redirected to the product")) {
                     makeCall("Get", "RecordLog", null,
                         function(req) {
                             if (req.readyState == 4) {
                                 var message = req.responseText;
                                 if (req.status == 200) {
-                                	let e= new Event("click");
-                                	(document.getElementById("switchbutton")).dispatchEvent(e);
+                                    orchestrator.refresh(0);
                                 } else {
                                     var alertContainer = document.getElementById("id_alert");
                                     self.alert.textContent = message;
@@ -617,25 +549,8 @@
     /************************************************BEGIN LEADERBOARDFRAME***************************************************************** */
 
     function LeaderBoardFrame(_frame) {
-        this.frame = _frame;
+        this.frame = _frame[0];
         var self = this;
-        
-        
-        this.call = function() {
-            var self = this;
-            makeCall("GET", "GetLeaderBoard", null,
-                function(req) {
-                    if (req.readyState == 4) {
-                        var message = req.responseText;
-                        if (req.status == 200) {
-                            self.show(JSON.parse(req.responseText));
-                        } else {
-                            self.alert.textContent = message;
-                        }
-                    }
-                }
-            );
-        }
 
         this.show = function(players) {
         	console.log(players);
@@ -691,27 +606,20 @@
         this.alertContainer = document.getElementById("id_alert");
         
         this.create = function() {
-      
-                   logout = new Logout(document.getElementById("logoutbutton"));
-                   messagecontainer = document.getElementsByClassName("messagecontainer")[0];
+            var url;
+            var self = this;
 
-
-                    switchButton = new SwitchButton(document.getElementById("switchbutton"), 0);
-
-        	
-                    productFrame = new ProductFrame(document.getElementsByClassName("productframe")[0]);
-                    productFrame.call();
+           
+                    productFrame = new ProductFrame(document.getElementsByClassName("productframe"));
+                    productFrame.show();
                 
                     
-                    //commentsFrame = new CommentsFrame(document.getElementsByClassName("commentsframe")[0]);
-                    //commentsFrame.call();
+                    commentsFrame = new ProductFrame(document.getElementsByClassName("commentsframe"));
+                    commentsFrame.show();
 
                
-                    questionnaireFrame = new QuestionnaireFrame(document.getElementsByClassName("leftsidecontent")[0]);
-                    
-                    leaderBoardFrame = new LeaderBoardFrame(document.getElementsByClassName("leftsidecontent")[0]);
-                    leaderBoardFrame.call();
-
+                    questionnaireFrame = new QuestionnaireFrame(document.getElementsByClassName("leftsidecontent"));
+                    questionnaireFrame.show();
 
                    
                   /*  leaderBoardFrame = new LeaderBoardFrame(document.getElementsByClassName("mainContent"));
@@ -721,6 +629,98 @@
 
             }
         
+        this.call= function(url){
+        	makeCall("GET", url, null,
+                    function(req) {
+                        if (req.readyState == 4) {
+                            var message = req.responseText;
+                            if (req.status == 200) {
+                                self.update(JSON.parse(req.responseText), state);
+                            } else {
+
+                                self.alertContainer.textContent = message;
+                            }
+                        }
+                    }
+                );
+
+            }
+        }
+            
+
+
+      /*  this.show = function(state) {
+            var url;
+            var self = this;
+
+            switch (state) {
+                case 0:
+                    productFrame = new ProductFrame(document.getElementsByClassName("mainContent"));
+                    url = "GetProduct";
+                    break;
+                case 1:
+                    questionnaireFrame = new QuestionnaireFrame(document.getElementsByClassName("mainContent"));
+                    url = "GetQuestionnaire";
+
+                    break;
+                case 2:
+                    leaderBoardFrame = new LeaderBoardFrame(document.getElementsByClassName("mainContent"));
+                    url = "GetLeaderboard";
+                    break;
+
+            }
+            makeCall("GET", url, null,
+                function(req) {
+                    if (req.readyState == 4) {
+                        var message = req.responseText;
+                        if (req.status == 200) {
+                            self.update(JSON.parse(req.responseText), state);
+                        } else {
+
+                            self.alertContainer.textContent = message;
+                        }
+                    }
+                }
+            );
+
+        }*/
+
+
+        this.update = function(array, state) {
+
+
+
+            switch (state) {
+                case 0:
+                    document.getElementById("id_alert").innerHTML = "";
+
+                    document.getElementsByClassName("mainContent")[0].innerHTML = "";
+                    productFrame.show(array)
+
+                    break;
+                case 1:
+
+                    document.getElementById("id_alert").innerHTML = "";
+
+                    document.getElementsByClassName("mainContent")[0].innerHTML = "";
+
+                    console.log(array);
+                    questionnaireFrame.show(array);
+
+                    break;
+                case 2:
+
+                    document.getElementById("id_alert").innerHTML = "";
+
+                    document.getElementsByClassName("mainContent")[0].innerHTML = "";
+
+                    leaderBoardFrame.show(array);
+
+                    break;
+            }
+
+        }
+
     }
 
 
@@ -737,15 +737,23 @@
 
             //struttura principale
             mainFrame = new MainFrame(document.getElementsByClassName("mainpage")[0]);
-            mainFrame.create();
-           
 
             //directory coi bottoni
            // questionnaireButton = new QuestionnaireButton(state);
            // leaderBoardButton = new LeaderBoardButton(state);
 
            // homeButton = new HomeButton(state);
-        
+            logout = new Logout();
+        }
+
+
+        this.refresh = function(state) {
+           // openTab();
+            mainFrame.show(state);
+           // closeTab();
+
+
+
         }
 
     }

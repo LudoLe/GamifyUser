@@ -117,7 +117,7 @@ public class SubmitQuestionnaire extends HttpServlet{
 	 			count++;
 	 		}
 	 		System.out.println("sto per creare la review..");
-	 		review = reviewService.createReview(canAccessAge, canAccessSex, new Date(), expertise, user, questionnaire, answers, sex, birthDate);
+	 		//review = reviewService.createReview(canAccessAge, canAccessSex, new Date(), expertise, user, questionnaire);
 	 		System.out.println("escooo");
 			response.setStatus(HttpServletResponse.SC_OK);
 			response.setCharacterEncoding("UTF-8");
