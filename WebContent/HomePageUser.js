@@ -25,6 +25,8 @@
                   content = document.getElementById("switchbuttoncontent");  
                   message = document.getElementById("questionnairemessage");  
                   message.innerHTML="";
+                  $('#questionnairemessage').css('border','none').css('padding','none');
+
                   var  left = document.getElementsByClassName("leftsidecontent")[0];  
                   left.innerHTML="";
                   
@@ -35,6 +37,8 @@
         		else{
         			 content = document.getElementById("switchbuttoncontent");
         			 message = document.getElementById("leaderboardmessage"); 
+                     $('#leaderboardmessage').css('border','none').css('padding','none');
+
         			 var  left = document.getElementsByClassName("leftsidecontent")[0];  
         		     left.innerHTML="";
         			
@@ -98,43 +102,46 @@
                 var self = this;
                 var container = document.getElementById("productmessage");
                 container.innerHtml="";
+                $('#productmessage').css('border','5px solid white').css('padding','10px');
+
                 var alert = document.createElement("span");
                 alert.textContent = "Nothing to display!";
                 container.appendChild(alert);
                
             } else {
                 var self = this;
-                // build the figure with the product image and product image
-                var figure = document.createElement("FIGURE");
-                figure.textContent = questionnaire.name
-                figure.setAttribute('id', questionnaire.questionnaireId);
+                // build the span with product name and the product image
+                var span = document.createElement("span");
+                span.setAttribute("id", "productspan");
+
+                span.textContent = questionnaire.name
                 var i = document.createElement("IMG");
 
 
                 i.setAttribute("src", "uploads/campaignImages/" + questionnaire.image);
+                i.setAttribute("id", "productimage");
+
                 i.setAttribute("width", "250");
                 i.setAttribute("height", "200");
                 i.setAttribute("alt", questionnaire.name);
-                figure.appendChild(i);
+                
+                span.style.border='5px solid white';
+                span.style.padding=' 1vh 2vw';
+                
+                i.style.border='5px solid white';
+                i.style.padding=' 1vh 2vw';
+                i.style.objectfit = 'cover';
 
-                //  var c = document.createElement("FIGCAPTION");
-                //  var t = document.createTextNode(questionnaire.details);
-                //  c.appendChild(t);
-                //  figure.appendChild(c);
+               
+                //$('#productspan').css('border','5px solid white').css('padding',' 1vh 2vw');
+                //$('#productimage').css('border','5px solid white').css('padding',' 1vh 2vw').css('object-fit', 'cover');
 
-                // build the the button that, if clicked, make you see the reviews 
-               /* var button = document.createElement("button");
-                button.setAttribute("open", "0");
-                button.setAttribute("class", "btn");
-                button.setAttribute('id', questionnaire.questionnaireId);
-                //set the icon
-                var fafas = document.createElement("i");
-                fafas.setAttribute("class", "fas fa-comments");
-                button.appendChild(fafas);*/
 
-                //retrieve the div dedicated to the product visualition and fills it with the newly created elements        
+              
+                self.frame.appendChild(span);
+                self.frame.appendChild(document.createElement("br"));
+                self.frame.appendChild(i);
 
-                self.frame.appendChild(figure);
             }
         }
     }
@@ -166,7 +173,7 @@
 
      this.call = function() {
          var self = this;
-         makeCall("GET", "GetComments", null,
+        /* makeCall("GET", "GetComments", null,
              function(req) {
                  if (req.readyState == 4) {
                      if (req.status == 200) {
@@ -174,7 +181,9 @@
                      } 
                  }
              }
-         );
+         );*/
+         self.updateCommentSection(null);
+
      }
 
 
@@ -183,9 +192,13 @@
      this.updateCommentSection = function(array) {
     	 
     	 if(array == null) {
+    		 	
+    		 
          	var self = this;
             var container = document.getElementById("commentsmessage");
             container.innerHtml="";
+            $('#commentsmessage').css('border','5px solid white').css('padding','10px');
+
             var alert = document.createElement("span");
             alert.textContent = "you are the first one to review this product!";
             container.appendChild(alert);
@@ -248,6 +261,8 @@
             	var self = this;
                 var container = document.getElementById("questionnairemessage");
                 container.innerHtml="";
+                $('#questionnairemessage').css('border','5px solid white').css('padding','10px');
+
                 var alert = document.createElement("span");
                 alert.textContent = "Nothing to display!";
                 container.appendChild(alert);
@@ -585,8 +600,8 @@
         this.registerEventSubmit = function(element) {
             console.log("invio");
             element.addEventListener("click", (e) => {
-                    
-                if (element.closest("form").checkValidity()) {
+                    form= element.closest("form");
+                if (form.checkValidity()) {
                 
                     console.log("invio1");
                     e.stopPropagation();
@@ -605,11 +620,15 @@
                                     //var alertContainer = document.getElementById("id_alert");
                                     //self.alert.textContent = message;
                                     console.log("error: "+message);
+                                    form.reportValidity();
                                 }
                             }
                         }
                     );
 
+                } else {
+                   
+                    form.reportValidity();
                 }
             }, false);
         }
@@ -646,9 +665,13 @@
         this.show = function(players) {
         	console.log(players);
             if (players == null) {
+            	  
             	var self = this;
                 var container = document.getElementById("leaderboardmessage");
                 container.innerHtml="";
+                $('#leaderboardmessage').css('border','5px solid white').css('padding','10px');
+
+
                 var alert = document.createElement("span");
                 alert.textContent = "Nothing to display!";
                 container.appendChild(alert);
@@ -708,8 +731,8 @@
                     productFrame.call();
                 
                     
-                    //commentsFrame = new CommentsFrame(document.getElementsByClassName("commentsframe")[0]);
-                    //commentsFrame.call();
+                    commentsFrame = new CommentsFrame(document.getElementsByClassName("commentsframe")[0]);
+                    commentsFrame.call();
 
                
                     questionnaireFrame = new QuestionnaireFrame(document.getElementsByClassName("leftsidecontent")[0]);
