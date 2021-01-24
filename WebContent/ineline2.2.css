@@ -7,8 +7,8 @@ body{
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: space-around;
-    align-items: flex-start;
+   justify-content: space-around;
+    align-items: self-start;
     
 }
 
@@ -142,7 +142,7 @@ body{
 }
 
 /* Remove excess padding and border in Firefox 4+ */
-&::-moz-focus-inner {
+.reset-Button::-moz-focus-inner {
     border: 0;
     padding: 0;
 }
@@ -184,7 +184,8 @@ body{
     align-self: stretch;
     outline: none;
     background-color:black;
-   color: -internal-light-dark(white, white);
+    placeholder: "insert your answer here";
+    color: -internal-light-dark(white, white);
 
     border-width: 0px;
     border-style: inset;
@@ -192,6 +193,10 @@ body{
     
     color: #FFFFFF;
     
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: white;
 }
 
 .box{

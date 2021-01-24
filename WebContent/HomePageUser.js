@@ -15,7 +15,7 @@
     function SwitchButton(_switch, state) {
         var switchbutton = _switch;   
         var  left = document.getElementsByClassName("leftsidecontent")[0];  
-        left.innerHtml="";
+        left.innerHTML="";
         content = document.getElementById("switchbuttoncontent");  
         content.textContent="SHOW QUESTIONNAIRE"
         
@@ -23,12 +23,22 @@
         switchbutton.addEventListener("click", (e) => {
      	if(state){         
                   content = document.getElementById("switchbuttoncontent");  
+                  message = document.getElementById("questionnairemessage");  
+                  message.innerHTML="";
+                  var  left = document.getElementsByClassName("leftsidecontent")[0];  
+                  left.innerHTML="";
+                  
                   content.textContent="SHOW QUESTIONNAIRE"
      		      leaderBoardFrame.call();
      		      state=0;
      		      }
         		else{
-        			 content = document.getElementById("switchbuttoncontent");  
+        			 content = document.getElementById("switchbuttoncontent");
+        			 message = document.getElementById("leaderboardmessage"); 
+        			 var  left = document.getElementsByClassName("leftsidecontent")[0];  
+        		     left.innerHTML="";
+        			
+                     message.innerHTML="";
                      content.textContent="SHOW LEADERBOARD"
                      questionnaireFrame.call();
                      state=1;
@@ -73,12 +83,9 @@
             makeCall("GET", "GetProduct", null,
                 function(req) {
                     if (req.readyState == 4) {
-                        var message = req.responseText;
                         if (req.status == 200) {
                             self.show(JSON.parse(req.responseText));
-                        } else {
-                            self.alert.textContent = message;
-                        }
+                        } 
                     }
                 }
             );
@@ -89,12 +96,12 @@
 
             if (questionnaire == null) {
                 var self = this;
-                var alert = document.createElement("p");
+                var container = document.getElementById("productmessage");
+                container.innerHtml="";
+                var alert = document.createElement("span");
                 alert.textContent = "Nothing to display!";
-                item = document.createElement("div");
-                item.setAttribute("class", "se");
-                item.appendChild(alert);
-                self.frame.appendChild(item);
+                container.appendChild(alert);
+               
             } else {
                 var self = this;
                 // build the figure with the product image and product image
@@ -162,12 +169,9 @@
          makeCall("GET", "GetComments", null,
              function(req) {
                  if (req.readyState == 4) {
-                     var message = req.responseText;
                      if (req.status == 200) {
                          self.updateCommentSection(JSON.parse(req.responseText));
-                     } else {
-                         self.alert.textContent = message;
-                     }
+                     } 
                  }
              }
          );
@@ -177,26 +181,38 @@
 
 
      this.updateCommentSection = function(array) {
-         var self = this;
-         var l = arrayComment.length,
-             ul, element, commentV;
-         ul = document.createElement("ul");
-         ul.setAttribute("id", "s" + target.id);
-         if (l = !0) {
+    	 
+    	 if(array == null) {
+         	var self = this;
+            var container = document.getElementById("commentsmessage");
+            container.innerHtml="";
+            var alert = document.createElement("span");
+            alert.textContent = "you are the first one to review this product!";
+            container.appendChild(alert);
+    	 }
+    	 else {
+    		 var self = this;
+             var l = arrayComment.length,
+                 ul, element, commentV;
+             ul = document.createElement("ul");
+             ul.setAttribute("id", "s" + target.id);
+             if (l = !0) {
 
-             array.forEach(function(comment) { // self visible here, not this
-                 element = document.createElement("li");
-                 commentV = document.createElement("i");
-                 commentV.textContent = comment.content;
-                 commentV.setAttribute("class", "comments");
-                 element.appendChild(commentV);
-                 commentV.setAttribute('id', comment.id);
-                 ul.appendChild(element);
+                 array.forEach(function(comment) { // self visible here, not this
+                     element = document.createElement("li");
+                     commentV = document.createElement("i");
+                     commentV.textContent = comment.content;
+                     commentV.setAttribute("class", "comments");
+                     element.appendChild(commentV);
+                     commentV.setAttribute('id', comment.id);
+                     ul.appendChild(element);
 
-             });
-         }
+                 });
+             }
 
-         self.frame.appendChild(ul);
+             self.frame.appendChild(ul);
+    	 }
+         
 
      }
 	 
@@ -219,12 +235,9 @@
             makeCall("GET", "GetQuestionnaire", null,
                 function(req) {
                     if (req.readyState == 4) {
-                        var message = req.responseText;
                         if (req.status == 200) {
                             self.show(JSON.parse(req.responseText));
-                        } else {
-                            self.alert.textContent = message;
-                        }
+                        } 
                     }
                 }
             );
@@ -232,13 +245,13 @@
 
         this.show = function(response) {
             if (response.questions == null) {
-                var self = this;
-                var alert = document.createElement("p");
+            	var self = this;
+                var container = document.getElementById("questionnairemessage");
+                container.innerHtml="";
+                var alert = document.createElement("span");
                 alert.textContent = "Nothing to display!";
-                item = document.createElement("div");
-                item.setAttribute("class", "container");
-                item.appendChild(alert);
-                self.frame.appendChild(item);
+                container.appendChild(alert);
+               
             } else {
                 var self = this;
                 //container that contains the form fields
@@ -279,7 +292,7 @@
                     label.setAttribute("class", "questioncontent");
                     label.textContent = question.content;
                     input = document.createElement("input");
-                   // input.setAttribute("placeholder", "Insert Here Your Answer");
+                    input.setAttribute("placeholder", "Insert Here Your Answer");
                     input.setAttribute("id", question.id);
                     input.setAttribute("class", "questioninput");
                     input.required = "required";
@@ -556,15 +569,10 @@
                     makeCall("Get", "RecordLog", null,
                         function(req) {
                             if (req.readyState == 4) {
-                                var message = req.responseText;
                                 if (req.status == 200) {
                                 	let e= new Event("click");
                                 	(document.getElementById("switchbutton")).dispatchEvent(e);
-                                } else {
-                                    var alertContainer = document.getElementById("id_alert");
-                                    self.alert.textContent = message;
-
-                                }
+                                } 
                             }
                         }
                     );
@@ -623,30 +631,27 @@
         
         this.call = function() {
             var self = this;
-            makeCall("GET", "GetLeaderBoard", null,
+            self.show(null);
+            /*makeCall("GET", "GetLeaderboard", null,
                 function(req) {
                     if (req.readyState == 4) {
-                        var message = req.responseText;
                         if (req.status == 200) {
                             self.show(JSON.parse(req.responseText));
-                        } else {
-                            self.alert.textContent = message;
-                        }
+                        } 
                     }
                 }
-            );
+            );*/
         }
 
         this.show = function(players) {
         	console.log(players);
             if (players == null) {
-                var self = this;
-                var alert = document.createElement("p");
-                alert.textContent = "Nothing to display yet!";
-                item = document.createElement("div");
-                item.setAttribute("class", "container");
-                item.appendChild(alert);
-                self.frame.appendChild(item);
+            	var self = this;
+                var container = document.getElementById("leaderboardmessage");
+                container.innerHtml="";
+                var alert = document.createElement("span");
+                alert.textContent = "Nothing to display!";
+                container.appendChild(alert);
             } else {
                 var self = this;
                 //container that contains the the 
