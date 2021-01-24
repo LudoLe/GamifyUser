@@ -5,6 +5,17 @@
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
+  <context-param>
+        <param-name>uploadsLocation</param-name>
+        <param-value>/var/lib/gamify</param-value>
+    </context-param>
+    <context-param>
+        <param-name>campaignImagesFolder</param-name>
+        <param-value>/campaignImages</param-value>
+    </context-param>
+    <listener>
+    	<listener-class>gamifyUser.utility.OnGamifyLoaded</listener-class>
+	</listener>
    <filter>
     <filter-name>CorsFilter</filter-name>
     <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>

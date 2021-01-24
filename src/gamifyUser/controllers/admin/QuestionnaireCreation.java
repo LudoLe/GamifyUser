@@ -2,6 +2,8 @@ package gamifyUser.controllers.admin;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 
 import java.util.*;
@@ -84,14 +86,11 @@ public class QuestionnaireCreation extends HttpServlet {
 		}
 
 		// gets absolute path of the web application
-		String applicationPath = request.getServletContext().getRealPath("");
+		String applicationPath = request.getServletContext().getInitParameter("uploadsLocation");
+	
 		// constructs path of the directory to save uploaded file
-		String uploadFilePath = applicationPath + File.separator + "uploads/campaignImages";
-		// creates upload folder if it does not exists
-		File uploadFolder = new File(uploadFilePath);
-		if (!uploadFolder.exists()) {
-			uploadFolder.mkdirs();
-		}
+		String uploadFilePath = applicationPath + request.getServletContext().getInitParameter("campaignImagesFolder");
+		
 
 		String fileName = part.getSubmittedFileName();
 		String contentType = part.getContentType();
@@ -104,13 +103,11 @@ public class QuestionnaireCreation extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid image extension.");
 			return;
 		}
-		String finalPath = uploadFilePath + File.separator + savedFileName;
-		File check = new File(uploadFilePath + File.separator + savedFileName);
+		File fileToSave = new File(uploadFilePath, savedFileName);
 		int i = 0;
-		while(check.exists()) {
+		while(fileToSave.exists()) {
 			savedFileName = generatedString + i + "." + ext;
-			finalPath = uploadFilePath + File.separator + savedFileName;
-			check = new File(finalPath);
+			fileToSave = new File(uploadFilePath, savedFileName);
 			i++;
 		}
 
@@ -122,7 +119,10 @@ public class QuestionnaireCreation extends HttpServlet {
 				response.getWriter().println("A questionnaire already exists on this date.");
 				return;
 			}
-			part.write(finalPath);
+			try (InputStream input = part.getInputStream()) {
+			    Files.copy(input, fileToSave.toPath());
+			}
+
 			response.setStatus(HttpServletResponse.SC_OK);
 			response.getWriter().println("OK");
 			return;
