@@ -1,6 +1,6 @@
 body{
     font-family: 'Roboto', sans-serif;
-    background-color: black;
+    background-color: pink;
     color: white ;
 }
 .mainpage{
@@ -9,6 +9,11 @@ body{
     flex-wrap: nowrap;
    justify-content: space-around;
     align-items: self-start;
+        background-color: black;
+          opacity: 0.75;
+          border: 10px solid white
+        
+    
     
 }
 
