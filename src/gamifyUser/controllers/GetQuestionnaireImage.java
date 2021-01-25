@@ -39,7 +39,7 @@ public class GetQuestionnaireImage extends HttpServlet {
 		            return;
 		}
 		
-        File uploadsFolder = new File(servletContext.getInitParameter("uploadsLocation") + File.separator + servletContext.getInitParameter("campaignImagesFolder"));
+        File uploadsFolder = new File(servletContext.getInitParameter("uploadsLocation"), servletContext.getInitParameter("campaignImagesFolder"));
         File file = new File(uploadsFolder, name);
         if(file == null || !file.exists()) {
 			response.setStatus(
