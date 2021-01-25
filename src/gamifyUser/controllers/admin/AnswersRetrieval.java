@@ -69,7 +69,7 @@ public class AnswersRetrieval extends HttpServlet {
 			answers = review.getAnswers();
 			if(review.getCanAccessAge() == 1) {
 				long diff = (new Date()).getTime() - user.getBirth().getTime();
-				diff = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+				diff = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) / 365;
 				statistics.add(String.valueOf(diff));
 			}
 			else statistics.add(null);
