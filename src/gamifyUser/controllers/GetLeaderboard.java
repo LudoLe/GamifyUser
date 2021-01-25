@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -19,19 +20,21 @@ import org.apache.commons.lang.StringEscapeUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import gamifyUser.utility.Utility;
-import polimi.db2.gamifyDB.entities.Leaderboard;
 import polimi.db2.gamifyDB.entities.Question;
 import polimi.db2.gamifyDB.entities.Questionnaire;
+import polimi.db2.gamifyDB.entities.Review;
 import polimi.db2.gamifyDB.entities.User;
-import polimi.db2.gamifyDB.services.LeaderboardService;
+import polimi.db2.gamifyDB.services.ReviewService;
+import polimi.db2.gamifyDB.services.UserService;
 
 @WebServlet("/GetLeaderboard")
 @MultipartConfig
 public class GetLeaderboard extends HttpServlet{
 	private static final long serialVersionUID = 123211111L;
-	@EJB(name = "gamifyDB.services/LeaderboardService")
-	private LeaderboardService LeaderboardService;
-
+	@EJB(name = "gamifyDB.services/ReviewService")
+	private ReviewService ReviewService;
+	@EJB(name = "gamifyDB.services/UserService")
+	private UserService UserService;
 	
 	int leaderboard_size = 10;
 	
@@ -46,13 +49,29 @@ public class GetLeaderboard extends HttpServlet{
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//get the product	
 		try {
-			List<Leaderboard> usernames_points=null;
-			//int page = Integer.parseInt(StringEscapeUtils.escapeJava(request.getParameter("page")));
-			//usernames_points = LeaderboardService.findBetween((page-1)*leaderboard_size, (page)*leaderboard_size);
-			usernames_points = LeaderboardService.findBetween(0, 5);
+			List<Review> reviews=null;
+			reviews = ReviewService.findAllToday();
+			reviews.sort((r1, r2) -> Integer.compare(r2.getPoints(), r1.getPoints()));
+
+			List<String> usernames = new ArrayList<>();
+			List<Integer> points = new ArrayList<>();
+			for(Review review: reviews) {
+				System.out.println(review.getUser());
+				System.out.println(review.getPoints());
+				if(review.getUser().getBlocked() == 0 && review.getUser().getAdmin() == 0) {
+					usernames.add(review.getUser().getUsername());
+					points.add(review.getPoints());
+				}
+			}
+			List<User> users = UserService.findAllNoBlockedNoAdmin();
+			for(User user: users) {
+				if(!usernames.contains(user.getUsername())) {
+					usernames.add(user.getUsername());
+					points.add(0);
+				}
+			}
 			Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-			
-			String ret = gson.toJson(usernames_points);
+			String ret = "{\"usernames\": "+gson.toJson(usernames)+", \"points\": "+gson.toJson(points)+" }";
 			
 			System.out.println(ret);
 			response.setStatus(HttpServletResponse.SC_OK);
