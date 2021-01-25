@@ -51,7 +51,9 @@ public class GetQuestionnaire extends HttpServlet{
 			try {
 				List<Question> questions=null;
 	     		questionnaire = questionnaireService.findByDate(new Date());
-	     		questions=questionnaire.getQuestions();		
+	     		if(questionnaire!=null){
+	     		questions=questionnaire.getQuestions();
+	     		}
 				Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 				
 				User user=(User) request.getSession().getAttribute("user");
@@ -65,6 +67,7 @@ public class GetQuestionnaire extends HttpServlet{
 				return;	
 			} catch (Exception e){
 				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				e.printStackTrace();
 				response.getWriter().println("Not possible to retrieve the questionnaire");
 				return;			
 			}

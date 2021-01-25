@@ -96,8 +96,7 @@ body{
     flex-direction: column;
     flex-wrap: nowrap;
     justify-content: stretch;
-    align-items: start;
-}
+    align-items: stretch;}
 
 .commentsframe{
     display: flex;
@@ -330,6 +329,8 @@ body{
     flex-wrap: nowrap;
     justify-content: center;
     align-items: center;
+    background-color: black;
+    opacity: 0.85;
 }
 
 
