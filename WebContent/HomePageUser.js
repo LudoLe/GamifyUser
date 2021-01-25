@@ -24,11 +24,14 @@
      	if(state){         
                   content = document.getElementById("switchbuttoncontent");  
                   message = document.getElementById("questionnairemessage");  
-                  message.innerHTML="";
                   $('#questionnairemessage').css('border','none').css('padding','none');
+                  $('#questionnairemessage').css('display', 'none');
+
 
                   var  left = document.getElementsByClassName("leftsidecontent")[0];  
                   left.innerHTML="";
+                  message.innerHTML="";
+
                   
                   content.textContent="SHOW QUESTIONNAIRE"
      		      leaderBoardFrame.call();
@@ -38,6 +41,8 @@
         			 content = document.getElementById("switchbuttoncontent");
         			 message = document.getElementById("leaderboardmessage"); 
                      $('#leaderboardmessage').css('border','none').css('padding','none');
+                     $('#leaderboardmessage').css('display', 'none');
+
 
         			 var  left = document.getElementsByClassName("leftsidecontent")[0];  
         		     left.innerHTML="";
@@ -105,7 +110,7 @@
                 $('#productmessage').css('border','5px solid white').css('padding','10px');
 
                 var alert = document.createElement("span");
-                alert.textContent = "Nothing to display!";
+                alert.textContent = "No product published today yet!";
                 container.appendChild(alert);
                
             } else {
@@ -132,38 +137,19 @@
                 i.style.padding=' 1vh 2vw';
                 i.style.objectfit = 'cover';
 
-               
-                //$('#productspan').css('border','5px solid white').css('padding',' 1vh 2vw');
-                //$('#productimage').css('border','5px solid white').css('padding',' 1vh 2vw').css('object-fit', 'cover');
-
-
-              
                 self.frame.appendChild(span);
                 self.frame.appendChild(document.createElement("br"));
                 self.frame.appendChild(i);
+                
+                commentsFrame.call();
+                leaderBoardFrame.call();
 
             }
         }
     }
 
 
-       /* this.registerEvents = function(element) {
-
-            let token = 0;
-
-            element.addEventListener("click", (e) => {
-                e.stopPropagation();
-                if (token === 0) {
-                    self.showComments(e.target);
-                    token = 1;
-                } else {
-                    element.removeChild(ul);
-                    token = 0;
-                }
-            }, false);
-        }
-        */
-
+  
 
  function CommentsFrame(_frame){
 	 this.frame = _frame;
@@ -200,7 +186,7 @@
             $('#commentsmessage').css('border','5px solid white').css('padding','10px');
 
             var alert = document.createElement("span");
-            alert.textContent = "you are the first one to review this product!";
+            alert.textContent = "no comments on this product yet!";
             container.appendChild(alert);
     	 }
     	 else {
@@ -262,9 +248,11 @@
                 var container = document.getElementById("questionnairemessage");
                 container.innerHtml="";
                 $('#questionnairemessage').css('border','5px solid white').css('padding','10px');
+                $('#questionnairemessage').css('display', 'block');
+
 
                 var alert = document.createElement("span");
-                alert.textContent = "Nothing to display!";
+                alert.textContent = "no questionnaire today :(!";
                 container.appendChild(alert);
                
             } else {
@@ -667,7 +655,9 @@
             if (players == null) {
             	var self = this;
                 var container = document.getElementById("leaderboardmessage");
-                container.innerHtml="";
+               // container.innerHtml="";
+               // $('#leaderboardmessage').css('border','5px solid white').css('padding','10px');
+               // $('#leaderboardmessage').css('display', 'block');
                 var alert = document.createElement("span");
                 //alert.textContent = "Nothing to display1!";
 				console.log("nothing");
@@ -754,25 +744,12 @@
 
         	
                     productFrame = new ProductFrame(document.getElementsByClassName("productframe")[0]);
-                    productFrame.call();
-                
-                    
                     commentsFrame = new CommentsFrame(document.getElementsByClassName("commentsframe")[0]);
-                    commentsFrame.call();
-
-               
                     questionnaireFrame = new QuestionnaireFrame(document.getElementsByClassName("leftsidecontent")[0]);
-                    
                     leaderBoardFrame = new LeaderBoardFrame(document.getElementsByClassName("leftsidecontent")[0]);
-                    leaderBoardFrame.call();
-
-
+                    productFrame.call();
+                    
                    
-                  /*  leaderBoardFrame = new LeaderBoardFrame(document.getElementsByClassName("mainContent"));
-                    url = "GetLeaderboard";
-                    break;
-                    */
-
             }
         
     }
