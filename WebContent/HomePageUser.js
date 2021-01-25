@@ -142,8 +142,8 @@
                 self.frame.appendChild(i);
                 
                 commentsFrame.call();
-                leaderBoardFrame.call();
-
+            	let e= new Event("click");
+                document.getElementById("switchbutton").dispatchEvent(e)
             }
         }
     }
@@ -713,7 +713,7 @@
         this.create = function() {
                     logout = new Logout(document.getElementById("logoutbutton"));
                     messagecontainer = document.getElementsByClassName("messagecontainer")[0];
-                    switchButton = new SwitchButton(document.getElementById("switchbutton"), 0);	
+                    switchButton = new SwitchButton(document.getElementById("switchbutton"), 1);	
                     productFrame = new ProductFrame(document.getElementsByClassName("productframe")[0]);
                     commentsFrame = new CommentsFrame(document.getElementsByClassName("commentsframe")[0]);
                     questionnaireFrame = new QuestionnaireFrame(document.getElementsByClassName("leftsidecontent")[0]);
