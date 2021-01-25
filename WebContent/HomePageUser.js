@@ -631,17 +631,19 @@
         }
 
         this.show = function(players) {
-        	console.log(players);
+        	console.log("ok "+players);
             if (players == null) {
-            	  
             	var self = this;
                 var container = document.getElementById("leaderboardmessage");
                // container.innerHtml="";
-                $('#leaderboardmessage').css('border','5px solid white').css('padding','10px');
-                $('#leaderboardmessage').css('display', 'block');
+               // $('#leaderboardmessage').css('border','5px solid white').css('padding','10px');
+               // $('#leaderboardmessage').css('display', 'block');
                 var alert = document.createElement("span");
-                alert.textContent = "Nothing to display!";
+                //alert.textContent = "Nothing to display1!";
+				console.log("nothing");
                 container.appendChild(alert);
+
+				console.log("noth "+container.innerHtml);
             } else {
                 var self = this;
                 //container that contains the the 
@@ -649,17 +651,44 @@
                 containerDiv.setAttribute("class", "container");
                 containerDiv.setAttribute("id", "formContainer");
 
-                players.forEach(function(player) { // self visible here, not this
-					console.log(player.username)
+
+				var table = document.createElement("table");
+				var th = document.createElement("th");
+				
+				var tdUser = document.createElement("td");
+				tdUser.innerHTML = "Username";
+				
+				var tdPoints = document.createElement("td");
+				tdPoints.innerHTML = "Points";
+				th.appendChild(tdUser);
+				th.appendChild(tdPoints);
+				table.appendChild(th);
+				containerDiv.appendChild(table);
+                var cont = 0;
+                players.usernames.forEach(function(username) { // self visible here, not this
+					console.log(username)
                     //each question (item)is contained in a div
                     itemDiv = document.createElement("div");
                     itemDiv.setAttribute("class", "item");
-                    p = document.createElement("p");
-                    p.textContent = player.username + " " +player.points;
-                    itemDiv.appendChild(p);
-                    containerDiv.appendChild(itemDiv);
+					var tr = document.createElement("tr");
+									
+					var tdUser = document.createElement("td");
+					tdUser.innerHTML = username;
+					
+					var tdPoints = document.createElement("td");
+					tdPoints.innerHTML = players.points[cont];
+					
+					tr.appendChild(tdUser);
+					tr.appendChild(tdPoints);
+					table.appendChild(tr);
+					
+                    cont +=1;
                 });
 				self.frame.appendChild(containerDiv);
+				
+				var container = document.getElementById("leaderboardmessage");
+				
+				container.innerHtml="";
             }
 
         }
