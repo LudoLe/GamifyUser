@@ -78,7 +78,7 @@ body{
     flex-direction: column;
     flex-wrap: nowrap;
     justify-content: stretch;
-    align-items: start;
+    align-items: stretch;
          border-left: 5px solid white;
     
 }
@@ -98,14 +98,13 @@ body{
     justify-content: stretch;
     align-items: stretch;}
 
-.commentsframe{
+.commentsframe {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    justify-content: center;
-    align-items: center;
+    justify-content: stretch;
+    align-items: stretch;
 }
-
 .mainpage::-webkit-scrollbar {
     display: none;
 }
