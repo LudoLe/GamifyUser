@@ -159,7 +159,7 @@
 
      this.call = function() {
          var self = this;
-        /* makeCall("GET", "GetComments", null,
+         makeCall("GET", "GetComments", null,
              function(req) {
                  if (req.readyState == 4) {
                      if (req.status == 200) {
@@ -167,7 +167,7 @@
                      } 
                  }
              }
-         );*/
+         );
          self.updateCommentSection(null);
 
      }
@@ -438,10 +438,8 @@
                 
                 //expertise
                 var input2, expertise;
-                //be replaced with radiobuttons
                 itemDiv2 = document.createElement("div");
                 itemDiv2.setAttribute("class", "box");
-
                 expertise = document.createElement("label");
                 expertise.setAttribute("class","expertiselabel");
 
@@ -484,37 +482,21 @@
                 itemDiv2.appendChild(expertise);
                 itemDiv2.appendChild(itemx);
                 itemDiv2.appendChild(itemy);
-                itemDiv2.appendChild(itemz);
-                
-                
+                itemDiv2.appendChild(itemz);        
                 fieldset.setAttribute("class", "questionnairefieldset");
-
-                fieldset.appendChild(itemDiv0autofill);
-                
+                fieldset.appendChild(itemDiv0autofill);              
                 fieldset.appendChild(document.createElement("br"));
-
-                fieldset.appendChild(itemDiv1autofill);
-                
+                fieldset.appendChild(itemDiv1autofill);                
                 fieldset.appendChild(document.createElement("br"));
-
                 fieldset.appendChild(itemDiv2);
-
                 fieldset.appendChild(document.createElement("br"));
 
-                //here we create the buttons   
                 var buttonsDiv = document.createElement("div");
-                
-                //this button gets you back to the product section
-               
-                
-                //this button makes you submit your answers 
-                
                 buttonDiv1 = document.createElement("div");
                 buttonDiv1.setAttribute("class", "button");
                 var button1 = document.createElement("span");
                 button1.textContent = "Cancel";
                 buttonDiv1.appendChild(button1);
-                
                 buttonDiv2 = document.createElement("div");
                 buttonDiv2.setAttribute("class", "button");
                 var button2 = document.createElement("span");
@@ -536,10 +518,8 @@
                 reset.required = "required";
 
                 resetDiv.appendChild(reset);
-
                 buttonsDiv.appendChild(resetDiv);
                 buttonsDiv.appendChild(buttonDiv1);
-
                 buttonsDiv.appendChild(buttonDiv2);
                 document.getElementById("formContainer").appendChild(buttonsDiv);
 
@@ -639,7 +619,7 @@
         this.call = function() {
             var self = this;
             self.show(null);
-            /*makeCall("GET", "GetLeaderboard", null,
+            makeCall("GET", "GetLeaderboard", null,
                 function(req) {
                     if (req.readyState == 4) {
                         if (req.status == 200) {
@@ -647,7 +627,7 @@
                         } 
                     }
                 }
-            );*/
+            );
         }
 
         this.show = function(players) {
@@ -694,60 +674,33 @@
     
 
 
-    //Questa funzione gestisce tutta la pagina in generale (tramite il page orchestrator), ha una lista degli stati in cui
-    //può trovarsi la pagina e a seconda dei parametri che le vengono passati nelle varie fnuzioni costruisce
-    //il giusto template
+    //this is the "MAINFRAME" function, it gets access to the whole page 
+    //and initializes the components 
+    //only the productFrame component is called in order to create itself
     function MainFrame(_mainpage) {
-
-
-
-        this.mainpage = _mainpage;
-        var self = this;
-        this.alertContainer = document.getElementById("id_alert");
-        
+       
+    	this.mainpage = _mainpage;
+  
         this.create = function() {
-      
-                   logout = new Logout(document.getElementById("logoutbutton"));
-                   messagecontainer = document.getElementsByClassName("messagecontainer")[0];
-
-
-                    switchButton = new SwitchButton(document.getElementById("switchbutton"), 0);
-
-        	
+                    logout = new Logout(document.getElementById("logoutbutton"));
+                    messagecontainer = document.getElementsByClassName("messagecontainer")[0];
+                    switchButton = new SwitchButton(document.getElementById("switchbutton"), 0);	
                     productFrame = new ProductFrame(document.getElementsByClassName("productframe")[0]);
                     commentsFrame = new CommentsFrame(document.getElementsByClassName("commentsframe")[0]);
                     questionnaireFrame = new QuestionnaireFrame(document.getElementsByClassName("leftsidecontent")[0]);
                     leaderBoardFrame = new LeaderBoardFrame(document.getElementsByClassName("leftsidecontent")[0]);
-                    productFrame.call();
-                    
-                   
+                    productFrame.call();             
             }
         
     }
 
-
-    var state = 0;
-
+    //this is the "PAGEORCHESTRATO" function, it gets access to the whole page 
+    //it initializes the mainframe 
+    //which is then able to create itself
     function PageOrchestrator() {
-
         this.start = function() {
-
-
-            //messaggio di welcome back
-            /*personalMessage = new PersonalMessage(sessionStorage.getItem('username'),  document.getElementById("id_username"));
-            personalMessage.show();*/
-
-            //struttura principale
             mainFrame = new MainFrame(document.getElementsByClassName("mainpage")[0]);
-            mainFrame.create();
-           
-
-            //directory coi bottoni
-           // questionnaireButton = new QuestionnaireButton(state);
-           // leaderBoardButton = new LeaderBoardButton(state);
-
-           // homeButton = new HomeButton(state);
-        
+            mainFrame.create();    
         }
 
     }
