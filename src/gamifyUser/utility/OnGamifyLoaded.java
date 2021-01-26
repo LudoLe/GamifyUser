@@ -64,4 +64,9 @@ public class OnGamifyLoaded implements javax.servlet.ServletContextListener {
 			  }
 		}
 	}
+	@Override
+	public void contextDestroyed(ServletContextEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
 }

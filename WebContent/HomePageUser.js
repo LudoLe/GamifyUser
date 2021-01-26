@@ -191,13 +191,30 @@
     	 }
     	 else {
     		 var self = this;
-             var l = arrayComment.length,
-                 ul, element, commentV;
+             var l = array.length, ul, element, commentV;
              ul = document.createElement("ul");
-             ul.setAttribute("id", "s" + target.id);
+             //ul.setAttribute("id", "s" + target.id);
              if (l = !0) {
 
-                 array.forEach(function(comment) { // self visible here, not this
+				array.forEach(function(review) { // self visible here, not this
+					console.log(review);
+					
+					var containerReview = document.createElement("div");
+					var user = document.createElement("li");
+					user.innerHTML = "User: "+review["user"]["username"];
+					
+					containerReview.appendChild(user);
+					
+					review["answers"].forEach(function(answer){
+						var quest = document.createElement("div");
+						quest.innerHTML = answer["question"]["content"];
+						containerReview.appendChild(quest);
+						var ans = document.createElement("div");
+						ans.innerHTML = answer["content"];
+						containerReview.appendChild(ans);
+					});
+					
+					/*
                      element = document.createElement("li");
                      commentV = document.createElement("i");
                      commentV.textContent = comment.content;
@@ -205,10 +222,11 @@
                      element.appendChild(commentV);
                      commentV.setAttribute('id', comment.id);
                      ul.appendChild(element);
-
+					*/
+					ul.appendChild(containerReview);
                  });
              }
-
+			
              self.frame.appendChild(ul);
     	 }
          
