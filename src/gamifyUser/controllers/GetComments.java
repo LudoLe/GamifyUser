@@ -42,9 +42,7 @@ public class GetComments extends HttpServlet{
 		//get the reviews	
 		try {
 			List<Review> reviews=null;
-			reviews = ReviewService.findAllToday();
-			if(reviews.size()>5)
-				reviews = reviews.subList(0, 5);
+			reviews = ReviewService.findTodayFirst(5);
 			Questionnaire questionnaire = QuestionnaireService.findByDate(new Date());
 			
 			Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
