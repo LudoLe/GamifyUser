@@ -405,23 +405,27 @@
 
                 sex_y.setAttribute("type", "radio");
                 sex_y.setAttribute("value", "female");
+                
+                sex_y.addEventListener("input", (e) => {
+                   
+                    can_access_sex.disabled = false;
+;
+                }, false);
+                
+                sex_x.addEventListener("click", (e) => {
+                    can_access_sex.disabled = false;
+                }, false);
+             
+                
+
                 sex_yl = document.createElement("label");
                 sex_yl.textContent = "Female";
+
                 itemy_sex = document.createElement("div");
                 itemy_sex.setAttribute("class", "sexitem");
                 itemy_sex.appendChild(sex_y);
                 itemy_sex.appendChild(sex_yl);
 
-                if(response.user.sex != null){
-                    //it is set in db
-                    if(response.user.sex == "male"){
-                        sex_x.checked = true;
-                        sex_y.disabled = true;
-                    }else {
-                        sex_y.checked = true;
-                        sex_x.disabled = true;
-                    }
-                }
 
                 itemDiv0autofill.appendChild(sex);
                 itemDiv0autofill.appendChild(document.createElement("br"));
@@ -439,9 +443,26 @@
                 can_access_sex.setAttribute("id", "can_access_sex_checkbox");
                 can_access_sex.name = "can_access_sex";
 
+                if(response.user.sex != null){
+                    can_access_sex.disabled= false;
+
+                    //it is set in db
+                    if(response.user.sex == "male"){
+                        sex_x.checked = true;
+                        sex_y.disabled = true;
+                    }else {
+                        sex_y.checked = true;
+                        sex_x.disabled = true;                   
+                    }
+                }else                 can_access_sex.disabled = true;
+
+
+
                 can_access_sex_label = document.createElement("label");
                 can_access_sex_label.setAttribute("for", "can_access_sex_checkbox");
                 can_access_sex_label.innerHTML = "I allow access to my sex";
+                
+                
 
                 itemDiv0autofill.appendChild(document.createElement("br"));
                 itemDiv0.appendChild(can_access_sex);
@@ -460,8 +481,31 @@
                 birth = document.createElement("input");
                 birth.setAttribute("type", "date");
                 birth.name = "birth";
+                
 
+              
+                
+                birth.addEventListener("input", (e) => {
+                    e.preventDefault();
+                    can_access_age.disabled= false;
+                }, false);
+                
+                //allow age access
+                var can_access_age, can_access_age_label;
+
+
+                itemDiv1 = document.createElement("div");
+                itemDiv1.setAttribute("class", "ageaccess");
+
+                can_access_age = document.createElement("input");
+                can_access_age.setAttribute("type", "checkbox");
+                can_access_age.setAttribute("id", "can_access_age_checkbox");
+
+                can_access_age.name = "can_access_age";
+                
                 if(response.user.birth != null){
+                    can_access_age.disabled= false;
+
                     d = new Date(response.user.birth)
                     month = '' + (d.getMonth() + 1), day = '' + d.getDate(), year = d.getFullYear();
 
@@ -474,19 +518,10 @@
                     //it is set in db
                     birth.setAttribute("value", date)
                     birth.readOnly = true;
-                }
+                } else can_access_age.disabled= true;
 
                 
-                //allow age access
-                var can_access_age, can_access_age_label;
 
-                itemDiv1 = document.createElement("div");
-                itemDiv1.setAttribute("class", "ageaccess");
-
-                can_access_age = document.createElement("input");
-                can_access_age.setAttribute("type", "checkbox");
-                can_access_age.setAttribute("id", "can_access_age_checkbox");
-                can_access_age.name = "can_access_age";
 
 
                 can_access_age_label = document.createElement("label");
@@ -609,6 +644,8 @@
             }, false);
         }
 
+        
+       
 
         //on click, reaload the product page
         this.registerEventCancel = function(element) {
