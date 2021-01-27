@@ -40,6 +40,7 @@ public class CheckSubmit extends HttpServlet{
 			//check if user already submitted 
 		    User user=null;
 		    Questionnaire questionnaire= null;
+		    Boolean bol= false;
 		    
 		    try{
 		    	user=(User) request.getSession().getAttribute("user");
@@ -60,19 +61,25 @@ public class CheckSubmit extends HttpServlet{
 				response.getWriter().println("Something went poof server-side. Please try again.( we couldnt find the user!)");
 				return;
 		   	}
-		    try {
-		   		if(reviewService.checkIfAlreadySubmitted(user, questionnaire)) {
-		   			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-					response.setContentType("text/plain"); 
-					response.getWriter().println("You've already submitted today's questionnaire. Come back tomorrow!");
-					return;
-			   	}
+		    try{
+		    	bol= reviewService.checkIfAlreadySubmitted(user, questionnaire);			   	
 		   	} catch(Exception e) {
 		   		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 				response.setContentType("text/plain"); 
-				response.getWriter().println("Something went poof server-side. Please try again.");
+				response.getWriter().println("Something went poof server-side. Please try again.( we couldnt find the user!)");
 				return;
 		   	}
+		   		   	
+		    
+		    
+		    	
+			response.setStatus(HttpServletResponse.SC_OK);
+			response.setContentType("text/plain");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().print(bol ? "1" : "0");
+			return;
+		    	   
+		   
 
       }
 		public void destroy() {
