@@ -94,26 +94,20 @@ public class RecordLog extends HttpServlet{
 			return;
 		}
 		
-		 //controlla che non submitti se gia hai submittato	
-	
-	
-		try{ 
-			reviews = reviewService.findAllToday();
-				
-			for(Review review : reviews){
-				submit=review.getUser().getUserId();
-				if(submit==userSubmit){
-					bol=true;
-				}
-			}
-			if(bol) {
-				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-				response.getWriter().println("Something went wrong");
-			}
-		}catch(Exception e){
-			response.getWriter().println("Not possible to retrieve the reviews of today.");
-
-		}
+		/* check whether the user has already submitted today's questionnaire */
+	   	try {
+	   		if(reviewService.checkIfAlreadySubmitted(user, questionnaire)) {
+	   			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.setContentType("text/plain"); 
+				response.getWriter().println("You've already submitted today's questionnaire. Come back tomorrow!");
+				return;
+		   	}
+	   	} catch(Exception e) {
+	   		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			response.setContentType("text/plain"); 
+			response.getWriter().println("Something went poof server-side. Please try again.");
+			return;
+	   	}
 
 
 		try {

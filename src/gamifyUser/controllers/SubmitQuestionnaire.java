@@ -64,44 +64,55 @@ public class SubmitQuestionnaire extends HttpServlet{
 			int canAccessSex=0;
 			Review review=null;
 			Questionnaire questionnaire;
-			
-			List<Review> reviews=null;
 		    User user=null;
-		    Boolean bol=false;
-		    int submit=0;
 		    
-		  
-		   	try{ 
-		   		reviews = reviewService.findAllToday();
+		    try{ 
+				  user=(User) request.getSession().getAttribute("user");
+				  if(user == null) {
+					  response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+						response.setContentType("text/plain"); 
+						response.getWriter().println("Not possible to retrieve the user in the session.");
+						return;
+				  }
 
 			   }catch(Exception e){
-					response.getWriter().println("Not possible to retrieve the reviews");
+					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+					response.setContentType("text/plain"); 
+					response.getWriter().println("Not possible to retrieve the user in the session.");
+					return;
 			   }
-
+		    
 		   	
 		   	try{ 
-				  user=(User) request.getSession().getAttribute("user");
-
+	 			questionnaire = questionnaireService.findByDate(new Date());
+	 			if(questionnaire == null) {
+	 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+					response.setContentType("text/plain"); 
+					response.getWriter().println("Not possible to find the questionnaire.");
+					return;
+	 			}
 			   }catch(Exception e){
-					response.getWriter().println("Not possible to retrieve the user in the session.");
+				   	response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+					response.setContentType("text/plain"); 
+					response.getWriter().println("Not possible to find the questionnaire.");
+					return;
 			   }
-					
-		   	int userSubmit= user.getUserId();
-
+		   	
+		   	/* check whether the user has already submitted today's questionnaire */
+		   	try {
+		   		if(reviewService.checkIfAlreadySubmitted(user, questionnaire)) {
+		   			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+					response.setContentType("text/plain"); 
+					response.getWriter().println("You've already submitted today's questionnaire. Come back tomorrow!");
+					return;
+			   	}
+		   	} catch(Exception e) {
+		   		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				response.setContentType("text/plain"); 
+				response.getWriter().println("Something went poof server-side. Please try again.");
+				return;
+		   	}
 			
-		   
-	   //controlla che non submitti se gia hai submittato				
-	    	for(Review review1 : reviews){
-				submit=review1.getUser().getUserId();
-				if(submit==userSubmit){
-					bol=true;
-				}
-			}
-			if(bol) {
-				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			    response.getWriter().println("Something went wrong");
-			    return;
-			}
 			String sex = null;
 			String birth_string = null;
 			String can_age_string = null;
@@ -142,15 +153,6 @@ public class SubmitQuestionnaire extends HttpServlet{
 				canAccessSex = 1;
 			}
 			
-			
-			try{ 
-	 			questionnaire = questionnaireService.findByDate(new Date());
-			   }catch(Exception e){
-				   	response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-					response.setContentType("text/plain"); 
-					response.getWriter().println("Not possible to find the questionnaire.");
-					return;
-			   }
 
 			
 			questions=questionnaire.getQuestions();
