@@ -63,61 +63,64 @@ public class RecordLog extends HttpServlet{
 	public void init(){}
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
-	 Log log;
-	 Questionnaire questionnaire=null;	
-	 User user=null;
-	 Date date = null;
-	 List<Review> reviews=null;
-	 Boolean bol=false;
-	 int submit=0;
-	 
+		Log log;
+		Questionnaire questionnaire=null;	
+		User user=null;
+		Date date = null;
+		List<Review> reviews=null;
+		Boolean bol=false;
+		int submit=0;
 		
 		try{ 
 			  user=(User) request.getSession().getAttribute("user");
 			  date= (Date)request.getSession().getAttribute("log");
 
+				
 		   }catch(Exception e){
 				response.getWriter().println("Not possible to retrieve the user in the session.");
-
+		
 		   }
+		
+		int userSubmit= user.getUserId();
+		
 		try{ 
 			questionnaire=questionnaireService.findByDate(new Date());
 		   }catch(Exception e){
 				response.getWriter().println("Not possible to retrieve the questionnaire of today.");
-
+		
 		   }
 		if((questionnaire==null)||(user==null)){
 			response.getWriter().println("Something went wrong.");
 			return;
-		   }
+		}
 		
 		 //controlla che non submitti se gia hai submittato	
-		
-		
+	
+	
 		try{ 
 			reviews = reviewService.findAllToday();
-			
-			 for(Review review : reviews){
-					submit=review.getUser().getUserId();
-					if(submit==userSubmit){
-						bol=true;
-					}
+				
+			for(Review review : reviews){
+				submit=review.getUser().getUserId();
+				if(submit==userSubmit){
+					bol=true;
 				}
-				if(bol) {
-					response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-				    response.getWriter().println("Something went wrong");
-				}
-		   }catch(Exception e){
-				response.getWriter().println("Not possible to retrieve the reviews of today.");
-
-		   }
-	
-		
-			try {
-				log=logService.createLog(questionnaire, user, date);
-			} catch (Exception e1) {
-				e1.printStackTrace();
 			}
+			if(bol) {
+				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				response.getWriter().println("Something went wrong");
+			}
+		}catch(Exception e){
+			response.getWriter().println("Not possible to retrieve the reviews of today.");
+
+		}
+
+
+		try {
+			log=logService.createLog(questionnaire, user, date);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		
 	      
 
