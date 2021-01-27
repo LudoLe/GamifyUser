@@ -53,7 +53,7 @@ public class QuestionnaireCanceledUsers extends HttpServlet {
 			return;
 		}
 
-		Set<User> users;
+		List<User> users;
 		try {
 			users = questionnaireService.getCanceledUsers(id);
 			if(users == null) {

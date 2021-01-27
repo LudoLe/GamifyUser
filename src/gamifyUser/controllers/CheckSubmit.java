@@ -22,8 +22,9 @@ import polimi.db2.gamifyDB.services.*;
 public class CheckSubmit extends HttpServlet{
 	private static final long serialVersionUID = 123211111L;
 	@EJB(name = "gamifyDB.services/ReviewService")
-	
 	private ReviewService reviewService;
+	@EJB(name = "gamifyDB.services/QuestionnaireService")
+	private QuestionnaireService questionnaireService;
 
 		public CheckSubmit() {
 			super();
@@ -36,33 +37,41 @@ public class CheckSubmit extends HttpServlet{
 			
 			//check if user already submitted 
 			List<Review> reviews=null;
-		    User user=(User) request.getSession().getAttribute("user");
-		    Boolean bol=false;
-		    int submit=0;
-		    int userSubmit= user.getUserId();
-
-		    try {		  				
-				reviews = reviewService.findAllToday();
-				
-				for(Review review : reviews){
-					submit=review.getUser().getUserId();
-					if(submit==userSubmit){
-						bol=true;
-					}
-				}
-			
-				
-				Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();	
-				response.setStatus(HttpServletResponse.SC_OK);
-				response.setContentType("application/json");
-				response.setCharacterEncoding("UTF-8");
-				response.getWriter().print(gson.toJson(bol));
+		    User user=null;;
+		    Questionnaire questionnaire= null;
+		    
+		    try{
+		    	user=(User) request.getSession().getAttribute("user");
+			   	
+		   	} catch(Exception e) {
+		   		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				response.setContentType("text/plain"); 
+				response.getWriter().println("Something went poof server-side. Please try again.( we couldnt find the user!)");
 				return;
-				
-			} catch (Exception e){
-				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-				response.getWriter().println("Something went wrong");
-				return;			}
+		   	}
+	    
+		   	try{
+		    	questionnaire=questionnaireService.findByDate(new Date());
+			   	
+		   	} catch(Exception e) {
+		   		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				response.setContentType("text/plain"); 
+				response.getWriter().println("Something went poof server-side. Please try again.( we couldnt find the user!)");
+				return;
+		   	}
+		    try {
+		   		if(reviewService.checkIfAlreadySubmitted(user, questionnaire)) {
+		   			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+					response.setContentType("text/plain"); 
+					response.getWriter().println("You've already submitted today's questionnaire. Come back tomorrow!");
+					return;
+			   	}
+		   	} catch(Exception e) {
+		   		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				response.setContentType("text/plain"); 
+				response.getWriter().println("Something went poof server-side. Please try again.");
+				return;
+		   	}
 
       }
 		public void destroy() {
