@@ -69,7 +69,7 @@ public class SubmitQuestionnaire extends HttpServlet{
 		    User user=null;
 		    Boolean bol=false;
 		    int submit=0;
-		    int userSubmit= user.getUserId();
+		    
 		  
 		   	try{ 
 		   		reviews = reviewService.findAllToday();
@@ -86,32 +86,37 @@ public class SubmitQuestionnaire extends HttpServlet{
 					response.getWriter().println("Not possible to retrieve the user in the session.");
 			   }
 					
-					
+		   	int userSubmit= user.getUserId();
 
 			
 		   
 	   //controlla che non submitti se gia hai submittato				
-	    	for(Review review : reviews){
-					submit=review.getUser().getUserId();
-					if(submit==userSubmit){
-						bol=true;
-					}
+	    	for(Review review1 : reviews){
+				submit=review1.getUser().getUserId();
+				if(submit==userSubmit){
+					bol=true;
 				}
-				if(bol) {
-					response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-				    response.getWriter().println("Something went wrong");
-				}
-				
-				
-			 	try{ 
-					String birth_string = (StringEscapeUtils.escapeJava(request.getParameter("birth")));
-					String can_age_string = (StringEscapeUtils.escapeJava(request.getParameter("can_access_age")));
-					String can_sex_string = (StringEscapeUtils.escapeJava(request.getParameter("can_access_sex")));
-		 			String expertise = StringEscapeUtils.escapeJava(request.getParameter("expertise"));
-				   }catch(Exception e){
-						response.getWriter().println("Not possible to retrieve the user in the session.");
-				   }
-						
+			}
+			if(bol) {
+				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			    response.getWriter().println("Something went wrong");
+			    return;
+			}
+			String sex = null;
+			String birth_string = null;
+			String can_age_string = null;
+			String can_sex_string = null;
+ 			String expertise = null;
+			try{
+				sex = (StringEscapeUtils.escapeJava(request.getParameter("sex")));
+				birth_string = (StringEscapeUtils.escapeJava(request.getParameter("birth")));
+				can_age_string = (StringEscapeUtils.escapeJava(request.getParameter("can_access_age")));
+				can_sex_string = (StringEscapeUtils.escapeJava(request.getParameter("can_access_sex")));
+				expertise = StringEscapeUtils.escapeJava(request.getParameter("expertise"));
+			}catch(Exception e){
+				response.getWriter().println("Not possible to retrieve the user in the session.");
+			}
+					
 							
 			
 			
@@ -141,18 +146,25 @@ public class SubmitQuestionnaire extends HttpServlet{
 			try{ 
 	 			questionnaire = questionnaireService.findByDate(new Date());
 			   }catch(Exception e){
+				   	response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+					response.setContentType("text/plain"); 
 					response.getWriter().println("Not possible to find the questionnaire.");
+					return;
 			   }
 
 			
 			questions=questionnaire.getQuestions();
 	 		int count=0;
-	 		for(Question question : questions){     
-	 			try{ 
-		 			String content = StringEscapeUtils.escapeJava(request.getParameter("answer"+count));
-				   }catch(Exception e){
-						response.getWriter().println("Not possible to retrieve the answers content.");
-				   }
+	 		for(Question question : questions){
+	 			String content = null;
+				try{ 
+					content = StringEscapeUtils.escapeJava(request.getParameter("answer"+count));
+				}catch(Exception e){
+
+	 		    	response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+					response.getWriter().println("Not possible to retrieve the answers content.");
+					return;
+				}
 	 		    if(content==null||content.isEmpty()){
 	 		    	response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 	 		    	response.setCharacterEncoding("UTF-8");
