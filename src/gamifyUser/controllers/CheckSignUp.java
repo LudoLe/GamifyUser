@@ -52,8 +52,14 @@ public class CheckSignUp extends HttpServlet {
 		try {
 			usrn = StringEscapeUtils.escapeJava(request.getParameter("user2"));
 			email = StringEscapeUtils.escapeJava(request.getParameter("mail2"));
-			if (!Utility.isValidMailAddress(email))
-				throw new Exception();
+			if (!Utility.isValidMailAddress(email)) {
+				
+						response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				        response.getWriter().println("Invalid email.");
+				         return;
+					
+				}
+			
 			pwd = StringEscapeUtils.escapeJava(request.getParameter("pass2"));
 			pwd2 = StringEscapeUtils.escapeJava(request.getParameter("pass3"));
 		} catch (Exception e) {
