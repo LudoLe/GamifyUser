@@ -53,7 +53,7 @@ public class QuestionnaireCompletedUsers extends HttpServlet {
 			return;
 		}
 
-		Set<User> users;
+		List<User> users;
 		try {
 			users = questionnaireService.getCompletedUsers(id);
 			if(users == null) {

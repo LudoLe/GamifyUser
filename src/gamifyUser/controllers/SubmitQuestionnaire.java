@@ -125,7 +125,7 @@ public class SubmitQuestionnaire extends HttpServlet{
 				can_sex_string = (StringEscapeUtils.escapeJava(request.getParameter("can_access_sex")));
 				expertise = StringEscapeUtils.escapeJava(request.getParameter("expertise"));
 			}catch(Exception e){
-				response.getWriter().println("Not possible to retrieve the user in the session.");
+				response.getWriter().println("Not possible to retrieve the data.");
 			}
 					
 							
