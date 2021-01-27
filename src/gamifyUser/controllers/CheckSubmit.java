@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import polimi.db2.gamifyDB.entities.Questionnaire;
 import polimi.db2.gamifyDB.entities.Review;
 import polimi.db2.gamifyDB.entities.User;
 import polimi.db2.gamifyDB.services.*;
@@ -36,8 +38,7 @@ public class CheckSubmit extends HttpServlet{
 		public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			
 			//check if user already submitted 
-			List<Review> reviews=null;
-		    User user=null;;
+		    User user=null;
 		    Questionnaire questionnaire= null;
 		    
 		    try{
