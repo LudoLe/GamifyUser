@@ -480,6 +480,21 @@
 
                 birth = document.createElement("input");
                 birth.setAttribute("type", "date");
+                
+                var today = new Date();
+				var dd = today.getDate();
+				var mm = today.getMonth()+1; //January is 0!
+				var yyyy = today.getFullYear();
+				 if(dd<10){
+				        dd='0'+dd
+				    } 
+				    if(mm<10){
+				        mm='0'+mm
+				    } 
+				
+				today = yyyy+'-'+mm+'-'+dd;
+				birth.setAttribute("max", today);
+
                 birth.name = "birth";
                 
 
@@ -683,10 +698,29 @@
 
                             if (req.readyState == 4) {
                                 var message = req.responseText;
+                                
                                 if (req.status == 200) {
-                                	self.frame.innerHTML="";
-                                	self.callforthanks();
-                                	commentsFrame.call();
+                                	console.log(message);
+	                                if(message === "blocked\n"){
+	                                	alert("You have entered some offensive word! You are BLOCKED from our site!");
+	                                	makeCall("GET", "LogOut", null,
+								            function(req) {
+								                if (req.readyState == 4) {
+								                    var message = req.responseText;
+								                    if (req.status == 200) {
+								                        window.location.href = "index.html";
+								                    } else {
+								                        var alertContainer = document.getElementById("id_alert");
+								                        self.alert.textContent = message;
+								                    }
+								                }
+								            }
+								        );
+	                                }else{
+	                                	self.frame.innerHTML="";
+	                                	self.callforthanks();
+	                                	commentsFrame.call();
+                                	}
                                 } else {
                                 	self.callforhelp();
                                 }

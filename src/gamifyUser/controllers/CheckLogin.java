@@ -64,6 +64,11 @@ public class CheckLogin extends HttpServlet {
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			response.getWriter().println("Incorrect credentials");
 		} else {
+			if(user.getBlocked() == 1) {
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.getWriter().println("This user is blocked.");
+				return;
+			}
 			request.getSession().setAttribute("user", user);
 			request.getSession().setAttribute("log", new Date());
 			response.setStatus(HttpServletResponse.SC_OK);
