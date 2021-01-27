@@ -181,7 +181,7 @@
     	 
     	 if(array == null) {	 
             var container = document.getElementById("commentsmessage");
-            container.innerHtml="";
+            container.innerHTML="";
             $('#commentsmessage').css('border','5px solid white').css('padding','10px');
 
             var alert = document.createElement("span");
@@ -189,7 +189,11 @@
             container.appendChild(alert);
     	 }
     	 else {
-             self.frame.innerHTML="";
+    		 self.frame.innerHTML="";
+			 message = document.getElementById("commentsmessage"); 
+             $('#commentsdmessage').css('border','none').css('padding','none');
+             $('#commentsmessage').css('display', 'none');            
+
              var l = array.length, ul, element, commentV;
              ul = document.createElement("ul");
              //ul.setAttribute("id", "s" + target.id);
@@ -253,7 +257,7 @@
                 function(req) {
                     if (req.readyState == 4) {
                         if (req.status == 200){
-                        	if(!(JSON.parse(req.responseText))){
+                        	if(req.responseText=="0"){
                           	   self.callforshow(); }
                         	else{self.callforthanks();}
                         } 
