@@ -56,16 +56,20 @@ public class AnswersRetrieval extends HttpServlet {
 		}
 
 		List<Answer> answers;
-		Optional<Review> optReview;
+		List<Review> optReview = new ArrayList<>();
 		User user;
 		List<String> statistics = new ArrayList<>();
 		try {
 			Review review = null;
 			user = userService.find(userId);
 			if(user == null) throw new Exception();
-			optReview = user.getReviews().stream().filter((Review r) -> r.getQuestionnaire().getQuestionnaireId() == questionnaireId).findAny();
+			//optReview = user.getReviews().stream().filter((Review r) -> r.getQuestionnaire().getQuestionnaireId() == questionnaireId).findAny();
+			for(Review r: user.getReviews()) {
+				if(r.getQuestionnaire().getQuestionnaireId() == questionnaireId)
+					optReview.add(r);
+			}
 			if(optReview.isEmpty()) throw new Exception();
-			review = optReview.get();
+			review = optReview.get(0);
 			answers = review.getAnswers();
 			if(review.getCanAccessAge() == 1) {
 				long diff = (new Date()).getTime() - user.getBirth().getTime();

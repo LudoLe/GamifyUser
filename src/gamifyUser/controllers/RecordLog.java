@@ -62,7 +62,8 @@ public class RecordLog extends HttpServlet{
 	
 	public void init(){}
 	
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("log");
 		Log log;
 		Questionnaire questionnaire=null;	
 		User user=null;
@@ -72,28 +73,26 @@ public class RecordLog extends HttpServlet{
 		int submit=0;
 		
 		try{ 
-			  user=(User) request.getSession().getAttribute("user");
+			  user= (User)request.getSession().getAttribute("user");
 			  date= (Date)request.getSession().getAttribute("log");
-
-				
-		   }catch(Exception e){
-				response.getWriter().println("Not possible to retrieve the user in the session.");
-		
-		   }
-		
-		int userSubmit= user.getUserId();
+	   }catch(Exception e){
+			response.getWriter().println("Not possible to retrieve the user in the session.");
+			return;
+	   }
+		System.out.println(user.getUserId());
 		
 		try{ 
 			questionnaire=questionnaireService.findByDate(new Date());
-		   }catch(Exception e){
-				response.getWriter().println("Not possible to retrieve the questionnaire of today.");
-		
-		   }
+	   }catch(Exception e){
+			response.getWriter().println("Not possible to retrieve the questionnaire of today.");
+			return;
+	
+	   }
 		if((questionnaire==null)||(user==null)){
 			response.getWriter().println("Something went wrong.");
 			return;
 		}
-		
+		System.out.println(questionnaire.getName()+" "+user.getUsername());
 		/* check whether the user has already submitted today's questionnaire */
 	   	try {
 	   		if(reviewService.checkIfAlreadySubmitted(user, questionnaire)) {
