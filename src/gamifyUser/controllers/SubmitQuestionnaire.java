@@ -184,7 +184,11 @@ public class SubmitQuestionnaire extends HttpServlet{
 	 		try{ 
 		 		review = reviewService.createReview(canAccessAge, canAccessSex, new Date(), expertise, user, questionnaire, answers, sex, birthDate);
 			   }catch(Exception e){
-					response.getWriter().println("Not possible to create the review.");
+					response.getWriter().println("Couldn't create review due to some dark magic tricking our servers. Please try again.");
+					response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+					response.setCharacterEncoding("UTF-8");
+					response.setContentType("text/plain"); 
+					return;
 			   }
 			response.setStatus(HttpServletResponse.SC_OK);
 			response.setCharacterEncoding("UTF-8");
