@@ -37,7 +37,7 @@ public class QuestionnaireCompletedUsers extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		System.out.println("Completed questionnaire");
 		List<String> mandatoryParams = new ArrayList<>(Arrays.asList("id","start","size"));
 		if(!Utility.paramExists(request, response, mandatoryParams) || Utility.paramIsEmpty(request, response, mandatoryParams)) return;
 		
@@ -53,7 +53,7 @@ public class QuestionnaireCompletedUsers extends HttpServlet {
 			return;
 		}
 
-		List<User> users;
+		Set<User> users;
 		try {
 			users = questionnaireService.getCompletedUsers(id);
 			if(users == null) {
@@ -61,6 +61,7 @@ public class QuestionnaireCompletedUsers extends HttpServlet {
 				return;
 			}
 			Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+			System.out.println(gson.toJson(users));
 			response.setStatus(HttpServletResponse.SC_OK);
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
