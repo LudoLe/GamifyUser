@@ -51,6 +51,7 @@ public class RecordLog extends HttpServlet{
 	private LogService logService;
 	@EJB(name = "gamifyDB.services/UserService")
 	private UserService userService;
+	
 
 	/* devo:
 	 * 1. registrare il log del cancel
@@ -66,6 +67,10 @@ public class RecordLog extends HttpServlet{
 	 Questionnaire questionnaire=null;	
 	 User user=null;
 	 Date date = null;
+	 List<Review> reviews=null;
+	 Boolean bol=false;
+	 int submit=0;
+	 
 		
 		try{ 
 			  user=(User) request.getSession().getAttribute("user");
@@ -85,6 +90,28 @@ public class RecordLog extends HttpServlet{
 			response.getWriter().println("Something went wrong.");
 			return;
 		   }
+		
+		 //controlla che non submitti se gia hai submittato	
+		
+		
+		try{ 
+			reviews = reviewService.findAllToday();
+			
+			 for(Review review : reviews){
+					submit=review.getUser().getUserId();
+					if(submit==userSubmit){
+						bol=true;
+					}
+				}
+				if(bol) {
+					response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				    response.getWriter().println("Something went wrong");
+				}
+		   }catch(Exception e){
+				response.getWriter().println("Not possible to retrieve the reviews of today.");
+
+		   }
+	
 		
 			try {
 				log=logService.createLog(questionnaire, user, date);

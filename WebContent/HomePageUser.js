@@ -3,7 +3,7 @@
  */
 (function() { // avoid variables ending up in the global scope
     // page components
-    var productFrame, leaderBoardFrame, questionnaireFrame, logout, homeButton, questionnaireButton, leaderBoardButton, mainFrame;
+    var productFrame, leaderBoardFrame, questionnaireFrame,  mainFrame;
 
     orchestrator = new PageOrchestrator();
 
@@ -176,11 +176,10 @@
 
 
      this.updateCommentSection = function(array) {
+        	var self = this;
+
     	 
-    	 if(array == null) {
-    		 	
-    		 
-         	var self = this;
+    	 if(array == null) {	 
             var container = document.getElementById("commentsmessage");
             container.innerHtml="";
             $('#commentsmessage').css('border','5px solid white').css('padding','10px');
@@ -190,7 +189,7 @@
             container.appendChild(alert);
     	 }
     	 else {
-    		 var self = this;
+             self.frame.innerHTML="";
              var l = array.length, ul, element, commentV;
              ul = document.createElement("ul");
              //ul.setAttribute("id", "s" + target.id);
@@ -244,10 +243,56 @@
     /************************************************BEGIN QUESTIONNAIRE***************************************************************** */
 
     function QuestionnaireFrame(_frame) {
+
         this.frame = _frame;
         var self = this;
         
         this.call = function() {
+            var self = this;
+            makeCall("GET", "CheckSubmit", null,
+                function(req) {
+                    if (req.readyState == 4) {
+                        if (req.status == 200){
+                        	if(!(JSON.parse(req.responseText))){
+                          	   self.callforshow(); }
+                        	else{self.callforthanks();}
+                        } 
+                    }
+                }
+            );
+        }
+     
+        this.callforthanks = function() {   
+        	var self = this;
+            var container = document.getElementById("questionnairemessage");
+            container.innerHtml="";
+            $('#questionnairemessage').css('border','5px solid white').css('padding','10px');
+            $('#questionnairemessage').css('display', 'block');
+
+
+            var alert = document.createElement("span");
+            alert.textContent = "Thank you for having submitted our questionnaire today! "
+            		+ "YOUR OPINION IS OUR MOST VALUABLE RESOURCE^^";
+            container.appendChild(alert);
+        
+        }
+        
+        this.callforhelp = function() {   
+        	var self = this;
+            var container = document.getElementById("questionnairemessage");
+            container.innerHtml="";
+            $('#questionnairemessage').css('border','5px solid white').css('padding','10px');
+            $('#questionnairemessage').css('display', 'block');
+
+
+            var alert = document.createElement("span");
+            alert.textContent = "WHOOPS SOMETHING WENT WRONG :(";
+            container.appendChild(alert);
+        
+        }
+        
+        
+        this.callforshow = function() {
             var self = this;
             makeCall("GET", "GetQuestionnaire", null,
                 function(req) {
@@ -261,8 +306,9 @@
         }
 
         this.show = function(response) {
+        	var self = this;
+
             if (response.questions == null) {
-            	var self = this;
                 var container = document.getElementById("questionnairemessage");
                 container.innerHtml="";
                 $('#questionnairemessage').css('border','5px solid white').css('padding','10px');
@@ -274,7 +320,7 @@
                 container.appendChild(alert);
                
             } else {
-                var self = this;
+                self.frame.innerHTML="";
                 //container that contains the form fields
                 containerDiv = document.createElement("div");
                 containerDiv.setAttribute("class", "container");
@@ -597,16 +643,11 @@
                             if (req.readyState == 4) {
                                 var message = req.responseText;
                                 if (req.status == 200) {
-                                	//var yourDataStr = JSON.stringify(req.responseText);
-                                    //self.update(JSON.parse(yourDataStr), state);
-                                    //var alertContainer = document.getElementById("id_alert");
-                                    //self.alert.textContent = message;
-                                    console.log(message);
+                                	self.frame.innerHTML="";
+                                	self.callforthanks();
+                                	commentsFrame.call();
                                 } else {
-                                    //var alertContainer = document.getElementById("id_alert");
-                                    //self.alert.textContent = message;
-                                    console.log("error: "+message);
-                                    form.reportValidity();
+                                	self.callforhelp();
                                 }
                             }
                         }
@@ -619,6 +660,7 @@
             }, false);
         }
 
+    
     }
 
 
