@@ -669,7 +669,7 @@
             element.addEventListener("click", (e) => {
                 e.stopPropagation();
                 if (window.confirm("Are you sure you want to cancel the questionnaire?")) {
-                    makeCall("Get", "RecordLog", null,
+                    makeCall("POST", "RecordLog", null,
                         function(req) {
                             if (req.readyState == 4) {
                                 if (req.status == 200) {
