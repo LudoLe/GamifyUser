@@ -62,15 +62,12 @@ public class RecordLog extends HttpServlet{
 	
 	public void init(){}
 	
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("log");
 		Log log;
 		Questionnaire questionnaire=null;	
 		User user=null;
 		Date date = null;
-		List<Review> reviews=null;
-		Boolean bol=false;
-		int submit=0;
 		
 		try{ 
 			  user= (User)request.getSession().getAttribute("user");
@@ -79,7 +76,6 @@ public class RecordLog extends HttpServlet{
 			response.getWriter().println("Not possible to retrieve the user in the session.");
 			return;
 	   }
-		System.out.println(user.getUserId());
 		
 		try{ 
 			questionnaire=questionnaireService.findByDate(new Date());
@@ -92,7 +88,6 @@ public class RecordLog extends HttpServlet{
 			response.getWriter().println("Something went wrong.");
 			return;
 		}
-		System.out.println(questionnaire.getName()+" "+user.getUsername());
 		/* check whether the user has already submitted today's questionnaire */
 	   	try {
 	   		if(reviewService.checkIfAlreadySubmitted(user, questionnaire)) {
@@ -111,10 +106,22 @@ public class RecordLog extends HttpServlet{
 
 		try {
 			log=logService.createLog(questionnaire, user, date);
+			if(log == null) {
+				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				response.setContentType("text/plain"); 
+				response.getWriter().println("Something went poof server-side. Please try again.");
+				return;
+			}
 		} catch (Exception e1) {
-			e1.printStackTrace();
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			response.setContentType("text/plain"); 
+			response.getWriter().println("Something went poof server-side. Please try again.");
+			return;
 		}
 		
+		
+		response.setStatus(HttpServletResponse.SC_OK);
+		return;
 	      
 
 	}
