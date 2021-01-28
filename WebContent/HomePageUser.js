@@ -124,10 +124,7 @@
 
 
                 i.setAttribute("src", "uploads/campaignImages?name=" + questionnaire.image);
-                i.setAttribute("id", "productimage");
-
-                i.setAttribute("width", "250");
-                i.setAttribute("height", "200");
+                i.setAttribute("id", "productimage");      
                 i.setAttribute("alt", questionnaire.name);
                 
                 span.style.border='5px solid white';
@@ -468,6 +465,8 @@
                 itemDiv0.appendChild(can_access_sex);
                 itemDiv0.appendChild(can_access_sex_label);
                 itemDiv0autofill.appendChild(itemDiv0);
+                
+                
                 //age
 
                 var age;
@@ -480,6 +479,9 @@
 
                 birth = document.createElement("input");
                 birth.setAttribute("type", "date");
+                birth.min="1920-01-01";
+
+                
                 
                 var today = new Date();
 				var dd = today.getDate();
