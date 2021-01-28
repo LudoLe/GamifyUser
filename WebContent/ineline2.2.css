@@ -73,6 +73,11 @@ body{
     align-items: center;
 }
 
+#productimage{	
+	max-width:500px;
+    max-height:500px;
+}
+
 .rightside {
     display: flex;
     flex-direction: column;
