@@ -4,5 +4,5 @@
   <Resource id="myDS" type="DataSource">JdbcDriver  = com.mysql.jdbc.Driver
     JdbcUrl = jdbc:mysql://localhost:3306/GamifyDB
     UserName  =  root
-    Password  = ***REMOVED***</Resource>
+    Password  = ian</Resource>
 </tomee>
